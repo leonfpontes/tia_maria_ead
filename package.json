@@ -1,0 +1,32 @@
+{
+  "name": "tia_maria_ead",
+  "version": "1.0.0",
+  "description": "Projeto estático que apresenta a home institucional do Terreiro Tia Maria e Cabocla Jupira. O objetivo é disponibilizar uma base organizada segundo boas práticas do W3C, com documentação de apoio para evolução do site.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
+    "watch:css": "tailwindcss -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
+    "build": "npm run build:css",
+    "start": "npx --yes http-server -c-1 ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonfpontes/tia_maria_ead.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leonfpontes/tia_maria_ead/issues"
+  },
+  "homepage": "https://github.com/leonfpontes/tia_maria_ead#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.14",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14"
+  }
+}
