@@ -32,10 +32,20 @@
         </nav>
         <div class="flex items-center gap-2">
           <a href="https://wa.me/5516982211712" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-oxossi-600 text-white text-sm font-semibold hover-bg-oxossi-500 transition">Entre em contato</a>
-          <button class="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 text-slate-700" aria-label="Abrir menu">
+          <button id="mobile-menu-button" class="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 text-slate-700" aria-label="Abrir menu" aria-controls="mobile-menu" aria-expanded="false">
             <svg width="20" height="20" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M3 6h14M3 12h14M3 18h14"/></svg>
           </button>
         </div>
+      </div>
+      <!-- Navegação mobile -->
+      <div id="mobile-menu" class="md:hidden hidden pb-3">
+        <nav class="pt-2 space-y-1">
+          <a href="#" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Início</a>
+          <a href="#novidades" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Novidades</a>
+          <a href="#endereco" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Endereço</a>
+          <a href="#redes" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Redes sociais</a>
+          <a href="https://wa.me/5516982211712" class="block mt-1 px-2 py-2 rounded-lg bg-oxossi-600 text-white text-sm font-semibold text-center">Entre em contato</a>
+        </nav>
       </div>
     </div>
   </header>
@@ -44,7 +54,7 @@
   <section class="relative overflow-hidden">
     <!-- gradiente Oxóssi -> Xangô -->
     <div class="hero-gradient">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-white relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28 text-white relative">
         <!-- Ornamentação: flecha (Oxóssi) -->
         <svg class="ornamento absolute -top-10 -left-6 w-40 h-40 text-white" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true">
           <rect x="46" y="10" width="8" height="80" rx="3"/><polygon points="50,5 60,20 40,20"/>
@@ -74,7 +84,7 @@
             </div>
           </div>
           <div class="mt-10 lg:mt-0 flex justify-center lg:justify-end">
-            <img src="assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo Terreiro Tia Maria & Cabocla Jupira" class="w-56 sm:w-64 md:w-72 lg:w-80 xl:w-96 h-auto drop-shadow-lg" />
+            <img src="assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo Terreiro Tia Maria & Cabocla Jupira" class="w-40 sm:w-56 md:w-64 lg:w-80 xl:w-96 h-auto drop-shadow-lg" />
           </div>
         </div>
       </div>
@@ -173,7 +183,7 @@
           <p class="mt-3 text-slate-600">
             Sob os mistérios de Oxóssi (Conhecimento) e Xangô (Justiça), nossa casa busca o equilíbrio entre a
             <span class="font-semibold">folha que cura</span> e a <span class="font-semibold">pedra que sustenta</span>.
-            Acolhemos com respeito, trabalhamos com caridade e estudamos com seriedade.
+            Acolhemos com respeito, trabalhamos com amor e estudamos com responsabilidade.
           </p>
           <ul class="mt-6 space-y-3 text-slate-700">
             <li class="flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-oxossi-500"></span> Atendimento fraterno e responsável</li>
@@ -309,7 +319,17 @@
       </div>
     </div>
     <script>
+      // Atualiza ano no rodapé
       document.getElementById('ano-atual').textContent = new Date().getFullYear();
+      // Toggle menu mobile
+      const btn = document.getElementById('mobile-menu-button');
+      const menu = document.getElementById('mobile-menu');
+      if (btn && menu) {
+        btn.addEventListener('click', () => {
+          menu.classList.toggle('hidden');
+          btn.setAttribute('aria-expanded', String(!menu.classList.contains('hidden')));
+        });
+      }
     </script>
   </footer>
 </body>
