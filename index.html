@@ -1,36 +1,99 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Terreiro Tia Maria e Cabocla Jupira</title>
-    <meta
-      name="description"
-      content="Casa de Umbanda Sagrada — fé, caridade e conhecimento. Okê Arô, Kaô Kabecilê!"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <script src="assets/js/main.js" defer></script>
-  </head>
-  <body class="text-slate-800 bg-folhas">
-    <a
-      href="#conteudo-principal"
-      class="absolute left-1/2 -translate-x-1/2 top-3 z-[100] inline-flex -translate-y-full items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow transition focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-      >Pular para o conteúdo</a
-    >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terreiro Tia Maria e Cabocla Jupira</title>
+  <meta name="description" content="Casa de Umbanda Sagrada — fé, caridade e conhecimento. Okê Arô, Kaô Kabecilê!" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      /* Paleta inspirada em Oxóssi (verdes/vegetal) e Xangô (pedra/ígneo/terra) */
+      --oxossi-600:#166534; /* verde mata */
+      --oxossi-500:#16a34a;
+      --xango-700:#7a4a2b;  /* marrom pedra/terra */
+      --xango-600:#8b5e34;
+      --pedra-700:#334155;  /* ardósia/rocha */
+      --pedra-600:#475569;
+      --folha:#22c55e;
+      --dourado:#d4a373;    /* acento quente */
+    }
+    body{ font-family:'Inter',system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+    /* Texturas sutis (folhas e pedras) */
+    .bg-folhas {
+      background-image:
+        radial-gradient(120px 80px at 10% 10%, rgba(34,197,94,0.12) 0%, transparent 60%),
+        radial-gradient(100px 60px at 85% 25%, rgba(34,197,94,0.10) 0%, transparent 60%);
+      background-color: #f8fafc;
+    }
+    .bg-pedras {
+      background-image:
+        radial-gradient(110px 70px at 20% 80%, rgba(51,65,85,0.10) 0%, transparent 60%),
+        radial-gradient(90px 60px at 80% 70%, rgba(71,85,105,0.10) 0%, transparent 60%);
+    }
+    /* Ornamentações (oxé e flecha) — decorativas, hidden para leitores de tela */
+    .ornamento { pointer-events:none; opacity:.12; }
+  </style>
+</head>
+<body class="text-slate-800 bg-folhas">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="flex items-center gap-3">
+          <!-- Logomarca simples (folha + pedra) -->
+          <span class="relative inline-flex h-9 w-9 items-center justify-center">
+            <span class="absolute inset-0 rounded-full bg-[color:var(--oxossi-600)]/90"></span>
+            <svg class="relative h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3c3.5 3.5 3.5 9.5 0 13 0 0-6-3.5-6-8s6-5 6-5Z" fill="currentColor"/>
+              <circle cx="17.5" cy="17.5" r="3.5" fill="currentColor" class="opacity-80"/>
+            </svg>
+          </span>
+          <div class="leading-tight">
+            <span class="block font-extrabold tracking-tight">Terreiro Tia Maria</span>
+            <span class="block text-xs text-slate-500 -mt-0.5">& Cabocla Jupira</span>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="#" class="text-sm font-medium hover:text-[color:var(--oxossi-600)]">Início</a>
+          <a href="#novidades" class="text-sm font-medium hover:text-[color:var(--oxossi-600)]">Novidades</a>
+          <a href="#endereco" class="text-sm font-medium hover:text-[color:var(--oxossi-600)]">Endereço</a>
+          <a href="#redes" class="text-sm font-medium hover:text-[color:var(--oxossi-600)]">Redes sociais</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <a href="#contato" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-[color:var(--oxossi-600)] text-white text-sm font-semibold hover:bg-[color:var(--oxossi-500)] transition">Entre em contato</a>
+          <button class="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-lg border border-slate-300 text-slate-700" aria-label="Abrir menu">
+            <svg width="20" height="20" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M3 6h14M3 12h14M3 18h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <!-- gradiente Oxóssi -> Xangô -->
+    <div class="bg-gradient-to-br from-[color:var(--oxossi-600)] via-emerald-700 to-[color:var(--xango-700)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-white relative">
+        <!-- Ornamentação: flecha (Oxóssi) -->
+        <svg class="ornamento absolute -top-10 -left-6 w-40 h-40 text-white" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true">
+          <rect x="46" y="10" width="8" height="80" rx="3"/><polygon points="50,5 60,20 40,20"/>
+        </svg>
+        <!-- Ornamentação: oxé (Xangô) -->
+        <svg class="ornamento absolute -bottom-10 -right-8 w-48 h-48 text-white" viewBox="0 0 120 120" fill="currentColor" aria-hidden="true">
+          <rect x="56" y="20" width="8" height="80" rx="3"/>
+          <path d="M20 40h40v20H20zM60 40h40v20H60z" />
+        </svg>
 
         <div class="max-w-2xl">
-          <p class="text-sm font-semibold tracking-widest uppercase text-emerald-200">O que praticamos aqui</p>
+          <p class="text-sm font-semibold tracking-widest uppercase text-emerald-200">Okê Arô, Kaô Kabecilê</p>
           <h1 class="mt-3 text-4xl sm:text-5xl font-black leading-tight tracking-tight">
-            Umbanda Sagrada <span class="underline decoration-[color:var(--dourado)] underline-offset-4">Conhecimento</span> e <span class="underline decoration-emerald-300 underline-offset-4">Expansão</span> de <span class="underline decoration-amber-300 underline-offset-4">Consciência</span>
+            Umbanda Sagrada em <span class="underline decoration-[color:var(--dourado)] underline-offset-4">caridade</span>, <span class="underline decoration-emerald-300 underline-offset-4">conhecimento</span> e <span class="underline decoration-amber-300 underline-offset-4">justiça</span>
           </h1>
           <p class="mt-5 text-lg text-emerald-50/90">
-            Acolhimento, firmeza e estudo. Sob a luz de Mãe Ray e Pai Tim, nossa casa caminha com folha e pedra: sabedoria e retidão .
+            Acolhimento, firmeza e estudo. Sob a luz de Mãe Ray (Oxóssi) e Pai Tim (Xangô), nossa casa caminha com folha e pedra: sabedoria, retidão e amor ao próximo.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <a href="#novidades" class="px-5 py-3 rounded-xl bg-white text-[color:var(--oxossi-600)] font-semibold hover:bg-emerald-50">
@@ -50,10 +113,10 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2"/></svg>
           Giras semanais • Estudos • Atendimento fraterno
         </span>
-        <!-- <span class="hidden sm:inline-flex items-center gap-2">
+        <span class="hidden sm:inline-flex items-center gap-2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="currentColor" stroke-width="2"/></svg>
           Umbanda é caridade
-        </span> -->
+        </span>
       </div>
     </div>
   </section>
@@ -66,8 +129,8 @@
           <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Novidades</h2>
           <p class="mt-2 text-slate-600">Acompanhe avisos de gira, campanhas e comunicados da casa.</p>
         </div>
+        <a href="#redes" class="text-[color:var(--oxossi-600)] font-semibold hover:underline">Ver nas redes</a>
       </div>
-    </header>
 
       <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Card 1 -->
@@ -77,7 +140,7 @@
             <time datetime="2025-10-18">18 out 2025</time>
           </div>
           <h3 class="mt-3 font-bold text-lg group-hover:text-[color:var(--oxossi-600)]">Gira de Caboclos</h3>
-          <p class="mt-2 text-sm text-slate-600">Abertura de Portões 19h30, início 20h00. Trazer 1kg de alimento para doação (opcional).</p>
+          <p class="mt-2 text-sm text-slate-600">Chegada 19h, início 19h30. Trazer 1kg de alimento para doação (opcional).</p>
         </article>
         <!-- Card 2 -->
         <article class="group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
@@ -85,8 +148,8 @@
             <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700">Campanha</span>
             <time datetime="2025-11-05">05 nov 2025</time>
           </div>
-          <h3 class="mt-3 font-bold text-lg group-hover:text-[color:var(--oxossi-600)]">Expansão do Terreiro</h3>
-          <p class="mt-2 text-sm text-slate-600">Arrecadação de mateiriais de construção ou doações de valores.</p>
+          <h3 class="mt-3 font-bold text-lg group-hover:text-[color:var(--oxossi-600)]">Ação Solidária</h3>
+          <p class="mt-2 text-sm text-slate-600">Arrecadação de roupas e cobertores. Entregas no salão nos dias de gira.</p>
         </article>
         <!-- Card 3 -->
         <article class="group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
@@ -101,335 +164,166 @@
     </div>
   </section>
 
-            <div class="max-w-2xl">
-              <p class="text-sm font-semibold tracking-widest uppercase text-emerald-200">
-                Okê Arô, Kaô Kabecilê
-              </p>
-              <h1 class="mt-3 text-4xl sm:text-5xl font-black leading-tight tracking-tight">
-                Umbanda Sagrada em
-                <span class="underline decoration-[color:var(--dourado)] underline-offset-4">caridade</span>,
-                <span class="underline decoration-emerald-300 underline-offset-4">conhecimento</span> e
-                <span class="underline decoration-amber-300 underline-offset-4">justiça</span>
-              </h1>
-              <p class="mt-5 text-lg text-emerald-50/90">
-                Acolhimento, firmeza e estudo. Sob a luz de Mãe Ray (Oxóssi) e Pai Tim (Xangô), nossa casa caminha com folha e
-                pedra: sabedoria, retidão e amor ao próximo.
-              </p>
-              <div class="mt-8 flex flex-wrap gap-3">
-                <a href="#novidades" class="px-5 py-3 rounded-xl bg-white text-[color:var(--oxossi-600)] font-semibold hover:bg-emerald-50"
-                  >Ver novidades</a
-                >
-                <a href="#endereco" class="px-5 py-3 rounded-xl ring-1 ring-white/60 text-white font-semibold hover:bg-white/10"
-                  >Como chegar</a
-                >
-              </div>
-            </div>
-          </div>
+  <!-- Sessão sobre/valores (folha + pedra) -->
+  <section class="relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Nossa caminhada</h2>
+          <p class="mt-3 text-slate-600">
+            Sob os mistérios de Oxóssi (Conhecimento) e Xangô (Justiça), nossa casa busca o equilíbrio entre a
+            <span class="font-semibold">folha que cura</span> e a <span class="font-semibold">pedra que sustenta</span>.
+            Acolhemos com respeito, trabalhamos com caridade e estudamos com seriedade.
+          </p>
+          <ul class="mt-6 space-y-3 text-slate-700">
+            <li class="flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-[color:var(--oxossi-500)]"></span> Atendimento fraterno e responsável</li>
+            <li class="flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-[color:var(--xango-600)]"></span> Ética, disciplina e retidão</li>
+            <li class="flex gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-[color:var(--dourado)]"></span> Estudo contínuo e troca de saberes</li>
+          </ul>
         </div>
-        <!-- faixa com símbolos -->
-        <div class="bg-white border-t">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm text-slate-600">
-            <span class="inline-flex items-center gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2" />
-              </svg>
-              Giras semanais • Estudos • Atendimento fraterno
-            </span>
-            <span class="inline-flex items-center gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M4 12l6 6L20 6" stroke="currentColor" stroke-width="2" />
-              </svg>
-              Umbanda é caridade
-            </span>
+        <div class="relative">
+          <div class="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl ring-1 ring-slate-200 bg-gradient-to-br from-emerald-50 to-stone-50 flex items-center justify-center">
+            <!-- Ícone composto: folha + oxé + pedras -->
+            <svg class="w-48 h-48" viewBox="0 0 200 200" aria-hidden="true">
+              <!-- pedra -->
+              <ellipse cx="100" cy="135" rx="62" ry="30" fill="#94a3b8"/>
+              <ellipse cx="130" cy="150" rx="28" ry="14" fill="#cbd5e1"/>
+              <!-- folha (Oxóssi) -->
+              <path d="M60 110c-8-22 10-54 38-64 4-1 9 2 10 6 4 12-6 28-23 42 8 0 15 2 21 6-12 14-27 18-46 10z" fill="#16a34a"/>
+              <!-- oxé (Xangô) -->
+              <g transform="translate(120,70) rotate(-10)">
+                <rect x="-4" y="0" width="8" height="60" rx="3" fill="#8b5e34"/>
+                <rect x="-28" y="8" width="24" height="14" rx="2" fill="#8b5e34"/>
+                <rect x="4" y="8" width="24" height="14" rx="2" fill="#8b5e34"/>
+              </g>
+            </svg>
           </div>
-        </div>
-      </section>
-
-      <!-- Novidades -->
-      <section id="novidades" class="relative bg-white bg-pedras">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Novidades</h2>
-              <p class="mt-2 text-slate-600">Acompanhe avisos de gira, campanhas e comunicados da casa.</p>
-            </div>
-            <a href="#redes" class="text-[color:var(--oxossi-600)] font-semibold hover:underline">Ver nas redes</a>
-          </div>
-
-          <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <!-- Card 1 -->
-            <article class="group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
-              <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Gira</span>
-                <time datetime="2025-10-18">18 out 2025</time>
-              </div>
-              <h3 class="mt-3 font-bold text-lg group-hover:text-[color:var(--oxossi-600)]">Gira de Caboclos</h3>
-              <p class="mt-2 text-sm text-slate-600">
-                Chegada 19h, início 19h30. Trazer 1kg de alimento para doação (opcional).
-              </p>
-            </article>
-            <!-- Card 2 -->
-            <article class="group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
-              <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700">Campanha</span>
-                <time datetime="2025-11-05">05 nov 2025</time>
-              </div>
-              <h3 class="mt-3 font-bold text-lg group-hover:text-[color:var(--oxossi-600)]">Ação Solidária</h3>
-              <p class="mt-2 text-sm text-slate-600">
-                Arrecadação de roupas e cobertores. Entregas no salão nos dias de gira.
-              </p>
-            </article>
-            <!-- Card 3 -->
-            <article class="group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
-              <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                <span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700">Estudo</span>
-                <time datetime="2025-11-12">12 nov 2025</time>
-              </div>
-              <h3 class="mt-3 font-bold text-lg group-hover:text-[color:var(--oxossi-600)]">Roda de Conhecimento</h3>
-              <p class="mt-2 text-sm text-slate-600">
-                Estudo aberto: “Umbanda é conhecimento – a folha que cura e ensina”.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- Sessão sobre/valores (folha + pedra) -->
-      <section class="relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <div class="grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Nossa caminhada</h2>
-              <p class="mt-3 text-slate-600">
-                Sob os mistérios de Oxóssi (Conhecimento) e Xangô (Justiça), nossa casa busca o equilíbrio entre a
-                <span class="font-semibold">folha que cura</span> e a <span class="font-semibold">pedra que sustenta</span>.
-                Acolhemos com respeito, trabalhamos com caridade e estudamos com seriedade.
-              </p>
-              <ul class="mt-6 space-y-3 text-slate-700">
-                <li class="flex gap-3">
-                  <span class="mt-1 h-2 w-2 rounded-full bg-[color:var(--oxossi-500)]"></span>
-                  Atendimento fraterno e responsável
-                </li>
-                <li class="flex gap-3">
-                  <span class="mt-1 h-2 w-2 rounded-full bg-[color:var(--xango-600)]"></span>
-                  Ética, disciplina e retidão
-                </li>
-                <li class="flex gap-3">
-                  <span class="mt-1 h-2 w-2 rounded-full bg-[color:var(--dourado)]"></span>
-                  Estudo contínuo e troca de saberes
-                </li>
-              </ul>
-            </div>
-            <div class="relative">
-              <div
-                class="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl ring-1 ring-slate-200 bg-gradient-to-br from-emerald-50 to-stone-50 flex items-center justify-center"
-              >
-                <!-- Ícone composto: folha + oxé + pedras -->
-                <svg class="w-48 h-48" viewBox="0 0 200 200" aria-hidden="true">
-                  <!-- pedra -->
-                  <ellipse cx="100" cy="135" rx="62" ry="30" fill="#94a3b8" />
-                  <ellipse cx="130" cy="150" rx="28" ry="14" fill="#cbd5e1" />
-                  <!-- folha (Oxóssi) -->
-                  <path
-                    d="M60 110c-8-22 10-54 38-64 4-1 9 2 10 6 4 12-6 28-23 42 8 0 15 2 21 6-12 14-27 18-46 10z"
-                    fill="#16a34a"
-                  />
-                  <!-- oxé (Xangô) -->
-                  <g transform="translate(120,70) rotate(-10)">
-                    <rect x="-4" y="0" width="8" height="60" rx="3" fill="#8b5e34" />
-                    <rect x="-28" y="8" width="24" height="14" rx="2" fill="#8b5e34" />
-                    <rect x="4" y="8" width="24" height="14" rx="2" fill="#8b5e34" />
-                  </g>
-                </svg>
-              </div>
-              <p class="mt-4 text-xs text-slate-500 text-center">Folha (Oxóssi) • Oxé (Xangô) • Pedra/Pedreira</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Endereço + mapa -->
-      <section id="endereco" class="relative bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div class="grid lg:grid-cols-2 gap-10">
-            <div>
-              <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Como chegar</h2>
-              <p class="mt-3 text-slate-600">Rua Exemplo, 123 — Bairro • Cidade/UF • CEP 00000-000</p>
-              <div class="mt-4 space-y-2 text-slate-700">
-                <p><span class="font-semibold">Dias de gira:</span> Quartas e Sábados (19h30)</p>
-                <p><span class="font-semibold">Orientação:</span> Chegue 15 minutos antes. Traje sóbrio.</p>
-                <p><span class="font-semibold">Acessibilidade:</span> Rampa de acesso e assentos reservados.</p>
-              </div>
-              <div class="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[color:var(--xango-700)] text-white font-semibold hover:opacity-95"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 2C8.1 2 5 5 5 8.9c0 5.2 7 12.1 7 12.1s7-6.9 7-12.1C19 5 15.9 2 12 2Z"
-                      stroke="currentColor"
-                      fill="currentColor"
-                      class="text-white"
-                    />
-                  </svg>
-                  Abrir no mapa
-                </a>
-                <a
-                  href="#contato"
-                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl ring-1 ring-slate-300 font-semibold hover:bg-slate-50"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M3 5h18M3 12h18M3 19h18" stroke="currentColor" stroke-width="2" />
-                  </svg>
-                  Orientações de visita
-                </a>
-              </div>
-            </div>
-            <div class="rounded-2xl overflow-hidden shadow-lg ring-1 ring-slate-200">
-              <!-- Substitua pelo embed real do Google Maps -->
-              <iframe
-                title="Mapa do Terreiro"
-                class="w-full h-[360px]"
-                src="https://maps.google.com/maps?q=São%20Paulo&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                loading="lazy"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Redes sociais -->
-      <section id="redes" class="relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div class="grid gap-6 md:grid-cols-3">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition bg-white"
-            >
-              <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500 to-violet-500"></div>
-                <div>
-                  <h3 class="font-bold">Instagram</h3>
-                  <p class="text-sm text-slate-600 group-hover:text-slate-700">@terreirosagrada</p>
-                </div>
-              </div>
-              <p class="mt-3 text-sm text-slate-600">Fotos das giras, avisos e campanhas.</p>
-            </a>
-            <a
-              href="https://wa.me/5500000000000"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition bg-white"
-            >
-              <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-emerald-500"></div>
-                <div>
-                  <h3 class="font-bold">WhatsApp</h3>
-                  <p class="text-sm text-slate-600 group-hover:text-slate-700">Atendimento e informações</p>
-                </div>
-              </div>
-              <p class="mt-3 text-sm text-slate-600">Dúvidas sobre horários, filas e diretrizes.</p>
-            </a>
-            <a
-              href="mailto:contato@terreiro.com.br"
-              class="group rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition bg-white"
-            >
-              <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-[color:var(--pedra-600)]"></div>
-                <div>
-                  <h3 class="font-bold">E-mail</h3>
-                  <p class="text-sm text-slate-600 group-hover:text-slate-700">contato@terreiro.com.br</p>
-                </div>
-              </div>
-              <p class="mt-3 text-sm text-slate-600">Solicitações e parcerias.</p>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contato -->
-      <section id="contato" class="relative bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div class="rounded-3xl border border-slate-200 p-6 md:p-8">
-            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Entre em contato</h2>
-            <p class="mt-2 text-slate-600">Envie sua mensagem. Responderemos com carinho e clareza.</p>
-            <form class="mt-6 grid gap-4 sm:grid-cols-2" novalidate>
-              <div class="sm:col-span-1">
-                <label for="campo-nome" class="block text-sm font-medium text-slate-700">Nome</label>
-                <input
-                  id="campo-nome"
-                  name="nome"
-                  type="text"
-                  class="mt-1 w-full rounded-xl border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  placeholder="Seu nome"
-                  autocomplete="name"
-                />
-              </div>
-              <div class="sm:col-span-1">
-                <label for="campo-email" class="block text-sm font-medium text-slate-700">E-mail</label>
-                <input
-                  id="campo-email"
-                  name="email"
-                  type="email"
-                  class="mt-1 w-full rounded-xl border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  placeholder="voce@email.com"
-                  autocomplete="email"
-                  required
-                />
-              </div>
-              <div class="sm:col-span-2">
-                <label for="campo-mensagem" class="block text-sm font-medium text-slate-700">Mensagem</label>
-                <textarea
-                  id="campo-mensagem"
-                  name="mensagem"
-                  rows="4"
-                  class="mt-1 w-full rounded-xl border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  placeholder="Como podemos ajudar?"
-                  required
-                ></textarea>
-              </div>
-              <div class="sm:col-span-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-xs text-slate-500">
-                  Ao enviar, você concorda com nossas diretrizes de acolhimento e privacidade.
-                </p>
-                <button
-                  type="submit"
-                  class="inline-flex px-5 py-3 rounded-xl bg-[color:var(--oxossi-600)] text-white font-semibold hover:bg-[color:var(--oxossi-500)]"
-                >
-                  Enviar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="relative bg-slate-950 text-slate-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <div class="font-extrabold tracking-tight text-white">Terreiro Tia Maria &amp; Cabocla Jupira</div>
-            <p class="text-sm text-slate-400 mt-1">Okê Arô • Kaô Kabecilê • Umbanda é caridade</p>
-          </div>
-          <nav class="flex gap-6 text-sm" aria-label="Links úteis">
-            <a href="#" class="hover:text-white">Início</a>
-            <a href="#novidades" class="hover:text-white">Novidades</a>
-            <a href="#endereco" class="hover:text-white">Endereço</a>
-            <a href="#redes" class="hover:text-white">Redes</a>
-          </nav>
-        </div>
-        <div class="mt-8 border-t border-white/10 pt-6 text-xs text-slate-400 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <span>© <span data-current-year></span> Terreiro Tia Maria e Cabocla Jupira. Todos os direitos reservados.</span>
-          <span class="sm:inline">Feito com respeito à mata e à pedreira.</span>
+          <p class="mt-4 text-xs text-slate-500 text-center">Folha (Oxóssi) • Oxé (Xangô) • Pedra/Pedreira</p>
         </div>
       </div>
-    </footer>
-  </body>
+    </div>
+  </section>
+
+  <!-- Endereço + mapa -->
+  <section id="endereco" class="relative bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="grid lg:grid-cols-2 gap-10">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Como chegar</h2>
+          <p class="mt-3 text-slate-600">Rua Exemplo, 123 — Bairro • Cidade/UF • CEP 00000-000</p>
+          <div class="mt-4 space-y-2 text-slate-700">
+            <p><span class="font-semibold">Dias de gira:</span> Quartas e Sábados (19h30)</p>
+            <p><span class="font-semibold">Orientação:</span> Chegue 15 minutos antes. Traje sóbrio.</p>
+            <p><span class="font-semibold">Acessibilidade:</span> Rampa de acesso e assentos reservados.</p>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[color:var(--xango-700)] text-white font-semibold hover:opacity-95">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.1 2 5 5 5 8.9c0 5.2 7 12.1 7 12.1s7-6.9 7-12.1C19 5 15.9 2 12 2Z" stroke="currentColor" fill="currentColor" class="text-white"/></svg>
+              Abrir no mapa
+            </a>
+            <a href="#contato" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl ring-1 ring-slate-300 font-semibold hover:bg-slate-50">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 5h18M3 12h18M3 19h18" stroke="currentColor" stroke-width="2"/></svg>
+              Orientações de visita
+            </a>
+          </div>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-lg ring-1 ring-slate-200">
+          <!-- Substitua pelo embed real do Google Maps -->
+          <iframe title="Mapa do Terreiro" class="w-full h-[360px]" src="https://maps.google.com/maps?q=São%20Paulo&t=&z=13&ie=UTF8&iwloc=&output=embed" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Redes sociais -->
+  <section id="redes" class="relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="grid md:grid-cols-3 gap-6">
+        <a href="https://instagram.com" target="_blank" class="group rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition bg-white">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500 to-violet-500"></div>
+            <div>
+              <h3 class="font-bold">Instagram</h3>
+              <p class="text-sm text-slate-600 group-hover:text-slate-700">@terreirosagrada</p>
+            </div>
+          </div>
+          <p class="mt-3 text-sm text-slate-600">Fotos das giras, avisos e campanhas.</p>
+        </a>
+        <a href="https://wa.me/5500000000000" target="_blank" class="group rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition bg-white">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-emerald-500"></div>
+            <div>
+              <h3 class="font-bold">WhatsApp</h3>
+              <p class="text-sm text-slate-600 group-hover:text-slate-700">Atendimento e informações</p>
+            </div>
+          </div>
+          <p class="mt-3 text-sm text-slate-600">Dúvidas sobre horários, filas e diretrizes.</p>
+        </a>
+        <a href="mailto:contato@terreiro.com.br" class="group rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition bg-white">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-[color:var(--pedra-600)]"></div>
+            <div>
+              <h3 class="font-bold">E-mail</h3>
+              <p class="text-sm text-slate-600 group-hover:text-slate-700">contato@terreiro.com.br</p>
+            </div>
+          </div>
+          <p class="mt-3 text-sm text-slate-600">Solicitações e parcerias.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato -->
+  <section id="contato" class="relative bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="rounded-3xl border border-slate-200 p-6 md:p-8">
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Entre em contato</h2>
+        <p class="mt-2 text-slate-600">Envie sua mensagem. Responderemos com carinho e clareza.</p>
+        <form class="mt-6 grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-1">
+            <label class="block text-sm font-medium text-slate-700">Nome</label>
+            <input type="text" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Seu nome" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm font-medium text-slate-700">E-mail</label>
+            <input type="email" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-emerald-500 focus:border-emerald-500" placeholder="voce@email.com" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-slate-700">Mensagem</label>
+            <textarea rows="4" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Como podemos ajudar?"></textarea>
+          </div>
+          <div class="sm:col-span-2 flex items-center justify-between gap-4">
+            <p class="text-xs text-slate-500">Ao enviar, você concorda com nossas diretrizes de acolhimento e privacidade.</p>
+            <button type="submit" class="inline-flex px-5 py-3 rounded-xl bg-[color:var(--oxossi-600)] text-white font-semibold hover:bg-[color:var(--oxossi-500)]">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative bg-slate-950 text-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
+          <div class="font-extrabold tracking-tight text-white">Terreiro Tia Maria & Cabocla Jupira</div>
+          <p class="text-sm text-slate-400 mt-1">Okê Arô • Kaô Kabecilê • Umbanda é caridade</p>
+        </div>
+        <nav class="flex gap-6 text-sm">
+          <a href="#" class="hover:text-white">Início</a>
+          <a href="#novidades" class="hover:text-white">Novidades</a>
+          <a href="#endereco" class="hover:text-white">Endereço</a>
+          <a href="#redes" class="hover:text-white">Redes</a>
+        </nav>
+      </div>
+      <div class="mt-8 border-t border-white/10 pt-6 text-xs text-slate-400 flex items-center justify-between">
+        <span>© <span id="ano-atual"></span> Terreiro Tia Maria e Cabocla Jupira. Todos os direitos reservados.</span>
+        <span class="hidden sm:inline">Feito com respeito à mata e à pedreira.</span>
+      </div>
+    </div>
+    <script>
+      document.getElementById('ano-atual').textContent = new Date().getFullYear();
+    </script>
+  </footer>
+</body>
 </html>
