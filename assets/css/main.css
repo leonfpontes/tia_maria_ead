@@ -57,3 +57,10 @@ body {
 .decoration-dourado { text-decoration-color: var(--dourado); }
 .hover-bg-oxossi-500:hover { background-color: var(--oxossi-500); }
 .group:hover .group-hover\:text-oxossi-600 { color: var(--oxossi-600); }
+
+/* Garantir que a imagem Ray_Tim fique contida no container, sem distorcer */
+img[src="assets/img/Ray_Tim.png"] {
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
