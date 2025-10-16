@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "build:css": "tailwindcss -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
-    "watch:css": "tailwindcss -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
+    "build:css": "npx tailwindcss -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
+    "watch:css": "npx tailwindcss -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
     "build": "npm run build:css",
     "start": "npx --yes http-server -c-1 ."
   },
