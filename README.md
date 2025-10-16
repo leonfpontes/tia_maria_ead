@@ -4,32 +4,30 @@ Projeto estático que apresenta a home institucional do Terreiro Tia Maria e Cab
 
 ## Visão geral
 
-- **Tecnologias:** HTML5 semântico, Tailwind CSS via CDN, CSS customizado modular e JavaScript vanilla.
-- **Idiomas:** Conteúdo principal em português (pt-BR).
-- **Foco:** Acessibilidade, responsividade e fácil manutenção.
+- Tecnologias: HTML5 semântico, Tailwind CSS via CDN, CSS modular e JavaScript vanilla.
+- Idioma: Conteúdo principal em português (pt-BR).
+- Foco: Acessibilidade, responsividade e fácil manutenção.
 
 ## Estrutura de pastas
 
 ```
 .
-├── assets/
-│   ├── css/
-│   │   └── main.css         # Tokens e estilos complementares ao Tailwind
-│   ├── img/                 # Pasta reservada para imagens do projeto
-│   └── js/
-│       └── main.js          # Interações básicas (menu mobile e ano dinâmico)
-├── docs/
-│   ├── guia-arquitetura.md  # Convenções de código e organização
-│   └── diretrizes-conteudo.md # Recomendações para textos e acessibilidade
-└── index.html               # Home do site
-```
+└─ assets/
+   ├─ css/
+   │  ├─ main.css           # Tokens e estilos complementares ao Tailwind
+   │  ├─ tailwind.css       # Saída gerada do Tailwind
+   │  └─ tailwind.input.css # Fonte para o build do Tailwind
+   ├─ img/                  # Imagens do projeto
+   └─ js/
+      └─ auth.js           # Lógica de autenticação mock (modal / FAB)
 
-> **Observação:** A hierarquia segue o padrão sugerido pelo W3C para projetos estáticos, separando recursos em diretórios específicos.
+index.html                 # Home do site
+```
 
 ## Como visualizar
 
-1. Faça o download/clonagem do repositório.
-2. Abra o arquivo `index.html` diretamente no navegador de preferência ou sirva o diretório com um servidor HTTP simples.
+1. Abra o arquivo `index.html` diretamente no navegador, ou
+2. Sirva o diretório com um servidor HTTP simples.
 
 Exemplo utilizando o Python 3:
 
@@ -41,17 +39,18 @@ Acesse `http://localhost:5173` e visualize a home.
 
 ## Personalização
 
-- **Cores e tokens:** Centralizados em `assets/css/main.css` nas variáveis CSS (`:root`).
-- **Componentes Tailwind:** Utilizam classes utilitárias diretamente no HTML.
-- **JavaScript:** Ajuste comportamentos ou adicione novas interações em `assets/js/main.js`.
+- Cores e tokens: Centralizados em `assets/css/main.css` nas variáveis CSS (`:root`).
+- Componentes Tailwind: Classes utilitárias diretamente no HTML (`index.html`).
+- JavaScript: Ajuste comportamentos em `assets/js/auth.js`.
 
 ## Padrões de contribuição
 
 - Prefira HTML semântico (`<main>`, `<section>`, `<nav>`, etc.).
-- Mantenha textos alternativos e atributos `aria` atualizados para preservar a acessibilidade.
-- Documente alterações relevantes em novos arquivos dentro de `docs/` conforme necessário.
-- Utilize indentação de dois espaços para HTML e seguir convenções presentes nos arquivos existentes.
+- Mantenha textos alternativos e atributos `aria` atualizados para acessibilidade.
+- Documente alterações relevantes em arquivos dentro de `docs/` (se aplicável).
+- Utilize indentação consistente e siga as convenções presentes nos arquivos existentes.
 
 ## Licença
 
 Projeto aberto para uso comunitário. Ajuste conforme as necessidades do terreiro mantendo os créditos culturais originais.
+
