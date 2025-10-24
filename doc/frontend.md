@@ -16,25 +16,30 @@ apps/web
 └── src
     ├── app
         │   ├── layout.tsx              # tema global e baseline CSS
-        │   ├── page.tsx                # home com controles de login/recuperação
+    │   ├── page.tsx                # home híbrida (dashboard/landing) com novo layout
         │   ├── login.tsx               # redireciona para ?login=1 (mantém compatibilidade)
         │   ├── forgot-password.tsx     # redireciona para ?forgot=1
         │   └── reset-password.tsx      # página de redefinição via token
         ├── components
-        │   └── auth
-        │       ├── LoginDialog.tsx
-        │       └── ForgotPasswordDialog.tsx
+    │   ├── auth
+    │   │   ├── LoginDialog.tsx
+    │   │   └── ForgotPasswordDialog.tsx
+    │   └── layout
+    │       ├── AppChrome.tsx        # shell autenticado com AppBar + Drawer responsivo
+    │       ├── navigation/NavLinks.tsx
+    │       ├── hero/HeroSection.tsx
+    │       └── dash/{CourseCard,SectionTitle,StatCard}.tsx
         └── providers
                 └── theme-registry.tsx
 ├── public/.gitkeep             # garante pasta estática durante o build
 ```
 
 ## Boas Práticas
-- Tema global e Emotion cache configurados em `theme-registry`; evite recriar provedores locais desnecessários.
+- Tema global e Emotion cache configurados em `theme-registry`; evite criar provedores locais redundantes.
 - Prefira componentes MUI (`Grid2`, `Stack`, `Typography`) para garantir consistência visual e responsiva.
 - Centralize chamadas de API em hooks React Query (ex.: `useDashboardMe`) quando conectar com backend.
 - Utilize `.env.local` para definir `NEXT_PUBLIC_API_BASE_URL` em ambientes não-docker.
-- Sempre rode `npm run lint` antes do PR.
+- Sempre rode `npm run lint` (raiz do monorepo) antes de abrir PR.
 
 ## Autenticação no Frontend
 - A home (`app/page.tsx`) controla os diálogos de login/recuperação e persiste o usuário em `localStorage` (`tia-maria-auth`, `tia-maria-token`).
@@ -74,7 +79,7 @@ apps/web
 - Habilite previews automáticos para PRs e restrinja deploys para `main` quando estabilizar o MVP.
 
 ## Próximos Passos
-- Criar layout principal (AppBar, navegação lateral) e contexto de usuário logado.
 - Conectar React Query às rotas `/auth/login`, `/dashboard/me`, etc., com invalidation adequada.
-- Exibir cursos/certificados reais na home ou dashboard após login.
-- Adicionar testes (React Testing Library/Playwright) para fluxos críticos de autenticação.
+- Exibir cursos/certificados reais na home/dashboard usando os novos cards.
+- Evoluir fluxo de contexto de usuário (sincronizar `localStorage`, refresh tokens, logout global).
+- Adicionar testes (React Testing Library/Playwright) para fluxos críticos de autenticação e navegação logada.

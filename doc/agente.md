@@ -51,3 +51,6 @@ Scripts úteis no `package.json` raiz:
 - [24/10/2025]: Alinhamento da landing com o backend real (login via FastAPI), ajuste de CORS para `localhost:8080` e atualização geral da documentação.
 - [24/10/2025]: Configuração do CI com lint/teste base, guia de deploy (Vercel/Railway) e atualização da Fase 1 do backlog.
 - [24/10/2025]: Definição da branch operacional `feat(ead)-branch-main-ead-001` para consolidar todas as fases antes do merge final na `main`.
+- [24/10/2025]: Início da Fase 3 (frontend) com preparação do design system MUI e componentes base.
+- [24/10/2025]: Integração do design system na homepage (AppChrome + Hero + cards), criação do script `npm run lint` na raiz e atualização da documentação do frontend/backlog.
+- [24/10/2025]: Ajustes de roteamento admin/aluno (landing e Next.js), identificação do erro `toLowerCase` no dashboard do aluno e pendência de `npm run build` bloqueado por servidor dev ativo.

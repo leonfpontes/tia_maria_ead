@@ -10,6 +10,27 @@ const API_BASE_URL =
     ? 'http://localhost:8000'
     : window.location.origin.replace(/\/$/, ''));
 
+const EAD_BASE_URL =
+  window.__TIA_MARIA_EAD_BASE__ ||
+  (document.documentElement?.dataset?.eadBase || '').trim() ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : `${window.location.origin.replace(/\/$/, '')}/ead`);
+
+const ALUNO_BASE_URL =
+  window.__TIA_MARIA_ALUNO_BASE__ ||
+  (document.documentElement?.dataset?.alunoBase || '').trim() ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/dashboard'
+    : `${window.location.origin.replace(/\/$/, '')}/ead/dashboard`);
+
+const ADMIN_BASE_URL =
+  window.__TIA_MARIA_ADMIN_BASE__ ||
+  (document.documentElement?.dataset?.adminBase || '').trim() ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/admin'
+    : `${window.location.origin.replace(/\/$/, '')}/ead/admin`);
+
 const SESSION_STORAGE_KEY = 'tia-maria-auth';
 const TOKEN_STORAGE_KEY = 'tia-maria-token';
 
@@ -19,6 +40,29 @@ function buildApiUrl(path) {
     return `${base}/${path}`;
   }
   return `${base}${path}`;
+}
+
+function buildPortalHref(baseUrl, token) {
+  if (typeof window === 'undefined') {
+    return baseUrl;
+  }
+
+  try {
+    const url = new URL(baseUrl, window.location.origin);
+    if (token) {
+      url.searchParams.set('token', token);
+    } else {
+      url.searchParams.delete('token');
+    }
+    return url.toString();
+  } catch (error) {
+    console.warn('URL de portal inválida', error);
+    if (token) {
+      const separator = baseUrl.includes('?') ? '&' : '?';
+      return `${baseUrl}${separator}token=${encodeURIComponent(token)}`;
+    }
+    return baseUrl;
+  }
 }
 
 // Estado global da autenticação
@@ -137,6 +181,8 @@ function updateAuthUI() {
   const userFab = document.getElementById('user-fab');
   const userFabName = document.getElementById('user-fab-name');
   const userFabEmail = document.getElementById('user-fab-email');
+  const eadAccessLinks = document.querySelectorAll('[data-ead-access]');
+  const alunoAccessLinks = document.querySelectorAll('[data-aluno-access]');
 
   console.log('Estado de auth:', authState);
 
@@ -172,6 +218,25 @@ function updateAuthUI() {
     if (userFabName) userFabName.textContent = authState.user.name;
     if (userFabEmail) userFabEmail.textContent = authState.user.email;
 
+    const eadHref = buildPortalHref(EAD_BASE_URL, authState.token);
+    const isAdmin = authState.user?.role === 'admin';
+    const alunoHref = buildPortalHref(isAdmin ? ADMIN_BASE_URL : ALUNO_BASE_URL, authState.token);
+    eadAccessLinks.forEach(link => {
+      link.classList.remove('hidden');
+      link.setAttribute('href', eadHref);
+      link.setAttribute('target', '_self');
+      link.setAttribute('rel', 'noopener');
+    });
+    alunoAccessLinks.forEach(link => {
+      link.setAttribute('href', alunoHref);
+      link.setAttribute('target', '_self');
+      link.setAttribute('rel', 'noopener');
+      const label = link.querySelector('[data-role-label]');
+      if (label) {
+        label.textContent = isAdmin ? 'Área Administrativa' : 'Área do Aluno';
+      }
+    });
+
   } else {
     console.log('Usuário deslogado - mostrando botão Entrar');
 
@@ -197,6 +262,22 @@ function updateAuthUI() {
       userFab.classList.add('hidden');
       userFab.classList.remove('open');
     }
+
+    eadAccessLinks.forEach(link => {
+      link.classList.add('hidden');
+      link.setAttribute('href', EAD_BASE_URL);
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+    });
+    alunoAccessLinks.forEach(link => {
+      link.setAttribute('href', ALUNO_BASE_URL);
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+      const label = link.querySelector('[data-role-label]');
+      if (label) {
+        label.textContent = 'Área do Aluno';
+      }
+    });
   }
 }
 

@@ -10,7 +10,10 @@ from app.schemas.user import UserType
 class CursoResumo(BaseModel):
     id: UUID
     nome: str
+    descricao: str | None = None
     liberado_em: datetime
+    expira_em: datetime | None = None
+    ativo: bool | None = None
 
 
 class CertificadoResumo(BaseModel):

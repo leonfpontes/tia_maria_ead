@@ -40,6 +40,7 @@
 - Produção deve definir o host da API com `window.__TIA_MARIA_API_BASE__` ou `data-api-base` no `<html>`.
 - O script mantém compatibilidade com o `localStorage` legado (`auth`) e salva a sessão moderna em `tia-maria-auth`/`tia-maria-token`.
 - Erros de CORS ou rede aparecem no console; repetir `docker compose up --build -d api` após alterar origens.
+- Quando o usuário estiver autenticado, os menus "Catálogo EAD" (`data-ead-base`, padrão `/catalogo`) e "Área do Aluno" (`data-aluno-base`, padrão `/dashboard`) geram links para o app Next.js anexando o JWT via query string (`?token=...`). Se o perfil for admin, o menu troca automaticamente para "Área Administrativa" e usa `data-admin-base` (padrão `/admin`). O app consome o token na primeira carga, persiste novamente em `localStorage` e remove o parâmetro da barra de endereço.
 
 ---
 

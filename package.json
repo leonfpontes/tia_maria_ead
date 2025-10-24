@@ -13,7 +13,9 @@
     "start": "npx --yes http-server -c-1 .",
     "dev:backend": "docker compose up api",
     "dev:frontend": "npm run dev --prefix apps/web",
-    "dev:stack": "docker compose up"
+    "dev:stack": "docker compose up",
+    "restart:stack": "docker compose down && docker compose up",
+    "lint": "npm --prefix apps/web run lint"
   },
   "repository": {
     "type": "git",

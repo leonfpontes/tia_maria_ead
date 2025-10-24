@@ -25,6 +25,8 @@ def create_application() -> FastAPI:
     allowed_origins = settings.cors_origins or [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
         "http://localhost:8080",
         "http://127.0.0.1:8080",
     ]

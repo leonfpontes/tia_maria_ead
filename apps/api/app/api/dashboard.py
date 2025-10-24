@@ -33,7 +33,14 @@ def get_dashboard(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
 
     cursos = [
-        CursoResumo(id=item.curso.id, nome=item.curso.nome, liberado_em=item.liberado_em)
+        CursoResumo(
+            id=item.curso.id,
+            nome=item.curso.nome,
+            descricao=item.curso.descricao,
+            liberado_em=item.liberado_em,
+            expira_em=getattr(item, "expira_em", None),
+            ativo=item.curso.ativo,
+        )
         for item in user.cursos
         if item.curso is not None
     ]
