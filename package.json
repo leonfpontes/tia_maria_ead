@@ -7,7 +7,6 @@
     "doc": "docs"
   },
   "scripts": {
-    "postinstall": "chmod +x node_modules/.bin/* || true",
     "build:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
     "watch:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
     "build": "npm run build:css",
