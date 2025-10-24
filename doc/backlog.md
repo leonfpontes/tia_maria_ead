@@ -25,6 +25,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [x] Remover card "Não haverá gira!" e dar destaque ao card "Gira de Caboclos" na seção de novidades - Status: Concluída em 23/10/2025
 - [x] Destacar o card "Gira de Caboclos" com tons de verde e selo de próxima gira - 23/10/2025
 - [x] Refinar responsividade geral (carrossel mobile, CTA do hero ajustada, mapa redes) - 23/10/2025
+- [x] Implementar rolagem suave para navegação por âncoras - 23/10/2025
 
 ## Instruções para Agentes
 

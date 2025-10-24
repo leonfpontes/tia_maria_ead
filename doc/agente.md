@@ -55,3 +55,4 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 - [23/10/2025]: Removido card "Não haverá gira!" e dado destaque ao card "Gira de Caboclos" na seção de novidades (fundo oxossi, borda destacada, badge especial).
 - [23/10/2025]: Card "Gira de Caboclos" ganhou destaque completo em tons de verde com selo de próxima gira.
 - [23/10/2025]: Layout responsivo refinado (hero centrado, CTAs mobile ajustadas, carrossel de novidades, mapa e redes sociais otimizados para telas pequenas).
+- [23/10/2025]: Adicionada rolagem suave para navegação por âncoras.
