@@ -56,3 +56,4 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 - [23/10/2025]: Card "Gira de Caboclos" ganhou destaque completo em tons de verde com selo de próxima gira.
 - [23/10/2025]: Layout responsivo refinado (hero centrado, CTAs mobile ajustadas, carrossel de novidades, mapa e redes sociais otimizados para telas pequenas).
 - [23/10/2025]: Adicionada rolagem suave para navegação por âncoras.
+- [23/10/2025]: Incluído botão flutuante "Voltar ao topo" com comportamento responsivo.

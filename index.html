@@ -149,6 +149,13 @@
     </div>
   </header>
 
+  <button id="back-to-top" class="back-to-top hidden" type="button" aria-label="Voltar ao topo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5"></path>
+      <path d="M5 12l7-7 7 7"></path>
+    </svg>
+  </button>
+
   <!-- Floating User Menu -->
   <div id="user-fab" class="user-fab hidden" aria-expanded="false">
     <button id="user-fab-toggle" class="user-fab__btn" aria-label="Abrir menu do usuário">
@@ -482,6 +489,24 @@
         btn.addEventListener('click', () => {
           menu.classList.toggle('hidden');
           btn.setAttribute('aria-expanded', String(!menu.classList.contains('hidden')));
+        });
+      }
+
+      // Back to top button
+      const backToTopBtn = document.getElementById('back-to-top');
+      if (backToTopBtn) {
+        const toggleBackToTop = () => {
+          if (window.scrollY > 320) {
+            backToTopBtn.classList.remove('hidden');
+          } else {
+            backToTopBtn.classList.add('hidden');
+          }
+        };
+
+        toggleBackToTop();
+        window.addEventListener('scroll', toggleBackToTop, { passive: true });
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
     </script>
