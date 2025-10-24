@@ -214,7 +214,7 @@ export default function HomePage() {
   );
 
   const userRoleLabel = user?.tipo === "admin" ? "Administração" : user ? "Estudante" : undefined;
-  const firstName = user?.nome.split(" ")[0] ?? "amiga(o)";
+  const firstName = user?.nome?.split(" ")[0] ?? "amiga(o)";
 
   const content = user ? (
     <AppChrome userName={user.nome} userEmail={user.email} userRole={userRoleLabel} onLogout={handleLogout}>

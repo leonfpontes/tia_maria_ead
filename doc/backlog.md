@@ -80,8 +80,10 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [x] Documentar playbook de deploy Vercel + Railway - 24/10/2025
 
 ## Débitos Técnicos Abertos
-- [ ] Corrigir erro runtime na área do aluno (`TypeError: Cannot read properties of undefined (reading 'toLowerCase')`) ao acessar `localhost:3000` autenticado.
-- [ ] Garantir que `npm run build` rode em ambiente limpo (finalizar `next dev`, remover travas em `.next/trace`) e registrar procedimento.
+- [ ] [BUG] Erro runtime na área do aluno (`TypeError: Cannot read properties of undefined (reading 'toLowerCase')`) ao acessar `localhost:3000` autenticado.
+- [ ] [BUG] `npm run build` não roda se o dev server estiver ativo (trava em `.next/trace`).
+- [ ] [BUG] Falta de testes/lint pós-merge: rodar `npm run lint` e testes após cada merge.
+- [ ] [BUG] Falta de validação de fluxo de login/logout e navegação admin/aluno: garantir que o fluxo de autenticação e redirecionamento está correto para ambos os papéis.
 
 ## Instruções para Agentes
 
