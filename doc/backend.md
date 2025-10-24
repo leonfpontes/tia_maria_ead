@@ -94,6 +94,20 @@ apps/api
   ```
 - Seed padrão cria usuários `admin@tiamariaead.com` (`admin123`), `aluno@tiamariaead.com` (`aluno123`), curso “Fundamentos da Umbanda” e certificado vinculado.
 
+## Deploy (Railway ou Render)
+- **Railway (recomendado para MVP)**
+  - Crie um novo projeto, selecione “Deploy From GitHub” e aponte para `apps/api` ou use `railway init` localmente.
+  - O template Python usa Nixpacks automaticamente. Ajuste `Start Command` para `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+  - Anexe um banco PostgreSQL gratuito; Railway exporta `DATABASE_URL`. Configure `SECRET_KEY`, `FRONTEND_BASE_URL`, `CORS_ORIGINS` (JSON) e qualquer credencial SMTP.
+  - Migrações/seed rodando direto do painel ou CLI: `railway run alembic upgrade head` e `railway run python -m app.db.seed`.
+  - Logs: `railway logs` ou painel; monitore consumo mensal de créditos.
+- **Render (alternativa)**
+  - Crie um `Web Service` apontando para `apps/api` com `Environment = Python`.
+  - `Build Command`: `pip install -r apps/api/requirements.txt`. `Start Command`: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+  - Adicione um banco PostgreSQL (seção `Add Database`) e copie a URI para `DATABASE_URL`.
+  - Configure `SECRET_KEY`, `FRONTEND_BASE_URL`, `CORS_ORIGINS` e SMTP.
+  - Rodar migrações via shell: `render exec` ou job temporário.
+
 ## Lifespan e inicialização
 - `app.main` usa um `lifespan` assíncrono (async contextmanager) preparado para futuros hooks.
 - O container espera o startup completar; logs ficam disponíveis via `docker compose logs -f api`.

@@ -2,6 +2,8 @@
 
 Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o status das atividades do projeto. Sempre que uma tarefa for iniciada, atualizada ou concluída, marque-a aqui com o status apropriado.
 
+> Branch de trabalho contínuo: `feat(ead)-branch-main-ead-001`. Sempre que for iniciar algo (esteja na `main` ou já na staging), rode `git checkout feat(ead)-branch-main-ead-001 && git pull`, crie uma branch filha e só depois implemente. Cada fase concluída é mergeada de volta nessa base intermediária e só então promovida para `main` quando a plataforma EAD estiver pronta. A `main` segue servindo a landing em produção (agenda atualizada manualmente).
+
 ## Fases do Projeto EAD (Pendente)
 
 ### Fase 0 – Estratégia e Governança
@@ -12,8 +14,8 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 
 ### Fase 1 – Arquitetura e Base Técnica
 - [x] Organizar monorepo com `apps/landing`, `apps/web (Next.js)`, `apps/api (FastAPI)` preservando deploy atual na Vercel. (23/10/2025)
-- [/] Configurar Docker + docker-compose locais e GitHub Actions (lint/test) para web e api. – Compose validado em 24/10/2025; CI pendente.
-- [ ] Configurar projetos na Vercel (frontend) e Railway/Render (backend + Postgres) em modo free tier.
+- [x] Configurar Docker + docker-compose locais e GitHub Actions (lint/test) para web e api. – Compose validado em 24/10/2025; CI adicionado em 24/10/2025 (`.github/workflows/ci.yml`).
+- [x] Configurar projetos na Vercel (frontend) e Railway/Render (backend + Postgres) em modo free tier – Playbook documentado em 24/10/2025 (ver `README.md`, `doc/frontend.md`, `doc/backend.md`).
 - [x] Criar documentação técnica (ver `doc/ead_arquitetura.md`, `doc/frontend.md`, `doc/backend.md`) e manter atualizações. (23/10/2025)
 
 ### Fase 2 – Backend EAD
@@ -73,6 +75,8 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [x] Validar stack Docker (`npm run dev:stack`), aplicar migrações e seed com usuários de exemplo - 24/10/2025
 - [x] Integrar login/recuperação no frontend Next.js (diálogos MUI + página de reset) - 24/10/2025
 - [x] Ligar a landing estática ao backend FastAPI (auth.js + CORS para 8080) - 24/10/2025
+- [x] Configurar CI inicial (lint Next + checagens FastAPI) - 24/10/2025
+- [x] Documentar playbook de deploy Vercel + Railway - 24/10/2025
 
 ## Instruções para Agentes
 

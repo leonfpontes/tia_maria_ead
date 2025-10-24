@@ -63,6 +63,16 @@ apps/web
 - Para disparar e-mails de teste, verifique os logs do container `api` (fallback imprime o link).
 - Ao testar a landing com a API real, garanta que o backend permita a origem (`http://localhost:8080` por padrão) ou defina `CORS_ORIGINS` conforme necessidade.
 
+## Deploy na Vercel
+- Crie um projeto novo na Vercel e selecione este repositório.
+- Em “Project Settings → General → Root Directory”, aponte para `apps/web`.
+- Use as variáveis de build padrão (`Install Command`: `npm ci`, `Build Command`: `npm run build`, `Output Directory`: `.vercel/output`).
+- Configure variáveis de ambiente: 
+    - `NEXT_PUBLIC_API_BASE_URL` → domínio público da API.
+    - `NEXT_PUBLIC_SITE_URL` → URL final exibida nos e-mails/links.
+    - (Opcional) `NODE_OPTIONS=--max_old_space_size=4096` para builds maiores.
+- Habilite previews automáticos para PRs e restrinja deploys para `main` quando estabilizar o MVP.
+
 ## Próximos Passos
 - Criar layout principal (AppBar, navegação lateral) e contexto de usuário logado.
 - Conectar React Query às rotas `/auth/login`, `/dashboard/me`, etc., com invalidation adequada.

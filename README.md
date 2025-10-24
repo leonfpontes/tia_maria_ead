@@ -130,6 +130,30 @@ uvicorn app.main:app --reload
 
 ---
 
+## ✅ Integração Contínua
+
+- Workflow GitHub Actions em `.github/workflows/ci.yml` roda em push/PR para `main`, `develop` e branches `feat/*`.
+- Job **Frontend Lint** usa Node 20, instala dependências e executa `npm run lint --prefix apps/web`.
+- Job **Backend Checks** usa Python 3.12, instala requisitos da API, roda `python -m compileall` para garantir sintaxe e finaliza com `pytest`.
+- Ajuste ou adicione novas verificações conforme surgirem testes ou ferramentas extras (ex.: Ruff, MyPy, Playwright).
+
+---
+
+## ☁️ Deploy (Vercel + Railway)
+
+- **Vercel (Next.js em `apps/web`)**:
+  - Crie um projeto apontando para este repositório e defina `Root Directory` como `apps/web`.
+  - Configure `Install Command`: `npm ci` e `Build Command`: `npm run build` (defaults do Next).
+  - Defina variáveis `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_SITE_URL` e, se necessário, `NODE_OPTIONS=--max_old_space_size=4096`.
+- **Railway (FastAPI em `apps/api`)**:
+  - Crie um serviço Python e conecte o repositório; Railway detecta o `Dockerfile` ou use Nixpacks.
+  - `Start Command`: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+  - Anexe banco PostgreSQL gratuito; Railway injeta `DATABASE_URL`. Complete com `SECRET_KEY` e `FRONTEND_BASE_URL`.
+  - Rode migrações/seed com `railway run alembic upgrade head` e `railway run python -m app.db.seed`.
+- Instruções detalhadas nos guias `doc/frontend.md` e `doc/backend.md`.
+
+---
+
 ## 🔐 Usuários e Fluxo de Login
 
 - Seed padrão cria:
@@ -162,12 +186,12 @@ uvicorn app.main:app --reload
 
 ## 🧑‍💻 Fluxo de Contribuição
 
-1. Crie uma branch: `git checkout -b minha-feature`.
-2. Faça suas alterações (landing, frontend ou backend).
-3. Rode os comandos de desenvolvimento referentes à parte que mexeu.
-4. Atualize a documentação (`doc/agente.md`, `doc/backlog.md`, `doc/frontend.md`, `doc/backend.md`) quando necessário.
+1. Se estiver na `main` (ou mesmo já na `feat(ead)-branch-main-ead-001`), troque/permaneça na branch intermediária e atualize: `git checkout feat(ead)-branch-main-ead-001 && git pull`.
+2. Crie uma branch filha a partir dela para cada entrega: `git checkout -b feat/descricao`.
+3. Implementou? Rode os comandos necessários, atualize documentação e volte para a base: `git checkout feat(ead)-branch-main-ead-001`.
+4. Ao meu comando (ou decisão de integração), faça `git merge feat/descricao`, resolva conflitos e apenas então suba o estágio consolidado.
 5. Commits em português, mensagens claras: `git commit -m "feat: adiciona player de vídeo"`.
-6. Push e abra o PR.
+6. PRs e pushes sempre miram `feat(ead)-branch-main-ead-001`. A `main` só recebe a plataforma quando concluirmos todas as fases EAD.
 
 ### Boas práticas importantes
 
@@ -185,6 +209,8 @@ uvicorn app.main:app --reload
 - [doc/ead_db_model.md](doc/ead_db_model.md) – modelagem das tabelas de usuários, cursos, certificados e logs.
 - [doc/ead_auth_flow.md](doc/ead_auth_flow.md) – fluxos de login, recuperação de senha e segurança.
 - [doc/backlog.md](doc/backlog.md) – lista de tarefas atualizada.
+
+> Nota: `main` permanece dedicada à landing em produção (agenda e comunicados). Atualizações rápidas da agenda continuam sendo aplicadas diretamente na `main` até a migração final da plataforma EAD.
 
 ---
 

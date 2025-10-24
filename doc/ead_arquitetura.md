@@ -27,15 +27,17 @@
   - Logs estruturados no backend (Loguru + envio para Railway/Render).
   - Monitoramento uptime gratuito (Better Stack, UptimeRobot).
 - **CI/CD**:
-  - GitHub Actions: lint + testes + build. Deploy automático para Vercel (frontend) e Railway/Render (backend) via API tokens.
+  - GitHub Actions configurado (`.github/workflows/ci.yml`) rodando lint do Next e checagens do FastAPI.
+  - Próxima etapa: automatizar deploy para Vercel (frontend) e Railway/Render (backend) via tokens/API.
 
 ## Fluxo de Deploy
-1. Landing page atual continua servida pelo build estático (branch principal/Vercel).
-2. Monorepo já estruturado com `apps/web` e `apps/api`; manter pipelines separados.
-3. Para releases do MVP EAD:
+1. Landing page atual continua servida pelo build estático (branch `main`/Vercel).
+2. Desenvolvimento EAD acontece na branch intermediária `feat(ead)-branch-main-ead-001`; toda vez que iniciar algo (mesmo já estando nela) execute `git checkout feat(ead)-branch-main-ead-001 && git pull`, crie uma filha e, ao final, faça merge controlado de volta.
+3. Monorepo já estruturado com `apps/web` e `apps/api`; manter pipelines separados.
+4. Para releases do MVP EAD:
   - Backend: Railway/Render com deploy via CI (rodar migrations antes do release).
   - Frontend: Vercel (App Router). Configure variáveis `NEXT_PUBLIC_API_BASE_URL`/`NEXT_PUBLIC_SITE_URL`.
-4. Enquanto a landing antiga estiver ativa, mantenha scripts Tailwind (`npm run build:css`) disponíveis para hotfixes.
+5. Enquanto a landing antiga estiver ativa, mantenha scripts Tailwind (`npm run build:css`) disponíveis para hotfixes na `main`.
 
 ## Considerações de Custo
 - **Vercel**: Plano gratuito dá direito a deploys ilimitados com limites de 100GB/h mês de bandwidth.
@@ -59,7 +61,7 @@
 
 ## Próximos Passos Imediatos
 - Validar provedor (Railway vs Render) conforme custo e ciclos de sleep.
-- Automatizar pipeline de deploy (GitHub Actions) para lint/test + publish.
+- Estender pipeline GitHub Actions para publicar em Vercel/Railway quando tokens estiverem disponíveis.
 - Conectar React Query ao backend (`/dashboard/me`) e desenhar layout do dashboard.
 - Prototipar entrega de conteúdo (Mux/Bunny) e fluxo de pagamentos (Stripe ou alternativa local).
 - Atualizar backlog continuamente alinhado a este plano.

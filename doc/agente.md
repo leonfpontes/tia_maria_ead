@@ -30,10 +30,14 @@ Scripts úteis no `package.json` raiz:
 1. **Leia antes de agir**: revise `README.md`, este arquivo e o backlog para entender o estado atual.
 2. **Respeite o tema**: mantenha o tom espiritual, linguagem inclusiva e conteúdo em pt-BR.
 3. **Rode e teste**: antes de entregar mudanças, suba os serviços afetados (Docker ou local) e execute o que for necessário (lint, testes, seeds).
-4. **Atualize documentação**: qualquer alteração relevante exige revisão de README, `doc/*.md` relacionados e `doc/backlog.md`.
-5. **Registre no backlog**: marque tarefas como concluídas/em andamento com data.
-6. **Não reverta mudanças do usuário**: se encontrar alterações externas, confirme antes de sobrescrever.
-7. **Registrar histórico**: adicione uma linha no final deste arquivo resumindo o que fez e quando.
+4. **Branch base**:
+	- Sempre inicie (ou continue) a partir de `feat(ead)-branch-main-ead-001`: `git checkout feat(ead)-branch-main-ead-001 && git pull` (mesmo que já esteja nela).
+	- Crie uma branch filha a partir dela (`git checkout -b feat/descricao`) para cada pacote de trabalho.
+	- Ao finalizar, aguarde instrução para fazer `git merge feat/descricao` de volta na base e manter o staging antes da `main`.
+5. **Atualize documentação**: qualquer alteração relevante exige revisão de README, `doc/*.md` relacionados e `doc/backlog.md`.
+6. **Registre no backlog**: marque tarefas como concluídas/em andamento com data.
+7. **Não reverta mudanças do usuário**: se encontrar alterações externas, confirme antes de sobrescrever.
+8. **Registrar histórico**: adicione uma linha no final deste arquivo resumindo o que fez e quando.
 
 ## Histórico de Mudanças
 
@@ -45,3 +49,5 @@ Scripts úteis no `package.json` raiz:
 - [24/10/2025]: Setup inicial do frontend Next.js/MUI com componentes para login e reset.
 - [24/10/2025]: Integração completa do fluxo de login/recuperação no frontend, ajustes no README e guides, e validação da stack Docker com seed automático.
 - [24/10/2025]: Alinhamento da landing com o backend real (login via FastAPI), ajuste de CORS para `localhost:8080` e atualização geral da documentação.
+- [24/10/2025]: Configuração do CI com lint/teste base, guia de deploy (Vercel/Railway) e atualização da Fase 1 do backlog.
+- [24/10/2025]: Definição da branch operacional `feat(ead)-branch-main-ead-001` para consolidar todas as fases antes do merge final na `main`.
