@@ -1,141 +1,167 @@
-# Terreiro Tia Maria e Cabocla Jupira
+# Terreiro Tia Maria & Cabocla Jupira – Website + Plataforma EAD
 
-Projeto estático que apresenta a home institucional do Terreiro Tia Maria e Cabocla Jupira. O objetivo é disponibilizar uma base organizada segundo boas práticas do W3C, com documentação de apoio para evolução do site. Desenvolvido para ser simples, acessível e fácil de executar, mesmo para desenvolvedores juniores.
+Este repositório reúne:
 
-## Visão Geral
+1. **Landing page estática** (HTML + Tailwind) – já em produção na Vercel, fácil de editar.
+2. **Plataforma EAD em construção** – monorepo com frontend (Next.js + MUI) e backend (FastAPI) prontos para evolução gradual.
 
-- **Tecnologias**: HTML5 semântico, Tailwind CSS (compilado), CSS modular e JavaScript vanilla.
-- **Idioma**: Conteúdo principal em português (pt-BR).
-- **Foco**: Acessibilidade, responsividade, fácil manutenção e automação de tarefas.
-- **Deploy**: Hospedado no Vercel para produção.
+Tudo foi organizado para que até iniciantes consigam rodar, testar e contribuir sem sustos.
 
-## Pré-requisitos
+---
 
-- **Node.js**: Versão 20.x ou superior (verifique com `node --version`).
-- **NPM**: Incluído com Node.js (verifique com `npm --version`).
-- **Navegador**: Qualquer navegador moderno (Chrome, Firefox, Edge, etc.).
+## 🧰 Pré-requisitos
 
-## Instalação
+| Ferramenta | Para quê? | Como verificar |
+|------------|-----------|----------------|
+| **Node.js 20+** | Scripts, Tailwind e frontend | `node --version` |
+| **npm** (vem com Node) | Instalar pacotes | `npm --version` |
+| **Docker Desktop** (opcional, mas recomendado) | Subir banco + backend rapidamente | Abra o app e verifique se está rodando |
+| **Python 3.12+** (opcional) | Caso queira rodar o backend sem Docker | `python --version` |
 
-1. Clone ou baixe o repositório:
-   ```bash
-   git clone https://github.com/leonfpontes/tia_maria_ead.git
-   cd tia_maria_ead
-   ```
+> Dica: se ainda não usa Docker, tudo continua funcionando; você só precisará instalar dependências manualmente quando chegar na parte EAD.
 
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
-   Isso instala as dependências de desenvolvimento (como Tailwind CLI e http-server).
+---
 
-## Execução
+## 🚀 Primeiros Passos (clonar e preparar)
 
-Para executar o projeto localmente:
-
-1. Inicie o servidor de desenvolvimento:
-   ```bash
-   npm start
-   ```
-   - Isso compila automaticamente o CSS do Tailwind (se necessário) e inicia um servidor HTTP na porta 8080.
-   - Abra o navegador e acesse `http://localhost:8080`.
-
-2. **Alternativa simples**: Abra o arquivo `index.html` diretamente no navegador (funciona, mas sem servidor, alguns recursos podem ser limitados).
-
-3. **Parar o servidor**: Pressione `Ctrl + C` no terminal.
-
-## Desenvolvimento
-
-### Build do CSS
-O Tailwind CSS é compilado automaticamente ao executar `npm start`. Se precisar buildar manualmente:
 ```bash
-npm run build:css
-```
-Isso gera `assets/css/tailwind.css` a partir de `assets/css/tailwind.input.css`.
+git clone https://github.com/leonfpontes/tia_maria_ead.git
+cd tia_maria_ead
 
-### Modo de Observação (Watch)
-Para desenvolvimento contínuo, monitore mudanças no CSS:
+# Dependências da landing page (uma única vez)
+
+
+# Dependências do frontend Next.js (uma única vez)
+
+npm install
+cd ../..
+```
+
+Pronto! A partir daqui você escolhe o que quer rodar.
+
+---
+
+## 🌐 Rodar apenas a landing page
+
+Pensado para quem quer editar o site atual rapidamente.
+
 ```bash
-npm run watch:css
+npm start
 ```
-Isso recompila automaticamente o CSS sempre que `tailwind.input.css` for alterado.
 
-### Estrutura de Pastas
+- Abre `http://localhost:8080`.
+- Tailwind é recompilado e servido automaticamente.
+- Para parar, use `Ctrl + C` no terminal.
+
+Outros comandos úteis:
+
+- `npm run build:css` – gera o CSS final.
+- `npm run watch:css` – recompila o CSS sempre que você salvar o arquivo de entrada.
+
+---
+
+## 📚 Rodar a plataforma EAD (stack completa)
+
+> O jeito mais fácil é usar os scripts prontos. Tudo é orquestrado por Docker (banco + API) e Next.js.
+
+### 1. Subir tudo junto (recomendado)
+
+```bash
+npm run dev:stack
+```
+
+- Sobe banco PostgreSQL, API FastAPI e frontend Next.js.
+- URLs padrão:
+  - Frontend: `http://localhost:3000`
+  - API: `http://localhost:8000/docs`
+
+### 2. Subir serviços separados
+
+- **Somente backend (FastAPI + Postgres)**:
+  ```bash
+  npm run dev:backend
+  ```
+- **Somente frontend (Next.js + MUI)**:
+  ```bash
+  npm run dev:frontend
+  ```
+
+> Sempre que quiser desligar, use `Ctrl + C`. Para limpar os contêineres do Docker Compose, rode `docker compose down`.
+
+### 3. Rodar o backend sem Docker (opcional)
+
+```bash
+cd apps/api
+python -m venv .venv && .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+> Lembre de exportar `DATABASE_URL` e `SECRET_KEY` ou criar um arquivo `.env` (veja `doc/backend.md`).
+
+---
+
+## 🗂️ Estrutura de Pastas
 
 ```
 .
-├── index.html                 # Página principal do site
-├── package.json               # Configurações do projeto Node.js
-├── README.md                  # Esta documentação
-├── vercel.json                # Configuração para deploy no Vercel
-├── assets/
-│   ├── css/
-│   │   ├── main.css           # Estilos customizados e variáveis CSS
-│   │   ├── tailwind.css       # CSS compilado do Tailwind (gerado)
-│   │   └── tailwind.input.css # Entrada para build do Tailwind
-│   ├── img/                   # Imagens do projeto (logo, fotos, etc.)
-│   └── js/
-│       └── auth.js            # Lógica de autenticação mockada
-└── doc/
-    ├── agente.md              # Prompt para agentes de IA
-    └── backlog.md             # Controle de tarefas e status
+├── index.html              # Landing page atual
+├── package.json            # Scripts e dependências da landing + automações
+├── docker-compose.yml      # Stack EAD (db, api, web)
+├── apps/
+│   ├── api/                # Backend FastAPI + Alembic
+│   └── web/                # Frontend Next.js + MUI
+├── assets/                 # CSS/JS/imagens da landing
+├── doc/
+│   ├── agente.md           # Guia para agentes/colaboradores
+│   ├── backlog.md          # Roadmap e status
+│   ├── backend.md          # Passo a passo do backend EAD
+│   ├── frontend.md         # Passo a passo do frontend EAD
+│   └── ead_arquitetura.md  # Plano completo da plataforma EAD
+└── ...
 ```
 
-## Personalização
+---
 
-- **Cores e tokens**: Centralizados em `assets/css/main.css` nas variáveis CSS (`:root`). Inspire-se em Oxóssi (verdes) e Xangô (marrons).
-- **Componentes Tailwind**: Use classes utilitárias diretamente no HTML (`index.html`).
-- **JavaScript**: Ajuste comportamentos em `assets/js/auth.js` (autenticação mockada com localStorage).
-- **Conteúdo**: Edite textos e imagens em `index.html` e `assets/img/`.
+## 🎨 Personalizar a Landing Page
 
-## Como Contribuir
+- **Cores e tokens**: `assets/css/main.css` (variáveis CSS inspiradas em Oxóssi e Xangô).
+- **Layout**: edite `index.html` usando classes Tailwind.
+- **JS**: `assets/js/auth.js` cuida do login mockado (localStorage).
+- **Imagens**: troque arquivos em `assets/img/`.
 
-1. **Fork** o repositório e crie uma branch para sua feature:
-   ```bash
-   git checkout -b minha-feature
-   ```
+---
 
-2. Faça suas mudanças seguindo os padrões:
-   - Use HTML semântico (`<main>`, `<section>`, `<nav>`, etc.).
-   - Mantenha acessibilidade: textos alternativos (`alt`), atributos `aria` e navegação por teclado.
-   - Teste responsividade em dispositivos móveis e desktop.
-   - Atualize a documentação em `doc/` se necessário (veja `doc/agente.md` para instruções).
+## 🧑‍💻 Fluxo de Contribuição
 
-3. Teste suas mudanças:
-   - Execute `npm start` e verifique no navegador.
-   - Certifique-se de que o login/logout mockado funciona.
-   - Valide acessibilidade com ferramentas como Lighthouse.
+1. Crie uma branch: `git checkout -b minha-feature`.
+2. Faça suas alterações (landing, frontend ou backend).
+3. Rode os comandos de desenvolvimento referentes à parte que mexeu.
+4. Atualize a documentação (`doc/agente.md`, `doc/backlog.md`, `doc/frontend.md`, `doc/backend.md`) quando necessário.
+5. Commits em português, mensagens claras: `git commit -m "feat: adiciona player de vídeo"`.
+6. Push e abra o PR.
 
-4. Commit suas mudanças:
-   ```bash
-   git add .
-   git commit -m "Descrição clara da mudança"
-   ```
+### Boas práticas importantes
 
-5. Push e abra um Pull Request:
-   ```bash
-   git push origin minha-feature
-   ```
+- **Acessibilidade sempre**: cabeçalhos semânticos, `alt` nas imagens, foco visível.
+- **Responsividade testada**: mobile first.
+- **Logs e documentação**: descreva mudanças relevantes para facilitar o trabalho do próximo dev.
 
-### Padrões de Código
-- **Indentação**: Use 2 espaços.
-- **Linguagem**: Português para comentários e commits.
-- **Acessibilidade**: Sempre priorize.
-- **Documentação**: Atualize `doc/agente.md` e `doc/backlog.md` para mudanças significativas.
+---
 
-## Scripts Disponíveis
+## 📖 Documentação complementar
 
-- `npm start`: Inicia servidor local e compila CSS.
-- `npm run build:css`: Compila CSS do Tailwind.
-- `npm run watch:css`: Monitora mudanças no CSS e recompila.
-- `npm run build`: Alias para `build:css`.
+- [doc/ead_arquitetura.md](doc/ead_arquitetura.md) – visão geral da arquitetura e decisões de custo.
+- [doc/backend.md](doc/backend.md) – referência rápida do backend.
+- [doc/frontend.md](doc/frontend.md) – guia do frontend Next.js/MUI.
+- [doc/backlog.md](doc/backlog.md) – lista de tarefas atualizada.
 
-## Suporte
+---
 
-- **Issues**: Abra uma issue no GitHub para bugs ou sugestões.
-- **Contato**: Via redes sociais no site ou e-mail em `terreirotiamariaecaboclajupira@outlook.com`.
+## 🤝 Suporte
 
-## Licença
+- **Issues**: abra no GitHub para bugs ou ideias.
+- **Contato direto**: `terreirotiamariaecaboclajupira@outlook.com`.
 
-Projeto aberto para uso comunitário. Ajuste conforme as necessidades do terreiro, mantendo os créditos culturais originais e respeitando a religião de Umbanda.
+Projeto aberto para a comunidade, com respeito à tradição da Umbanda. Faça bom uso e compartilhe melhorias 🙌.
 
