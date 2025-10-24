@@ -7,6 +7,7 @@ from alembic import context
 
 from app.core.config import settings
 from app.db.base import Base
+from app import models  # noqa: F401  Ensures metadata is populated
 
 
 config = context.config

@@ -28,13 +28,11 @@ Tudo foi organizado para que até iniciantes consigam rodar, testar e contribuir
 git clone https://github.com/leonfpontes/tia_maria_ead.git
 cd tia_maria_ead
 
-# Dependências da landing page (uma única vez)
-
-
-# Dependências do frontend Next.js (uma única vez)
-
+# Dependências da landing (Tailwind, http-server)
 npm install
-cd ../..
+
+# Dependências do frontend Next.js
+npm install --prefix apps/web
 ```
 
 Pronto! A partir daqui você escolhe o que quer rodar.
@@ -74,6 +72,15 @@ npm run dev:stack
 - URLs padrão:
   - Frontend: `http://localhost:3000`
   - API: `http://localhost:8000/docs`
+
+Primeira execução? Rode as migrações e o seed (uma vez):
+
+```bash
+docker compose run --rm api bash -c "export PYTHONPATH=/app && alembic upgrade head"
+docker compose run --rm api bash -c "export PYTHONPATH=/app && python -m app.db.seed"
+```
+
+Depois disso, só `npm run dev:stack`. Para manter em background use `docker compose up -d`.
 
 ### 2. Subir serviços separados
 
@@ -123,11 +130,32 @@ uvicorn app.main:app --reload
 
 ---
 
+## 🔐 Usuários e Fluxo de Login
+
+- Seed padrão cria:
+  - Admin: `admin@tiamariaead.com` / senha `admin123`
+  - Aluno: `aluno@tiamariaead.com` / senha `aluno123`
+- A home do Next.js abre diálogos MUI para login e recuperação.
+- Tokens JWT ficam no `localStorage` (`tia-maria-auth` e `tia-maria-token`).
+- `/?login=1` ou `/?forgot=1` na URL forçam abertura dos diálogos (útil para testes).
+- Redefinição de senha disponível em `/reset-password?token=...` (link enviado pelo endpoint de reset).
+- A landing estática (`index.html`) chama `POST /auth/login` da API real; se a API estiver em outro domínio, configure a base antes de carregar `assets/js/auth.js`.
+
+## 🔄 Landing + API (CORS e Base URL)
+
+- A landing consome o backend definido em `data-api-base` no elemento `<html>` (default `http://localhost:8000`).
+- Produção pode configurar `window.__TIA_MARIA_API_BASE__ = "https://api.seudominio";` antes de importar `assets/js/auth.js`.
+- `app/main.py` usa `CORSMiddleware`; exports adicionais podem ser feitos via env `CORS_ORIGINS='["https://site.com","https://app.vercel.app"]'`.
+- Quando surgir erro `CORS`, execute `docker compose up --build -d api` para aplicar mudanças na API.
+- Logs relevantes aparecem com `docker compose logs -f api` para depurar respostas `401/500`.
+
+---
+
 ## 🎨 Personalizar a Landing Page
 
 - **Cores e tokens**: `assets/css/main.css` (variáveis CSS inspiradas em Oxóssi e Xangô).
 - **Layout**: edite `index.html` usando classes Tailwind.
-- **JS**: `assets/js/auth.js` cuida do login mockado (localStorage).
+- **JS**: `assets/js/auth.js` integra com o FastAPI (`POST /auth/login`) e mantém compatibilidade com o legado.
 - **Imagens**: troque arquivos em `assets/img/`.
 
 ---
@@ -154,6 +182,8 @@ uvicorn app.main:app --reload
 - [doc/ead_arquitetura.md](doc/ead_arquitetura.md) – visão geral da arquitetura e decisões de custo.
 - [doc/backend.md](doc/backend.md) – referência rápida do backend.
 - [doc/frontend.md](doc/frontend.md) – guia do frontend Next.js/MUI.
+- [doc/ead_db_model.md](doc/ead_db_model.md) – modelagem das tabelas de usuários, cursos, certificados e logs.
+- [doc/ead_auth_flow.md](doc/ead_auth_flow.md) – fluxos de login, recuperação de senha e segurança.
 - [doc/backlog.md](doc/backlog.md) – lista de tarefas atualizada.
 
 ---

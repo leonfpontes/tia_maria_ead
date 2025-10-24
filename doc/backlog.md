@@ -12,19 +12,21 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 
 ### Fase 1 – Arquitetura e Base Técnica
 - [x] Organizar monorepo com `apps/landing`, `apps/web (Next.js)`, `apps/api (FastAPI)` preservando deploy atual na Vercel. (23/10/2025)
-- [ ] Configurar Docker + docker-compose locais e GitHub Actions (lint/test) para web e api.
+- [/] Configurar Docker + docker-compose locais e GitHub Actions (lint/test) para web e api. – Compose validado em 24/10/2025; CI pendente.
 - [ ] Configurar projetos na Vercel (frontend) e Railway/Render (backend + Postgres) em modo free tier.
 - [x] Criar documentação técnica (ver `doc/ead_arquitetura.md`, `doc/frontend.md`, `doc/backend.md`) e manter atualizações. (23/10/2025)
 
 ### Fase 2 – Backend EAD
-- [ ] Modelar banco (usuários, cursos, módulos, aulas, matrículas, pagamentos, materiais) com SQLAlchemy/Alembic.
-- [ ] Implementar autenticação com `fastapi-users`, JWT e refresh tokens (cookies httpOnly).
+- [x] Modelar banco (usuários, cursos, matrículas, certificados, logs) com SQLAlchemy/Alembic – migration aplicada em 24/10/2025.
+- [ ] Evoluir autenticação com refresh tokens (cookies httpOnly) e hardening (rate limit, bloqueio de IP).
+- [x] Entregar fluxo mínimo de login/recuperação de senha (JWT + tokens de reset + email HTML) – API pronta e validada em 24/10/2025.
 - [ ] Integrar Stripe (checkout, webhooks) e criar fallback plan para gateway nacional.
 - [ ] Implementar serviço de entrega segura (Mux/Bunny + URLs assinadas para materiais em Cloudflare R2).
 - [ ] Configurar Celery/Redis (ou background tasks nativas) para emails e processamento assíncrono considerando custo.
 
 ### Fase 3 – Frontend Next.js + MUI
 - [ ] Criar design system MUI (tema, tipografia, tokens) e componentes base (AppBar, Sidebar, Cards).
+- [x] Construir experiência de login/recuperação (modais, página de redefinição, integração API) – fluxo end-to-end concluído em 24/10/2025.
 - [ ] Implementar páginas públicas (landing migrada, catálogo, loja) consumindo API; manter HTML atual até go-live.
 - [ ] Desenvolver área do aluno (dashboard, player, materiais, certificados, histórico de pagamentos).
 - [ ] Criar painel administrativo (gestão de cursos, uploads, usuários) com `@mui/x-data-grid`.
@@ -50,7 +52,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Implementar sistema de comentários nas novidades - Status: Pendente
 - [ ] Adicionar seção de galeria de fotos - Status: Pendente
 - [ ] Otimizar imagens para carregamento mais rápido - Status: Pendente
-- [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
+- [ ] Garantir acessibilidade dos diálogos de autenticação (landing + Next.js) - Status: Em andamento
 
 ## Tarefas Concluídas
 - [x] Criar documentação para agentes (agente.md e backlog.md) - Status: Concluída em 23/10/2025
@@ -66,6 +68,11 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [x] Refinar responsividade geral (carrossel mobile, CTA do hero ajustada, mapa redes) - 23/10/2025
 - [x] Implementar rolagem suave para navegação por âncoras - 23/10/2025
 - [x] Adicionar botão flutuante "Voltar ao topo" responsivo - 23/10/2025
+- [x] Criar documentação de modelagem de banco (`doc/ead_db_model.md`) - 24/10/2025
+- [x] Documentar fluxo de autenticação (`doc/ead_auth_flow.md`) - 24/10/2025
+- [x] Validar stack Docker (`npm run dev:stack`), aplicar migrações e seed com usuários de exemplo - 24/10/2025
+- [x] Integrar login/recuperação no frontend Next.js (diálogos MUI + página de reset) - 24/10/2025
+- [x] Ligar a landing estática ao backend FastAPI (auth.js + CORS para 8080) - 24/10/2025
 
 ## Instruções para Agentes
 

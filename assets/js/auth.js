@@ -1,12 +1,31 @@
 /**
- * Sistema de autenticação mockado para Terreiro Tia Maria
- * Simula backend de login sem servidor real
+ * Sistema de autenticação para Terreiro Tia Maria
+ * Integra com o backend FastAPI para validar credenciais reais
  */
+
+const API_BASE_URL =
+  window.__TIA_MARIA_API_BASE__ ||
+  (document.documentElement?.dataset?.apiBase || '').trim() ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8000'
+    : window.location.origin.replace(/\/$/, ''));
+
+const SESSION_STORAGE_KEY = 'tia-maria-auth';
+const TOKEN_STORAGE_KEY = 'tia-maria-token';
+
+function buildApiUrl(path) {
+  const base = API_BASE_URL.replace(/\/$/, '');
+  if (!path.startsWith('/')) {
+    return `${base}/${path}`;
+  }
+  return `${base}${path}`;
+}
 
 // Estado global da autenticação
 let authState = {
   isLoggedIn: false,
   user: null,
+  token: null,
   users: [
     {
       id: 1,
@@ -17,34 +36,67 @@ let authState = {
   ]
 };
 
-// Função para simular delay de requisição
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function persistLegacyState() {
+  localStorage.setItem('auth', JSON.stringify(authState));
 }
 
-// Função para simular login
+// Função de login integrada ao backend
 async function login(email, password) {
-  // Simula delay de rede
-  await delay(1000);
+  if (!email || !password) {
+    return { success: false, error: 'Informe e-mail e senha' };
+  }
 
-  // Mock: aceita qualquer e-mail/senha válidos
-  if (email && password && password.length >= 6) {
+  const endpoint = buildApiUrl('/auth/login');
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha: password })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data?.detail || 'Credenciais inválidas');
+    }
+
     const user = {
-      id: 1,
-      name: 'Usuário Exemplo',
-      email: email,
-      role: 'membro'
+      id: null,
+      name: data?.nome || 'Usuário',
+      email: data?.email || email,
+      role: data?.tipo || 'membro'
+    };
+
+    const sessionPayload = {
+      token: data.token,
+      nome: data?.nome || user.name,
+      email: user.email,
+      tipo: user.role
     };
 
     authState.isLoggedIn = true;
     authState.user = user;
+    authState.token = data.token;
 
-    // Salva no localStorage
-    localStorage.setItem('auth', JSON.stringify(authState));
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionPayload));
+    localStorage.setItem(TOKEN_STORAGE_KEY, data.token);
+    persistLegacyState();
 
-    return { success: true, user: user };
-  } else {
-    return { success: false, error: 'Credenciais inválidas' };
+    return { success: true, user };
+  } catch (error) {
+    console.error('Falha ao autenticar usuário', error);
+    let message = 'Não foi possível entrar. Tente novamente.';
+    if (error instanceof Error) {
+      message = error.message;
+      if (/Failed to fetch/i.test(message)) {
+        message = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
+      }
+    }
+    return {
+      success: false,
+      error: message
+    };
   }
 }
 
@@ -52,9 +104,12 @@ async function login(email, password) {
 function logout() {
   authState.isLoggedIn = false;
   authState.user = null;
+  authState.token = null;
 
   // Remove do localStorage
   localStorage.removeItem('auth');
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+  localStorage.removeItem(TOKEN_STORAGE_KEY);
 
   // Atualiza interface
   updateAuthUI();
@@ -158,21 +213,60 @@ function initAuth() {
     }
   });
 
-  // Verifica se há sessão salva
-  const savedAuth = localStorage.getItem('auth');
-  if (savedAuth) {
+  // Verifica se há sessão salva (preferência pelo formato integrado ao backend)
+  const savedSession = localStorage.getItem(SESSION_STORAGE_KEY);
+  if (savedSession) {
     try {
-      const parsedAuth = JSON.parse(savedAuth);
-      if (parsedAuth && parsedAuth.isLoggedIn && parsedAuth.user) {
-        authState = parsedAuth;
-        console.log('Sessão carregada:', authState);
+      const parsedSession = JSON.parse(savedSession);
+      if (parsedSession && parsedSession.token && parsedSession.email) {
+        authState.isLoggedIn = true;
+        authState.token = parsedSession.token;
+        authState.user = {
+          id: null,
+          name: parsedSession.nome || 'Usuário',
+          email: parsedSession.email,
+          role: parsedSession.tipo || 'membro'
+        };
+        persistLegacyState();
+        console.log('Sessão carregada (API):', authState);
       } else {
         console.log('Sessão inválida, removendo...');
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar sessão:', error);
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    }
+  } else {
+    const legacyAuth = localStorage.getItem('auth');
+    if (legacyAuth) {
+      try {
+        const parsedAuth = JSON.parse(legacyAuth);
+        if (parsedAuth && parsedAuth.isLoggedIn && parsedAuth.user) {
+          authState.isLoggedIn = parsedAuth.isLoggedIn;
+          authState.user = parsedAuth.user;
+          authState.token = parsedAuth.token || null;
+          console.log('Sessão carregada (legacy):', authState);
+          // Sincroniza com novo formato, se houver token
+          if (authState.token && authState.user?.email) {
+            localStorage.setItem(
+              SESSION_STORAGE_KEY,
+              JSON.stringify({
+                token: authState.token,
+                nome: authState.user.name,
+                email: authState.user.email,
+                tipo: authState.user.role
+              })
+            );
+          }
+        } else {
+          console.log('Sessão legada inválida, removendo...');
+          localStorage.removeItem('auth');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar sessão legada:', error);
         localStorage.removeItem('auth');
       }
-    } catch (e) {
-      console.error('Erro ao carregar sessão:', e);
-      localStorage.removeItem('auth');
     }
   }
 
