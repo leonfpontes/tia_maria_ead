@@ -19,6 +19,8 @@ O projeto utiliza tecnologias modernas como HTML5 semântico, Tailwind CSS para 
 - `vercel.json`: Configuração para deploy no Vercel.
 - `doc/`: Pasta de documentação com este arquivo e backlog.
 - `doc/ead_arquitetura.md`: Plano resumido da arquitetura EAD (frontend Next.js/MUI, backend FastAPI, storage e provedores econômicos).
+- `doc/frontend.md`: Guia do frontend Next.js/MUI com passos de execução e boas práticas.
+- `doc/backend.md`: Guia do backend FastAPI/SQLAlchemy/Alembic com orientação de setup.
 
 ## Funcionalidades Principais
 
@@ -59,3 +61,5 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 - [23/10/2025]: Adicionada rolagem suave para navegação por âncoras.
 - [23/10/2025]: Incluído botão flutuante "Voltar ao topo" com comportamento responsivo.
 - [23/10/2025]: Criado plano de arquitetura EAD (`doc/ead_arquitetura.md`) e backlog com fases detalhadas focadas em baixo custo.
+- [23/10/2025]: Estrutura inicial do monorepo EAD adicionada (FastAPI + Next.js + Docker Compose) com documentação frontend/backend.
+- [23/10/2025]: Adicionados scripts npm (`dev:backend`, `dev:frontend`, `dev:stack`) para automatizar execução dos serviços EAD.

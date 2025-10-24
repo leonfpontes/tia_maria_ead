@@ -11,10 +11,10 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Escolher provedores alinhados ao menor custo (Railway vs Render, Stripe vs Pagar.me) e documentar decisão.
 
 ### Fase 1 – Arquitetura e Base Técnica
-- [ ] Organizar monorepo com `apps/landing`, `apps/web (Next.js)`, `apps/api (FastAPI)` preservando deploy atual na Vercel.
+- [x] Organizar monorepo com `apps/landing`, `apps/web (Next.js)`, `apps/api (FastAPI)` preservando deploy atual na Vercel. (23/10/2025)
 - [ ] Configurar Docker + docker-compose locais e GitHub Actions (lint/test) para web e api.
 - [ ] Configurar projetos na Vercel (frontend) e Railway/Render (backend + Postgres) em modo free tier.
-- [ ] Criar documentação técnica (ver `doc/ead_arquitetura.md`) e manter atualizações.
+- [x] Criar documentação técnica (ver `doc/ead_arquitetura.md`, `doc/frontend.md`, `doc/backend.md`) e manter atualizações. (23/10/2025)
 
 ### Fase 2 – Backend EAD
 - [ ] Modelar banco (usuários, cursos, módulos, aulas, matrículas, pagamentos, materiais) com SQLAlchemy/Alembic.

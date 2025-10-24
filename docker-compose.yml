@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: tia-maria-ead-db
+    environment:
+      POSTGRES_DB: tiamariaead
+      POSTGRES_USER: tiamaria
+      POSTGRES_PASSWORD: tiamaria
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./apps/api
+    container_name: tia-maria-ead-api
+    environment:
+      DATABASE_URL: postgresql+psycopg2://tiamaria:tiamaria@db:5432/tiamariaead
+      SECRET_KEY: changeme
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  web:
+    build:
+      context: ./apps/web
+    container_name: tia-maria-ead-web
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:

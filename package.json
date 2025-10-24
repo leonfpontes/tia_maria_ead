@@ -10,7 +10,10 @@
     "build:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
     "watch:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
     "build": "npm run build:css",
-    "start": "npx --yes http-server -c-1 ."
+    "start": "npx --yes http-server -c-1 .",
+    "dev:backend": "docker compose up api",
+    "dev:frontend": "npm run dev --prefix apps/web",
+    "dev:stack": "docker compose up"
   },
   "repository": {
     "type": "git",
