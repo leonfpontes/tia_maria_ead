@@ -18,6 +18,7 @@ O projeto utiliza tecnologias modernas como HTML5 semântico, Tailwind CSS para 
 - `README.md`: Documentação em português explicando estrutura, personalização e padrões.
 - `vercel.json`: Configuração para deploy no Vercel.
 - `doc/`: Pasta de documentação com este arquivo e backlog.
+- `doc/ead_arquitetura.md`: Plano resumido da arquitetura EAD (frontend Next.js/MUI, backend FastAPI, storage e provedores econômicos).
 
 ## Funcionalidades Principais
 
@@ -57,3 +58,4 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 - [23/10/2025]: Layout responsivo refinado (hero centrado, CTAs mobile ajustadas, carrossel de novidades, mapa e redes sociais otimizados para telas pequenas).
 - [23/10/2025]: Adicionada rolagem suave para navegação por âncoras.
 - [23/10/2025]: Incluído botão flutuante "Voltar ao topo" com comportamento responsivo.
+- [23/10/2025]: Criado plano de arquitetura EAD (`doc/ead_arquitetura.md`) e backlog com fases detalhadas focadas em baixo custo.

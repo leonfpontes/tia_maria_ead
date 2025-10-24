@@ -2,18 +2,57 @@
 
 Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o status das atividades do projeto. Sempre que uma tarefa for iniciada, atualizada ou concluída, marque-a aqui com o status apropriado.
 
-## Tarefas Pendentes
+## Fases do Projeto EAD (Pendente)
 
+### Fase 0 – Estratégia e Governança
+- [ ] Validar escopo EAD com stakeholders e definir entregas incrementais.
+- [ ] Mapear requisitos legais (LGPD, direitos autorais) e registrar políticas internas.
+- [ ] Definir métricas de sucesso (retenção, conclusão de curso, conversão) e painéis simples (planilha ou Looker Studio gratuito).
+- [ ] Escolher provedores alinhados ao menor custo (Railway vs Render, Stripe vs Pagar.me) e documentar decisão.
+
+### Fase 1 – Arquitetura e Base Técnica
+- [ ] Organizar monorepo com `apps/landing`, `apps/web (Next.js)`, `apps/api (FastAPI)` preservando deploy atual na Vercel.
+- [ ] Configurar Docker + docker-compose locais e GitHub Actions (lint/test) para web e api.
+- [ ] Configurar projetos na Vercel (frontend) e Railway/Render (backend + Postgres) em modo free tier.
+- [ ] Criar documentação técnica (ver `doc/ead_arquitetura.md`) e manter atualizações.
+
+### Fase 2 – Backend EAD
+- [ ] Modelar banco (usuários, cursos, módulos, aulas, matrículas, pagamentos, materiais) com SQLAlchemy/Alembic.
+- [ ] Implementar autenticação com `fastapi-users`, JWT e refresh tokens (cookies httpOnly).
+- [ ] Integrar Stripe (checkout, webhooks) e criar fallback plan para gateway nacional.
+- [ ] Implementar serviço de entrega segura (Mux/Bunny + URLs assinadas para materiais em Cloudflare R2).
+- [ ] Configurar Celery/Redis (ou background tasks nativas) para emails e processamento assíncrono considerando custo.
+
+### Fase 3 – Frontend Next.js + MUI
+- [ ] Criar design system MUI (tema, tipografia, tokens) e componentes base (AppBar, Sidebar, Cards).
+- [ ] Implementar páginas públicas (landing migrada, catálogo, loja) consumindo API; manter HTML atual até go-live.
+- [ ] Desenvolver área do aluno (dashboard, player, materiais, certificados, histórico de pagamentos).
+- [ ] Criar painel administrativo (gestão de cursos, uploads, usuários) com `@mui/x-data-grid`.
+
+### Fase 4 – Conteúdo e Operação
+- [ ] Configurar pipeline de upload (admin → storage → transcodificação) com notificações.
+- [ ] Implementar certificados PDF (WeasyPrint/ReportLab) e quizzes básicos.
+- [ ] Integrar serviço de email baixo custo (AWS SES, Mailersend) para notificações transacionais.
+- [ ] Criar fluxos de suporte e FAQ; adicionar canal de feedback in-app.
+
+### Fase 5 – Lançamento e Sustentação
+- [ ] Executar testes (unitários, integração, e2e com Playwright) e testes de carga mínimos.
+- [ ] Configurar monitoramento (Sentry, UptimeRobot) e logging estruturado.
+- [ ] Preparar plano de migração/conteúdo e onboarding de usuários pilotos.
+- [ ] Realizar go-live incremental e coletar métricas para ajustes.
+
+## Manutenção da Landing Atual
+- [ ] Manter pipeline existente de deploy estático na Vercel funcionando em paralelo até migração total.
+- [ ] Atualizar `README.md` com instruções para edições rápidas da landing sem build do monorepo.
+- [ ] Avaliar automação simples (GitHub Action) para publicar alterações na landing com preview.
+
+## Tarefas Legadas
 - [ ] Implementar sistema de comentários nas novidades - Status: Pendente
 - [ ] Adicionar seção de galeria de fotos - Status: Pendente
 - [ ] Otimizar imagens para carregamento mais rápido - Status: Pendente
-
-## Tarefas em Andamento
-
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
-
 - [x] Criar documentação para agentes (agente.md e backlog.md) - Status: Concluída em 23/10/2025
 - [x] Analisar código completo do projeto - Status: Concluída em 23/10/2025
 - [x] Atualizar README.md com instruções completas para execução e contribuição - Status: Concluída em 23/10/2025
