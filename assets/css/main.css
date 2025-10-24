@@ -34,6 +34,331 @@ body {
     radial-gradient(90px 60px at 80% 70%, rgba(71, 85, 105, 0.10) 0%, transparent 60%);
 }
 
+/* Cartão em destaque para a próxima gira */
+.novidade-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.novidade-card--caboclos {
+  border: 1px solid rgba(22, 101, 52, 0.35);
+  background: linear-gradient(135deg, rgba(22, 101, 52, 0.98) 0%, rgba(4, 120, 87, 0.95) 50%, rgba(22, 163, 74, 0.92) 100%);
+  color: #ecfdf5;
+  box-shadow: 0 28px 48px -22px rgba(15, 118, 110, 0.65);
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.novidade-card--caboclos:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 56px -24px rgba(15, 118, 110, 0.75);
+}
+
+.novidade-card__glow {
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(circle at 18% 18%, rgba(217, 249, 157, 0.55), transparent 58%);
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.novidade-card--caboclos:hover .novidade-card__glow {
+  opacity: 1;
+}
+
+.novidade-card--caboclos .novidade-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #f0fdf4;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.novidade-card--caboclos .novidade-card__badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bbf7d0;
+  box-shadow: 0 0 0 4px rgba(187, 247, 208, 0.3);
+}
+
+.novidade-card--caboclos time,
+.novidade-card--caboclos h3,
+.novidade-card--caboclos p,
+.novidade-card--caboclos .novidade-card__detail {
+  position: relative;
+  z-index: 1;
+}
+
+.novidade-card--caboclos time {
+  color: rgba(236, 253, 245, 0.82);
+  font-weight: 600;
+}
+
+.novidade-card--caboclos p {
+  color: rgba(236, 253, 245, 0.9);
+}
+
+.novidade-card--caboclos .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16, 95, 70, 0.45);
+  color: #f0fdf4;
+  font-weight: 600;
+}
+
+.novidade-card--caboclos .novidade-card__detail svg {
+  width: 16px;
+  height: 16px;
+  color: #bbf7d0;
+}
+
+.novidade-card--simple {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.novidade-card--simple:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -26px rgba(15, 23, 42, 0.45);
+}
+
+.hero-grid {
+  position: relative;
+}
+
+.hero-content {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-start;
+}
+
+.hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.6rem;
+  border-radius: 14px;
+  flex: 0 0 auto;
+  min-width: 160px;
+  max-width: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 16px 28px -22px rgba(15, 118, 110, 0.45);
+}
+
+.hero-actions a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 32px -24px rgba(15, 118, 110, 0.55);
+}
+
+.hero-actions a:last-child {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+.hero-actions a:last-child:hover {
+  box-shadow: 0 24px 40px -28px rgba(15, 118, 110, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero-media {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.novidades-header {
+  align-items: flex-end;
+}
+
+.novidades-wrapper {
+  position: relative;
+}
+
+.novidades-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.novidade-card {
+  position: relative;
+}
+
+.map-card iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  border: 0;
+}
+
+.endereco-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.redes-grid {
+  position: relative;
+}
+
+.redes-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.redes-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -26px rgba(15, 23, 42, 0.35);
+}
+
+.footer-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+  .hero-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .hero-media {
+    justify-content: center;
+  }
+
+  .hero-media img {
+    width: min(65vw, 320px);
+  }
+
+  .novidades-wrapper {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+  }
+
+  .novidades-wrapper .novidade-card {
+    flex: 0 0 70%;
+    scroll-snap-align: start;
+  }
+
+  .endereco-grid {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2.5rem;
+  }
+
+  .endereco-info {
+    background: #fff;
+    border-radius: 24px;
+    padding: 1.75rem;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    box-shadow: 0 24px 48px -32px rgba(15, 23, 42, 0.35);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .novidades-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .novidades-header a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 14px;
+    border: 1px solid rgba(22, 163, 74, 0.3);
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .novidades-wrapper {
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+  }
+
+  .novidades-wrapper .novidade-card {
+    flex-basis: 80%;
+  }
+
+  .map-card {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px -32px rgba(15, 23, 42, 0.35);
+  }
+
+  .redes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .footer-meta {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-media img {
+    width: min(72vw, 280px);
+  }
+
+  .hero-actions {
+    justify-content: center;
+    gap: 0.65rem;
+  }
+
+  .hero-actions a {
+    min-width: 150px;
+    padding: 0.8rem 1.4rem;
+  }
+
+  .novidades-wrapper .novidade-card {
+    flex-basis: 90%;
+  }
+
+  .endereco-info {
+    padding: 1.5rem;
+  }
+}
+
 /* Ornamentações (oxé e flecha) — decorativas */
 .ornamento { pointer-events: none; opacity: .12; }
 

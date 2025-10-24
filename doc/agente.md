@@ -50,3 +50,8 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 ## Histórico de Mudanças
 
 - [23/10/2025]: Criação inicial da documentação para agentes de IA, incluindo análise completa do código e estrutura do projeto.
+- [23/10/2025]: Adicionada seção "Como Chegar" no index.html com mapa Google, endereço, horários de gira e recomendação de vestimenta. Trocado link do WhatsApp para novo URL direto.
+- [23/10/2025]: Invertida a posição do mapa e texto na seção "Como Chegar" (mapa agora na esquerda).
+- [23/10/2025]: Removido card "Não haverá gira!" e dado destaque ao card "Gira de Caboclos" na seção de novidades (fundo oxossi, borda destacada, badge especial).
+- [23/10/2025]: Card "Gira de Caboclos" ganhou destaque completo em tons de verde com selo de próxima gira.
+- [23/10/2025]: Layout responsivo refinado (hero centrado, CTAs mobile ajustadas, carrossel de novidades, mapa e redes sociais otimizados para telas pequenas).
