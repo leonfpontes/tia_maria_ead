@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.15.3/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.15.3/dist/antd.min.css" />
   <link rel="icon" type="image/x-icon" href="/assets/img/Logo_Terr_White-removebg-preview.png">
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJWSRTGFHC"></script>
@@ -412,6 +414,20 @@
       </div>
   </section>
 
+      <!-- Carrossel de Eventos -->
+      <section id="carrossel" class="relative bg-slate-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Eventos e Inscrições</h2>
+            <p class="mt-4 text-lg text-slate-600">Confira nossas atividades especiais e oportunidades de participação.</p>
+          </div>
+
+          <div class="antd-carousel-shell">
+            <div id="events-carousel"></div>
+          </div>
+        </div>
+      </section>
+
   <!-- Sobre o Terreiro -->
   <section id="sobre" class="relative bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -534,6 +550,11 @@
         <span class="hidden sm:inline">Feito com respeito à religião.</span>
       </div>
     </div>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.11/dayjs.min.js"></script>
+  <script>window.dayjs = dayjs;</script>
+  <script src="https://cdn.jsdelivr.net/npm/antd@5.15.3/dist/antd.min.js"></script>
     <script>
       // Atualiza ano no rodapé
       document.getElementById('ano-atual').textContent = new Date().getFullYear();
@@ -563,6 +584,84 @@
         backToTopBtn.addEventListener('click', () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+      }
+
+      // Carousel functionality
+      // Carousel (Ant Design)
+      const carouselData = [
+        {
+          src: 'assets/img/TD6_Inscricao.png',
+          alt: 'Inscrição TD6 - Curso de Teologia de Umbanda'
+        },
+        {
+          src: 'assets/img/Vivencia_Pombogiras.png',
+          alt: 'Vivência de Pombogiras'
+        }
+      ];
+
+      function renderEventsCarousel() {
+        const container = document.getElementById('events-carousel');
+        if (!container || !window.React || !window.ReactDOM || !window.antd) {
+          return;
+        }
+
+        const { createElement } = React;
+        const { ConfigProvider, Carousel } = antd;
+
+        const slides = carouselData.map((item) =>
+          createElement(
+            'div',
+            { key: item.src },
+            createElement(
+              'div',
+              { className: 'antd-carousel-slide' },
+              createElement('img', { src: item.src, alt: item.alt })
+            )
+          )
+        );
+
+        const carouselNode = createElement(
+          ConfigProvider,
+          null,
+          createElement(
+            'div',
+            { className: 'antd-carousel-wrapper' },
+            createElement(
+              Carousel,
+              {
+                autoplay: true,
+                infinite: true,
+                dots: true,
+                arrows: true,
+                autoplaySpeed: 15000
+              },
+              slides
+            )
+          )
+        );
+
+        if (ReactDOM.createRoot) {
+          if (!container._reactRoot) {
+            container._reactRoot = ReactDOM.createRoot(container);
+          }
+          container._reactRoot.render(carouselNode);
+        } else if (ReactDOM.render) {
+          ReactDOM.render(carouselNode, container);
+        }
+      }
+
+      function ensureCarousel() {
+        if (window.React && window.ReactDOM && window.antd) {
+          renderEventsCarousel();
+        } else {
+          setTimeout(ensureCarousel, 50);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensureCarousel, { once: true });
+      } else {
+        ensureCarousel();
       }
     </script>
   </footer>

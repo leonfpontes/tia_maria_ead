@@ -121,6 +121,121 @@ html {
   font-weight: 600;
 }
 
+/* Ant Design Carousel wrapper */
+.antd-carousel-shell {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 35px 60px -25px rgba(15, 23, 42, 0.6);
+  background: #000;
+  max-width: 35rem;
+  margin: 0 auto;
+}
+
+.antd-carousel-wrapper {
+  background: #000;
+}
+
+.antd-carousel-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24rem;
+  background: #000;
+}
+
+.antd-carousel-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.antd-carousel-wrapper .slick-dots li button {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.antd-carousel-wrapper .slick-dots li.slick-active button {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.antd-carousel-wrapper .slick-dots {
+  bottom: 1rem;
+}
+
+.antd-carousel-wrapper .slick-arrow {
+  color: transparent;
+  font-size: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  position: absolute;
+  z-index: 2;
+  opacity: 1 !important;
+}
+
+.antd-carousel-wrapper .slick-prev {
+  left: 1.25rem;
+  display: flex !important;
+}
+
+.antd-carousel-wrapper .slick-next {
+  right: 1.25rem;
+  display: flex !important;
+}
+
+.antd-carousel-wrapper .slick-arrow::after {
+  content: '';
+}
+
+.antd-carousel-wrapper .slick-prev::before,
+.antd-carousel-wrapper .slick-next::before {
+  font-size: 1.5rem;
+  color: #f1f5f9;
+  line-height: 1;
+  display: inline-block;
+}
+
+.antd-carousel-wrapper .slick-prev::before {
+  content: '‹';
+}
+
+.antd-carousel-wrapper .slick-next::before {
+  content: '›';
+}
+
+.antd-carousel-wrapper .slick-prev::before,
+.antd-carousel-wrapper .slick-next::before {
+  pointer-events: none;
+}
+
+.antd-carousel-wrapper .slick-arrow:hover {
+  background: rgba(248, 250, 252, 0.95);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.antd-carousel-wrapper .slick-arrow:hover::before {
+  color: #0f172a;
+}
+
+.antd-carousel-wrapper .slick-arrow span,
+.antd-carousel-wrapper .slick-arrow::after {
+  display: none !important;
+}
+
+.antd-carousel-wrapper .slick-arrow.slick-disabled {
+  opacity: 0.35 !important;
+  pointer-events: auto !important;
+  display: flex !important;
+}
+
 .novidade-card--caboclos .novidade-card__detail svg {
   width: 16px;
   height: 16px;
