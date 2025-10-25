@@ -50,6 +50,13 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 
 ## Histórico de Mudanças
 
+- [25/10/2025]: Adicionados botões do Instagram nos cards de Aulas de Curimba e Vivência de Pombogiras, com efeitos de hover visuais, direcionando para as mesmas redes sociais da seção de Redes Sociais.
+- [25/10/2025]: Adicionados botões com logos do WhatsApp e Instagram nos cards de inscrições abertas (Aulas de Curimba, Vivência de Pombogiras e Curso de Teologia), permitindo cliques diretos para as redes sociais.
+- [25/10/2025]: Ajustadas as cores da fonte da badge "Portões abrem às 19h30" no card da Gira Mista para branco, incluindo o ícone, para melhor contraste.
+- [25/10/2025]: Ajustadas as sombras dos cards em destaque para preto/cinza em vez de verdes. Adicionada badge "Portões abrem às 19h30" no card da Gira Mista, com estilos correspondentes no CSS.
+- [25/10/2025]: Aplicado estilo de destaque aos cards da seção de novidades: Gira Mista, Aulas de Curimba e Curso de Teologia com cores verde e rosa claro; Vivência de Pombogiras com fundo preto e fonte vermelha. Adicionados novos estilos CSS para novidade-card--destaque-verde-rosa e novidade-card--destaque-preto-vermelho.
+- [25/10/2025]: Adicionado novo card de pré-inscrição para o "Curso de Teologia de Umbanda e Desenvolvimento Mediúnico", com início em Fevereiro de 2026, e inscrições via WhatsApp ou Instagram.
+- [25/10/2025]: Adicionado novo card "Vivência de Pombogiras" na seção de novidades, com datas 11 e 18 de novembro, vagas limitadas e inscrições via WhatsApp.
 - [23/10/2025]: Criação inicial da documentação para agentes de IA, incluindo análise completa do código e estrutura do projeto.
 - [23/10/2025]: Adicionada seção "Como Chegar" no index.html com mapa Google, endereço, horários de gira e recomendação de vestimenta. Trocado link do WhatsApp para novo URL direto.
 - [23/10/2025]: Invertida a posição do mapa e texto na seção "Como Chegar" (mapa agora na esquerda).

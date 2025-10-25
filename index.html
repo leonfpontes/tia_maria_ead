@@ -22,7 +22,7 @@
 </head>
 <body class="text-slate-800 bg-folhas">
   <!-- Header -->
-  <header class="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200">
+  <header class="sticky top-0 z-50 backdrop-blur bg-transparent">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <a href="#" class="flex items-center gap-3">
@@ -34,17 +34,17 @@
           </div>
         </a>
         <nav class="hidden md:flex items-center gap-6">
-          <a href="#" class="text-sm font-medium hover-text-oxossi-600">Início</a>
-          <a href="#sobre" class="text-sm font-medium hover-text-oxossi-600">Sobre</a>
-          <a href="#novidades" class="text-sm font-medium hover-text-oxossi-600">Novidades</a>
-          <a href="#endereco" class="text-sm font-medium hover-text-oxossi-600">Endereço</a>
-          <a href="#redes" class="text-sm font-medium hover-text-oxossi-600">Redes sociais</a>
+          <a href="#" class="text-sm font-semibold hover-text-oxossi-600">Início</a>
+          <a href="#sobre" class="text-sm font-semibold hover-text-oxossi-600">Sobre</a>
+          <a href="#novidades" class="text-sm font-semibold hover-text-oxossi-600">Novidades</a>
+          <a href="#endereco" class="text-sm font-semibold hover-text-oxossi-600">Endereço</a>
+          <a href="#redes" class="text-sm font-semibold hover-text-oxossi-600">Redes sociais</a>
         </nav>
         <div class="flex items-center gap-2">
           <!-- Botão de Login -->
-          <button id="login-button" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-white text-oxossi-600 text-sm font-semibold border border-oxossi-600 hover:bg-oxossi-50 transition">
+          <!-- <button id="login-button" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-white text-oxossi-600 text-sm font-semibold border border-oxossi-600 hover:bg-oxossi-50 transition">
             Entrar
-          </button>
+          </button> -->
 
           <!-- Área de Perfil (aparece quando logado) -->
           <div id="profile-button" class="hidden relative">
@@ -138,11 +138,11 @@
       <!-- Navegação mobile -->
       <div id="mobile-menu" class="md:hidden hidden pb-3">
         <nav class="pt-2 space-y-1">
-          <a href="#" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Início</a>
-          <a href="#sobre" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Sobre</a>
-          <a href="#novidades" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Novidades</a>
-          <a href="#endereco" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Endereço</a>
-          <a href="#redes" class="block px-2 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">Redes sociais</a>
+          <a href="#" class="block px-2 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">Início</a>
+          <a href="#sobre" class="block px-2 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">Sobre</a>
+          <a href="#novidades" class="block px-2 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">Novidades</a>
+          <a href="#endereco" class="block px-2 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">Endereço</a>
+          <a href="#redes" class="block px-2 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">Redes sociais</a>
           <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" class="block mt-1 px-2 py-2 rounded-lg bg-oxossi-600 text-white text-sm font-semibold text-center">Entre em contato</a>
         </nav>
       </div>
@@ -310,7 +310,24 @@
 
   <div class="novidades-wrapper mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Card 1 -->
-        <article class="group novidade-card novidade-card--caboclos rounded-2xl p-5 shadow-xl transition">
+        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
+          <div class="novidade-card__glow" aria-hidden="true"></div>
+          <div class="relative flex items-center gap-2 text-xs font-semibold">
+            <span class="novidade-card__badge bg-green-100 text-green-700">Próxima gira</span>
+            <time datetime="2025-10-31">31 out 2025</time>
+          </div>
+          <h3 class="relative mt-3 font-bold text-lg">Gira Mista</h3>
+          <p class="relative mt-2 text-sm">Traga uma doação para nossa casa e nos ajude a melhorar nosso espaço.</p>
+          <div class="novidade-card__detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 8v5l3 2"></path>
+              <circle cx="12" cy="12" r="9"></circle>
+            </svg>
+            <span>Portões abrem às 19h30</span>
+          </div>
+        </article>    
+        <!-- Card 2 -->
+        <!-- <article class="group novidade-card novidade-card--caboclos rounded-2xl p-5 shadow-xl transition">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
             <span class="novidade-card__badge">Próxima gira</span>
@@ -325,36 +342,74 @@
             </svg>
             <span>Portões abrem às 19h30</span>
           </div>
-        </article>
-        <!-- Card 2 -->
-  <article class="group novidade-card novidade-card--simple rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
-          <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700">Curimba</span>
+        </article> -->
+        <!-- Card 3 -->
+        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
+          <div class="novidade-card__glow" aria-hidden="true"></div>
+          <div class="relative flex items-center gap-2 text-xs font-semibold">
+            <span class="novidade-card__badge bg-green-100 text-green-700">Aulas disponíveis</span>
             <time datetime="2025-11-05">Entre em contato</time>
           </div>
-          <h3 class="mt-3 font-bold text-lg group-hover:text-oxossi-600">Aulas de Curimba</h3>
-          <p class="mt-2 text-sm text-slate-600">Iniciante, intermediário e avançado! Temos aulas particulares.</p>
-        </article>
-        <!-- Card 3 -->
-  <article class="group novidade-card novidade-card--simple rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
-          <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700">Estudo</span>
-            <time datetime="2025-11-12">Entre em contato</time>
+          <h3 class="relative mt-3 font-bold text-lg">Aulas de Curimba</h3>
+          <p class="relative mt-2 text-sm">Iniciante, intermediário e avançado! Temos aulas particulares.</p>
+          <div class="flex gap-2 mt-3">
+            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
+              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
+              </svg>
+            </a>
           </div>
-          <h3 class="mt-3 font-bold text-lg group-hover:text-oxossi-600">Inscrições Abertas!</h3>
-          <p class="mt-2 text-sm text-slate-600">Estudo aberto: "Teologia e Desenvolvimento Mediúnico".</p>
         </article>
         <!-- Card 4 -->
-  <article class="group novidade-card novidade-card--simple rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-5 hover:shadow-lg transition">
-          <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Gira</span>
-            <time datetime="2025-10-31">31 out 2025</time>
+        <article class="group novidade-card novidade-card--destaque-preto-vermelho rounded-2xl p-5 shadow-xl transition">
+          <div class="novidade-card__glow" aria-hidden="true"></div>
+          <div class="relative flex items-center gap-2 text-xs font-semibold">
+            <span class="novidade-card__badge bg-red-600 text-white">Vivência especial</span>
+            <time datetime="2025-11-11">11 e 18 nov 2025</time>
           </div>
-          <h3 class="mt-3 font-bold text-lg group-hover:text-oxossi-600">Gira Mista</h3>
-          <p class="mt-2 text-sm text-slate-600">Traga uma doação para nossa casa e nos ajude a melhorar nosso espaço.</p>
+          <h3 class="relative mt-3 font-bold text-lg text-red-500">Vivência de Pombogiras</h3>
+          <p class="relative mt-2 text-sm text-red-400">As vagas são limitadas. As inscrições e maiores informações são pelo WhatsApp ou instagram do terreiro.</p>
+          <div class="flex gap-2 mt-3">
+            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
+              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+        <!-- Card 5 -->
+        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
+          <div class="novidade-card__glow" aria-hidden="true"></div>
+          <div class="relative flex items-center gap-2 text-xs font-semibold">
+            <span class="novidade-card__badge bg-green-100 text-green-700">Pré-inscrição aberta</span>
+            <time datetime="2026-02-01">Fev 2026</time>
+          </div>
+          <h3 class="relative mt-3 font-bold text-lg">Curso de Teologia de Umbanda e Desenvolvimento Mediúnico</h3>
+          <p class="relative mt-2 text-sm">Início em Fevereiro de 2026. Maiores informações e inscrição através do WhatsApp ou Instagram do terreiro.</p>
+          <div class="flex gap-2 mt-3">
+            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
+              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
         </article>
       </div>
-    </div>
   </section>
 
   <!-- Sobre o Terreiro -->
