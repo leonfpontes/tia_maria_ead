@@ -29,7 +29,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 ### Fase 3 – Frontend Next.js + MUI
 - [x] Criar design system MUI (tema, tipografia, tokens) e componentes base (AppBar, Sidebar, Cards) – 24/10/2025 (inclui AppChrome, Hero, cards de dashboard e curso).
 - [x] Construir experiência de login/recuperação (modais, página de redefinição, integração API) – fluxo end-to-end concluído em 24/10/2025.
-- [/] Integrar design system na homepage/dashboard, conectar dados reais e refinar UX (em andamento – roteamento admin/aluno implementado, investigar erro `toLowerCase` no dashboard do aluno).
+- [/] Integrar design system na homepage/dashboard, conectar dados reais e refinar UX (em andamento).
 - [ ] Implementar páginas públicas (landing migrada, catálogo, loja) consumindo API; manter HTML atual até go-live.
 - [ ] Desenvolver área do aluno (dashboard, player, materiais, certificados, histórico de pagamentos).
 - [ ] Criar painel administrativo (gestão de cursos, uploads, usuários) com `@mui/x-data-grid`.
@@ -52,10 +52,6 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Avaliar automação simples (GitHub Action) para publicar alterações na landing com preview.
 
 ## Tarefas Legadas
-- [ ] Implementar sistema de comentários nas novidades - Status: Pendente
-- [ ] Adicionar seção de galeria de fotos - Status: Pendente
-- [ ] Otimizar imagens para carregamento mais rápido - Status: Pendente
-- [ ] Garantir acessibilidade dos diálogos de autenticação (landing + Next.js) - Status: Em andamento
 
 ## Tarefas Concluídas
 - [x] Criar documentação para agentes (agente.md e backlog.md) - Status: Concluída em 23/10/2025
@@ -78,6 +74,8 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [x] Ligar a landing estática ao backend FastAPI (auth.js + CORS para 8080) - 24/10/2025
 - [x] Configurar CI inicial (lint Next + checagens FastAPI) - 24/10/2025
 - [x] Documentar playbook de deploy Vercel + Railway - 24/10/2025
+- [x] Implementar mock da página de certificados (lista de cursos concluídos + visualização individual com download) - 25/10/2025
+- [x] Mockar redesign do catálogo de cursos (layout benchmarkado + dados mockados) - 25/10/2025
 
 ## Débitos Técnicos Abertos
 - [ ] [BUG] Erro runtime na área do aluno (`TypeError: Cannot read properties of undefined (reading 'toLowerCase')`) ao acessar `localhost:3000` autenticado.
@@ -146,8 +144,37 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 ## Tarefas Legadas
 
 ## Tarefas Concluídas
+- [x] Criar documentação para agentes (agente.md e backlog.md) - Status: Concluída em 23/10/2025
+- [x] Analisar código completo do projeto - Status: Concluída em 23/10/2025
+- [x] Atualizar README.md com instruções completas para execução e contribuição - Status: Concluída em 23/10/2025
+- [x] Atualizar agente.md com instrução para sempre atualizar documentação ao final - Status: Concluída em 23/10/2025
+- [x] Corrigir erro de instalação no Windows (remover script postinstall Unix) - Status: Concluída em 23/10/2025
+- [x] Adicionar seção "Como Chegar" com mapa Google, endereço, horários de gira e recomendação de vestimenta - Status: Concluída em 23/10/2025
+- [x] Trocar link do WhatsApp para https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0 - Status: Concluída em 23/10/2025
+- [x] Inverter posição do mapa e texto na seção "Como Chegar" (mapa na esquerda) - Status: Concluída em 23/10/2025
+- [x] Remover card "Não haverá gira!" e dar destaque ao card "Gira de Caboclos" na seção de novidades - Status: Concluída em 23/10/2025
+- [x] Destacar o card "Gira de Caboclos" com tons de verde e selo de próxima gira - 23/10/2025
+- [x] Refinar responsividade geral (carrossel mobile, CTA do hero ajustada, mapa redes) - 23/10/2025
+- [x] Implementar rolagem suave para navegação por âncoras - 23/10/2025
+- [x] Adicionar botão flutuante "Voltar ao topo" responsivo - 23/10/2025
+- [x] Criar documentação de modelagem de banco (`doc/ead_db_model.md`) - 24/10/2025
+- [x] Documentar fluxo de autenticação (`doc/ead_auth_flow.md`) - 24/10/2025
+- [x] Validar stack Docker (`npm run dev:stack`), aplicar migrações e seed com usuários de exemplo - 24/10/2025
+- [x] Integrar login/recuperação no frontend Next.js (diálogos MUI + página de reset) - 24/10/2025
+- [x] Ligar a landing estática ao backend FastAPI (auth.js + CORS para 8080) - 24/10/2025
+- [x] Configurar CI inicial (lint Next + checagens FastAPI) - 24/10/2025
+- [x] Documentar playbook de deploy Vercel + Railway - 24/10/2025
+- [x] Implementar mock da página de certificados (lista de cursos concluídos + visualização individual com download) - 25/10/2025
+
+## Débitos Técnicos Abertos
+- [ ] [BUG] Erro runtime na área do aluno (`TypeError: Cannot read properties of undefined (reading 'toLowerCase')`) ao acessar `localhost:3000` autenticado.
+- [ ] [BUG] `npm run build` não roda se o dev server estiver ativo (trava em `.next/trace`).
+- [ ] [BUG] Falta de testes/lint pós-merge: rodar `npm run lint` e testes após cada merge.
+- [ ] [BUG] Falta de validação de fluxo de login/logout e navegação admin/aluno: garantir que o fluxo de autenticação e redirecionamento está correto para ambos os papéis.
 
 ## Instruções para Agentes
+
+- Use checkboxes para marcar status: [ ] Pendente, [/] Em andamento, [x] Concluída.
 - Adicione novas tarefas conforme necessário.
 - Inclua data de conclusão ou atualização.
-- Mantenha o arquivo organizado por prioridade.</content>
+- Mantenha o arquivo organizado por prioridade.

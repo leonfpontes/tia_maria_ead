@@ -7,6 +7,10 @@ from typing import Any, Dict, Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
+from app.core.passlib_compat import ensure_bcrypt_about
+
+ensure_bcrypt_about()
+
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
