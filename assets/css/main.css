@@ -1,3 +1,12 @@
+.novidade-card__detail,
+.novidade-card__actions {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.novidade-card__actions {
+  display: inline-flex;
+}
 /*
  * Estilos customizados do Terreiro Tia Maria e Cabocla Jupira
  * Tokens (CSS variables), texturas e utilitários complementares ao Tailwind.
@@ -42,6 +51,10 @@ html {
 .novidade-card {
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
 }
 
 .novidade-card--caboclos {
@@ -113,7 +126,7 @@ html {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 1rem;
+  margin-top: auto;
   padding: 6px 12px;
   border-radius: 999px;
   background: rgba(16, 95, 70, 0.45);
@@ -900,7 +913,7 @@ img[src="assets/img/Ray_Tim.png"] {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 1rem;
+  margin-top: auto;
   padding: 6px 12px;
   border-radius: 999px;
   background: rgba(16, 95, 70, 0.45);
@@ -912,6 +925,299 @@ img[src="assets/img/Ray_Tim.png"] {
   width: 16px;
   height: 16px;
   color: #ffffff;
+}
+
+.novidade-card--destaque-principal {
+  border: 2px solid rgba(16, 185, 129, 0.75);
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.96) 0%, rgba(34, 197, 94, 0.92) 45%, rgba(249, 168, 212, 0.88) 100%);
+  color: #ecfdf5;
+  box-shadow: 0 36px 64px -28px rgba(13, 148, 136, 0.6);
+  backdrop-filter: blur(8px);
+  transform-origin: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.novidade-card--destaque-principal:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 42px 76px -28px rgba(8, 145, 178, 0.55);
+}
+
+.novidade-card--destaque-principal .novidade-card__glow {
+  background: radial-gradient(circle at 25% 25%, rgba(236, 253, 245, 0.6), transparent 62%);
+  opacity: 1;
+}
+
+.novidade-card--destaque-principal .novidade-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(236, 253, 245, 0.25);
+  color: #ecfdf5;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.novidade-card--destaque-principal .novidade-card__badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bbf7d0;
+  box-shadow: 0 0 0 4px rgba(187, 247, 208, 0.35);
+}
+
+.novidade-card--destaque-principal time,
+.novidade-card--destaque-principal h3,
+.novidade-card--destaque-principal p,
+.novidade-card--destaque-principal .novidade-card__detail {
+  position: relative;
+  z-index: 1;
+}
+
+.novidade-card--destaque-principal time {
+  color: rgba(236, 253, 245, 0.9);
+  font-weight: 600;
+}
+
+.novidade-card--destaque-principal h3 {
+  color: #fefce8;
+}
+
+.novidade-card--destaque-principal p {
+  color: rgba(236, 253, 245, 0.92);
+}
+
+.novidade-card--destaque-principal .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(6, 95, 70, 0.55);
+  color: #ecfdf5;
+  font-weight: 600;
+  box-shadow: 0 18px 32px -18px rgba(6, 78, 59, 0.65);
+}
+
+.novidade-card--destaque-principal .novidade-card__detail svg {
+  width: 18px;
+  height: 18px;
+  color: #ecfdf5;
+}
+
+/* Cartão especial para giras mistas (todas as cores da Umbanda) */
+.novidade-card--gira-mista {
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  background-image:
+    radial-gradient(160px 160px at 18% 18%, rgba(255, 255, 255, 0.75), transparent 68%),
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(252, 211, 77, 0.9) 14%,
+      rgba(244, 114, 182, 0.88) 28%,
+      rgba(56, 189, 248, 0.86) 42%,
+      rgba(168, 85, 247, 0.85) 56%,
+      rgba(34, 197, 94, 0.88) 70%,
+      rgba(139, 69, 19, 0.85) 84%,
+      rgba(17, 17, 17, 0.88) 92%,
+      rgba(244, 63, 94, 0.9) 100%);
+  color: #111827;
+  box-shadow: 0 34px 60px -26px rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+.novidade-card--gira-mista .novidade-card__glow {
+  background: radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.55), transparent 62%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+
+.novidade-card--gira-mista .novidade-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.novidade-card--gira-mista .novidade-card__badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(244, 63, 94, 0.9);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+.novidade-card--gira-mista time,
+.novidade-card--gira-mista h3,
+.novidade-card--gira-mista p {
+  color: #111827;
+  position: relative;
+  z-index: 1;
+}
+
+.novidade-card--gira-mista h3 {
+  text-shadow: 0 3px 8px rgba(255, 255, 255, 0.2);
+}
+
+.novidade-card--gira-mista .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #111827;
+  font-weight: 600;
+  box-shadow: 0 20px 36px -22px rgba(15, 23, 42, 0.4);
+}
+
+.novidade-card--gira-mista .novidade-card__detail svg {
+  width: 18px;
+  height: 18px;
+  color: #111827;
+}
+
+/* Cartão para giras de Pretos Velhos (preto e branco) */
+.novidade-card--pretos-velhos {
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background-image:
+    radial-gradient(180px 180px at 20% 20%, rgba(255, 255, 255, 0.45), transparent 70%),
+    linear-gradient(140deg, rgba(17, 24, 39, 0.95) 0%, rgba(31, 41, 55, 0.88) 35%, rgba(241, 245, 249, 0.92) 100%);
+  color: #f9fafb;
+  box-shadow: 0 30px 56px -26px rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.novidade-card--pretos-velhos .novidade-card__glow {
+  background: radial-gradient(circle at 65% 25%, rgba(248, 250, 252, 0.5), transparent 62%);
+  opacity: 0.9;
+}
+
+.novidade-card--pretos-velhos .novidade-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.22);
+  color: #f9fafb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.novidade-card--pretos-velhos .novidade-card__badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(249, 250, 251, 0.9);
+  box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.35);
+}
+
+.novidade-card--pretos-velhos time,
+.novidade-card--pretos-velhos h3,
+.novidade-card--pretos-velhos p {
+  color: #f8fafc;
+  position: relative;
+  z-index: 1;
+}
+
+.novidade-card--pretos-velhos .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #f9fafc;
+  font-weight: 600;
+}
+
+.novidade-card--pretos-velhos .novidade-card__detail svg {
+  width: 16px;
+  height: 16px;
+  color: #f9fafc;
+}
+
+/* Cartão para Ritual Coletivo na força das Pombogiras */
+.novidade-card--pombogira {
+  border: 1px solid rgba(190, 24, 93, 0.45);
+  background-image:
+    radial-gradient(200px 200px at 78% 18%, rgba(251, 191, 217, 0.35), transparent 70%),
+    linear-gradient(140deg, rgba(15, 15, 15, 0.95) 0%, rgba(136, 19, 55, 0.9) 40%, rgba(219, 39, 119, 0.88) 70%, rgba(244, 114, 182, 0.85) 100%);
+  color: #fee2e2;
+  box-shadow: 0 32px 60px -24px rgba(76, 5, 25, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.novidade-card--pombogira .novidade-card__glow {
+  background: radial-gradient(circle at 25% 25%, rgba(252, 165, 165, 0.6), transparent 58%);
+  opacity: 0.95;
+}
+
+.novidade-card--pombogira .novidade-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.28);
+  color: #fff1f2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.novidade-card--pombogira .novidade-card__badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(248, 113, 113, 0.95);
+  box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.35);
+}
+
+.novidade-card--pombogira time,
+.novidade-card--pombogira h3,
+.novidade-card--pombogira p {
+  color: #fee2e2;
+  position: relative;
+  z-index: 1;
+}
+
+.novidade-card--pombogira .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(153, 27, 27, 0.65);
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  color: #fee2e2;
+  font-weight: 600;
+  box-shadow: 0 18px 34px -20px rgba(76, 5, 25, 0.6);
+}
+
+.novidade-card--pombogira .novidade-card__detail svg {
+  width: 16px;
+  height: 16px;
+  color: #fee2e2;
 }
 
 /* Cartão em destaque para preto-vermelho */
@@ -973,4 +1279,22 @@ img[src="assets/img/Ray_Tim.png"] {
 
 .novidade-card--destaque-preto-vermelho p {
   color: rgba(254, 202, 202, 0.9);
+}
+
+.novidade-card--destaque-preto-vermelho .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(127, 29, 29, 0.45);
+  color: #fecaca;
+  font-weight: 600;
+}
+
+.novidade-card--destaque-preto-vermelho .novidade-card__detail svg {
+  width: 16px;
+  height: 16px;
+  color: #fecaca;
 }
