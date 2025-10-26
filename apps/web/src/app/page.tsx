@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -17,15 +18,17 @@ import Diversity3RoundedIcon from "@mui/icons-material/Diversity3Rounded";
 import LiveTvRoundedIcon from "@mui/icons-material/LiveTvRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRounded";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-import YouTube from "@mui/icons-material/YouTube";
 import Instagram from "@mui/icons-material/Instagram";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useRouter } from "next/navigation";
 
 import { ForgotPasswordDialog } from "../components/auth/ForgotPasswordDialog";
 import { LoginDialog } from "../components/auth/LoginDialog";
 import { CatalogCourseCard } from "../components/catalog/CatalogCourseCard";
 import { AppChrome } from "../components/layout/AppChrome";
+import { Carousel } from "../components/layout/Carousel";
+import { Footer } from "../components/layout/Footer";
+import { Header } from "../components/layout/Header";
 import { HeroSection } from "../components/layout/hero/HeroSection";
 
 type AuthUser = {
@@ -264,11 +267,6 @@ export default function HomePage() {
   const guestBenefits = useMemo<Benefit[]>(
     () => [
       {
-        title: "Rituais guiados ao vivo",
-        description: "Participe das giras virtuais e sinta a corrente sem sair de casa.",
-        icon: LiveTvRoundedIcon,
-      },
-      {
         title: "Mentorias personalizadas",
         description: "Receba orientação direta da Tia Maria para seguir com firmeza.",
         icon: AutoAwesomeRoundedIcon,
@@ -294,158 +292,6 @@ export default function HomePage() {
 
     return (
       <Stack spacing={{ xs: 4, md: 6 }}>
-        <Paper
-          sx={{
-            borderRadius: 4,
-            px: { xs: 3, md: 6 },
-            py: { xs: 4, md: 6 },
-            background: "linear-gradient(135deg, rgba(8,47,35,0.92) 0%, rgba(10,62,37,0.85) 55%, rgba(31,159,95,0.8) 100%)",
-            color: "#f8fafc",
-            display: "grid",
-            gap: { xs: 4, md: 6 },
-            gridTemplateColumns: { xs: "1fr", lg: "1.1fr 0.9fr" },
-            overflow: "hidden",
-          }}
-        >
-          <Stack spacing={2.5}>
-            <Chip
-              icon={<WorkspacePremiumRoundedIcon sx={{ color: "rgba(248,250,252,0.9)" }} />}
-              label="Portal Sagrado Tia Maria"
-              sx={{
-                width: "fit-content",
-                borderRadius: 999,
-                fontWeight: 600,
-                backgroundColor: "rgba(248,250,252,0.12)",
-                color: "rgba(248,250,252,0.9)",
-              }}
-            />
-            <Typography variant="h3" sx={{ fontWeight: 800, lineHeight: 1.1 }}>
-              Estudos, rituais e mentorias para fortalecer sua gira
-            </Typography>
-            <Typography variant="body1" sx={{ color: "rgba(248,250,252,0.85)", maxWidth: 520 }}>
-              Mock inspirado na plataforma benchmark: unimos trilhas completas de Umbanda, encontros ao vivo e uma
-              comunidade que caminha com fé.
-            </Typography>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={primaryCta.action}
-                sx={{
-                  px: 4,
-                  borderRadius: 999,
-                  fontWeight: 700,
-                  boxShadow: "0 18px 40px rgba(15,92,54,0.35)",
-                }}
-              >
-                {primaryCta.label}
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={secondaryCta.action}
-                sx={{
-                  px: 4,
-                  borderRadius: 999,
-                  fontWeight: 700,
-                  borderColor: "rgba(248,250,252,0.4)",
-                  color: "rgba(248,250,252,0.9)",
-                }}
-              >
-                {secondaryCta.label}
-              </Button>
-            </Stack>
-
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <Stack direction="row" spacing={1.5} alignItems="center">
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 999,
-                    display: "grid",
-                    placeItems: "center",
-                    backgroundColor: "rgba(248,250,252,0.18)",
-                  }}
-                >
-                  <AccessTimeRoundedIcon fontSize="small" />
-                </Box>
-                <Typography variant="body2">Conteúdo on-demand e encontros semanais</Typography>
-              </Stack>
-              <Stack direction="row" spacing={1.5} alignItems="center">
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 999,
-                    display: "grid",
-                    placeItems: "center",
-                    backgroundColor: "rgba(248,250,252,0.18)",
-                  }}
-                >
-                  <Diversity3RoundedIcon fontSize="small" />
-                </Box>
-                <Typography variant="body2">Comunidade acolhedora e mentorias personalizadas</Typography>
-              </Stack>
-            </Stack>
-          </Stack>
-
-          <Stack spacing={2}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "rgba(248,250,252,0.7)", letterSpacing: "0.14em" }}>
-              Destaques da casa
-            </Typography>
-            <Stack spacing={2.5}>
-              {showcases.map((item) => (
-                <Paper
-                  key={item.id}
-                  sx={{
-                    borderRadius: 3,
-                    p: 3,
-                    background: item.accent,
-                    color: "#f8fafc",
-                    boxShadow: "0 16px 40px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  <Stack spacing={1.5}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Chip
-                        label={item.subtitle}
-                        size="small"
-                        sx={{
-                          borderRadius: 999,
-                          bgcolor: "rgba(248,250,252,0.18)",
-                          color: "#f8fafc",
-                          fontWeight: 600,
-                        }}
-                      />
-                      <Chip
-                        icon={<PlayArrowRoundedIcon fontSize="small" />}
-                        label="Prévia"
-                        size="small"
-                        sx={{ borderRadius: 999, bgcolor: "rgba(248,250,252,0.16)", color: "#f8fafc" }}
-                      />
-                    </Stack>
-                    <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body2">{item.description}</Typography>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                      onClick={() => router.push(item.href)}
-                      sx={{ alignSelf: "flex-start", borderRadius: 999, fontWeight: 700, px: 3 }}
-                    >
-                      {item.ctaLabel}
-                    </Button>
-                  </Stack>
-                </Paper>
-              ))}
-            </Stack>
-          </Stack>
-        </Paper>
-
         <Stack spacing={2}>
           <Typography variant="h5" sx={{ fontWeight: 700 }}>
             Cursos, combos e vivências em destaque
@@ -465,7 +311,7 @@ export default function HomePage() {
 
         <Paper
           sx={{
-            borderRadius: 4,
+            borderRadius: 2,
             p: { xs: 3, md: 5 },
             background: "linear-gradient(120deg, rgba(248,250,252,0.96) 0%, rgba(255,255,255,0.98) 100%)",
             border: "1px solid rgba(15,92,54,0.08)",
@@ -480,7 +326,7 @@ export default function HomePage() {
                     size="small"
                     sx={{
                       width: "fit-content",
-                      borderRadius: 999,
+                      borderRadius: 8,
                       fontWeight: 600,
                       backgroundColor: "rgba(31,159,95,0.12)",
                       color: "#0f5c36",
@@ -503,11 +349,11 @@ export default function HomePage() {
         </Paper>
 
         <Grid container spacing={4}>
-          <Grid size={{ xs: 12, lg: 6 }}>
+          <Grid size={{ xs: 12, lg: 6 }} sx={{ display: 'flex', alignItems: 'center' }}>
             <Paper
               sx={{
-                height: "100%",
-                borderRadius: 4,
+                width: '100%',
+                borderRadius: 2,
                 overflow: "hidden",
                 border: "1px solid rgba(15,92,54,0.08)",
                 boxShadow: "0 18px 45px -28px rgba(15,92,54,0.35)",
@@ -516,9 +362,9 @@ export default function HomePage() {
               <Box sx={{ position: "relative", paddingTop: "56.25%" }}>
                 <Box
                   component="iframe"
-                  src="https://www.youtube.com/embed/w3wQrtME5wc"
-                  title="Apresentação Tia Maria"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  src="https://www.youtube.com/embed/4JqU5m5xeHo?list=RD4JqU5m5xeHo"
+                  title="🕊🙏 Melhores Pontos de Umbanda (Orixás, caboclos, pretos velhos, baianos, boiadeiros, manlandros...)"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
                 />
@@ -530,7 +376,7 @@ export default function HomePage() {
             <Paper
               sx={{
                 height: "100%",
-                borderRadius: 4,
+                borderRadius: 2,
                 border: "1px solid rgba(15,92,54,0.08)",
                 background: "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(248,250,252,0.96) 100%)",
                 p: { xs: 3, md: 4 },
@@ -542,7 +388,7 @@ export default function HomePage() {
                   size="small"
                   sx={{
                     width: "fit-content",
-                    borderRadius: 999,
+                    borderRadius: 8,
                     fontWeight: 600,
                     backgroundColor: "rgba(31,159,95,0.12)",
                     color: "#0f5c36",
@@ -587,35 +433,6 @@ export default function HomePage() {
           </Grid>
         </Grid>
 
-        <Paper
-          sx={{
-            borderRadius: 999,
-            px: { xs: 3, md: 5 },
-            py: 3,
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 2,
-            background: "linear-gradient(120deg, rgba(31,159,95,0.12) 0%, rgba(251,191,36,0.18) 100%)",
-            border: "1px solid rgba(15,92,54,0.12)",
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            Siga a Casa do Pai Benedito nas redes e acompanhe os novos rituais
-          </Typography>
-          <Stack direction="row" spacing={1.5}>
-            <IconButton color="primary" href="https://www.facebook.com/CasadoPaiBenedito/" target="_blank" rel="noreferrer">
-              <FacebookRoundedIcon />
-            </IconButton>
-            <IconButton color="primary" href="https://www.youtube.com/channel/UCGNVZS02VR23_Ndwv16yJBQ" target="_blank" rel="noreferrer">
-              <YouTube />
-            </IconButton>
-            <IconButton color="primary" href="https://www.instagram.com/casadopaibenedito/?hl=pt-br" target="_blank" rel="noreferrer">
-              <Instagram />
-            </IconButton>
-          </Stack>
-        </Paper>
       </Stack>
     );
   }
@@ -625,19 +442,55 @@ export default function HomePage() {
       {renderLandingContent(true)}
     </AppChrome>
   ) : (
-    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 8 } }}>
-      <Stack spacing={{ xs: 5, md: 7 }}>
-        <HeroSection
-          title="Sua jornada espiritual, acolhida online"
-          subtitle="Plataforma Tia Maria"
-          description="Mock para experimentarmos a nova cara do portal EAD sem perder a essência da Casa do Pai Benedito."
-          primaryAction={{ label: "Fazer login", onClick: () => setLoginOpen(true) }}
-          secondaryAction={{ label: "Recuperar senha", onClick: () => setForgotOpen(true) }}
-          highlights={["Mentorias ao vivo com a Tia Maria", "Rituais gravados com guias", "Materiais exclusivos"]}
-        />
-        {renderLandingContent(false)}
-      </Stack>
-    </Container>
+    <>
+      <Header />
+      <Carousel />
+      <Box
+        sx={{
+          width: '100vw',
+          position: 'relative',
+          left: '50%',
+          right: '50%',
+          marginLeft: '-50vw',
+          marginRight: '-50vw',
+          py: 8,
+          px: 4,
+          backgroundColor: '#f8f9fa',
+        }}
+      >
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={4} alignItems="center" maxWidth="lg" mx="auto">
+          <Box sx={{ flex: '0 0 70%', pr: 4 }}>
+            <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: '#1976d2' }}>
+              Sobre o Terreiro Tia Maria
+            </Typography>
+            <Typography variant="body1" sx={{ lineHeight: 1.7, color: '#333' }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+            </Typography>
+          </Box>
+          <Box sx={{ flex: '0 0 30%', display: 'flex', justifyContent: 'center' }}>
+            <Box
+              component="img"
+              src="/Logo_Terr_White-removebg-preview.png"
+              alt="Logo Terreiro Tia Maria"
+              sx={{
+                width: '100%',
+                maxWidth: 300,
+                height: 'auto',
+                border: '4px solid #1976d2',
+                borderRadius: 2,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              }}
+            />
+          </Box>
+        </Stack>
+      </Box>
+      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 8 } }}>
+        <Stack spacing={{ xs: 5, md: 7 }}>
+          {renderLandingContent(false)}
+        </Stack>
+      </Container>
+      <Footer />
+    </>
   );
 
   return (

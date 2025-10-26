@@ -102,10 +102,10 @@ const baseTheme: ThemeOptions = {
       contrastText: "#f8fafc",
     },
     secondary: {
-      main: colors.xango[500],
-      light: colors.xango[300],
-      dark: colors.xango[700],
-      contrastText: "#fff7ec",
+      main: colors.rose[400],
+      light: colors.rose[200],
+      dark: colors.rose[600],
+      contrastText: "#fff",
     },
     success: {
       main: colors.oxossi[500],
