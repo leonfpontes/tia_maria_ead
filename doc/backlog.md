@@ -76,6 +76,8 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [x] Documentar playbook de deploy Vercel + Railway - 24/10/2025
 - [x] Implementar mock da página de certificados (lista de cursos concluídos + visualização individual com download) - 25/10/2025
 - [x] Mockar redesign do catálogo de cursos (layout benchmarkado + dados mockados) - 25/10/2025
+- [x] Corrigir compatibilidade bcrypt no backend para Docker (shim para passlib) - 25/10/2025
+- [x] Ajustar .gitignore para ignorar .next/ - 25/10/2025
 
 ## Débitos Técnicos Abertos
 - [ ] [BUG] Erro runtime na área do aluno (`TypeError: Cannot read properties of undefined (reading 'toLowerCase')`) ao acessar `localhost:3000` autenticado.
