@@ -22,9 +22,9 @@
   gtag('config', 'G-TJWSRTGFHC');
 </script>
 </head>
-<body class="text-slate-800 bg-folhas">
+<body class="has-fixed-header text-slate-800 bg-folhas">
   <!-- Header -->
-  <header class="sticky top-0 z-50 backdrop-blur bg-transparent">
+  <header id="main-header" class="fixed top-0 z-50 w-full backdrop-blur bg-transparent">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <a href="#" class="flex items-center gap-3">
@@ -543,7 +543,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="endereco-grid grid lg:grid-cols-2 gap-10 items-center">
         <div class="map-card w-full rounded-2xl overflow-hidden border border-slate-200 bg-white">
-          <iframe class="map-frame" src="https://maps.google.com/maps?q=R.+Padre+Anchieta,+490+-+Vila+Tiberio,+Ribeirão+Preto+-+SP,+14050-140&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe class="map-frame" src="https://maps.google.com/maps?q=R.+Padre+Anchieta,+490+-+Vila+Tiberio,+Ribeir%C3%A3o+Preto+-+SP,+14050-140&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="endereco-info">
           <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Como Chegar</h2>
@@ -878,5 +878,30 @@
 
   <!-- Scripts -->
   <script src="assets/js/auth.js"></script>
+  <script>
+    // Novo script para corrigir visibilidade do header na rolagem
+    const header = document.getElementById('main-header');
+
+    if (header) {
+      const scrolledClasses = ['bg-white/80', 'shadow-xl', 'border-b', 'border-white/10'];
+
+      const applyHeaderState = (isScrolled) => {
+        if (isScrolled) {
+          header.classList.add(...scrolledClasses);
+          header.classList.remove('bg-transparent');
+        } else {
+          header.classList.add('bg-transparent');
+          scrolledClasses.forEach(cls => header.classList.remove(cls));
+        }
+      };
+
+      const toggleHeaderBackground = () => {
+        applyHeaderState(window.scrollY > 50);
+      };
+
+      window.addEventListener('scroll', toggleHeaderBackground, { passive: true });
+      toggleHeaderBackground(); // Executa na carga inicial
+    }
+  </script>
 </body>
 </html>

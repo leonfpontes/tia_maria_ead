@@ -29,6 +29,16 @@ body {
     'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
 }
 
+body.has-fixed-header {
+  padding-top: 4.5rem;
+}
+
+@media (max-width: 768px) {
+  body.has-fixed-header {
+    padding-top: 4.25rem;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
