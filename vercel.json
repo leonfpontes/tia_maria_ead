@@ -1,6 +1,7 @@
 {
   "installCommand": "rm -rf node_modules && npm ci",
   "buildCommand": "npm run build",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
