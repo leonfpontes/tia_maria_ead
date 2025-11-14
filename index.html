@@ -354,12 +354,11 @@
             <span>Portões abrem às 19h30</span>
           </div>
         </article> -->
+        <!-- 18/11 Vivência Pombogira (11/11 removido por já ter passado) -->
         <article class="group novidade-card novidade-card--destaque-preto-vermelho rounded-2xl p-5 shadow-xl transition">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
             <span class="novidade-card__badge bg-red-600 text-white">Vivência especial</span>
-            <time datetime="2025-11-11">11 nov 2025</time>
-            <span aria-hidden="true">•</span>
             <time datetime="2025-11-18">18 nov 2025</time>
           </div>
           <h3 class="relative mt-3 font-bold text-lg text-red-500">Vivência Pombogira</h3>
@@ -377,14 +376,15 @@
             </a>
           </div>
         </article>
-  <article class="group novidade-card novidade-card--pretos-velhos rounded-2xl p-5 shadow-xl transition">
+        <!-- 14/11 Hoje: Gira Mista (destaque) -->
+        <article class="group novidade-card novidade-card--destaque-principal novidade-card--gira-mista rounded-2xl p-5 shadow-2xl transition">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge">Gira do mês</span>
+            <span class="novidade-card__badge">Hoje</span>
             <time datetime="2025-11-14">14 nov 2025</time>
           </div>
-          <h3 class="relative mt-3 font-bold text-lg">Gira de Pretos Velhos</h3>
-          <p class="relative mt-2 text-sm">Noite de aconselhamento, benzimento e sabedoria ancestral com nossos Pretos Velhos.</p>
+          <h3 class="relative mt-3 font-bold text-lg">Gira Mista</h3>
+          <p class="relative mt-2 text-sm">Traga uma doação para nossa casa e fortaleça os trabalhos coletivos.</p>
           <div class="novidade-card__detail">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 8v5l3 2"></path>
@@ -430,14 +430,14 @@
             </a>
           </div>
         </article>
-  <article class="group novidade-card novidade-card--gira-mista rounded-2xl p-5 shadow-xl transition">
+  <article class="group novidade-card novidade-card--pretos-velhos rounded-2xl p-5 shadow-xl transition">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
             <span class="novidade-card__badge">Encerramento do mês</span>
             <time datetime="2025-11-28">28 nov 2025</time>
           </div>
-          <h3 class="relative mt-3 font-bold text-lg">Gira Mista</h3>
-          <p class="relative mt-2 text-sm">Encerramento de novembro com todas as linhas da casa trabalhando em união e comunidade.</p>
+          <h3 class="relative mt-3 font-bold text-lg">Gira de Pretos Velhos</h3>
+          <p class="relative mt-2 text-sm">Noite de aconselhamento, benzimento e sabedoria ancestral com nossos Pretos Velhos.</p>
           <div class="novidade-card__detail">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 8v5l3 2"></path>
@@ -447,7 +447,7 @@
           </div>
         </article>
         <!-- Outras novidades -->
-        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
+        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition" data-evergreen="true">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
             <span class="novidade-card__badge bg-green-100 text-green-700">Aulas disponíveis</span>
@@ -468,7 +468,7 @@
             </a>
           </div>
         </article>
-        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
+        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition" data-evergreen="true">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
             <span class="novidade-card__badge bg-green-100 text-green-700">Pré-inscrição aberta</span>
@@ -762,10 +762,181 @@
         }
       }
 
+      // Utilitários para Novidades
+      function getCardDates(card) {
+        return Array.from(card.querySelectorAll('time[datetime]'))
+          .map((t) => window.dayjs(t.getAttribute('datetime')))
+          .filter((d) => d && d.isValid());
+      }
+
+      function isEvergreenCard(card) {
+        if (card.hasAttribute('data-evergreen')) return true; // prefer attribute
+        const title = (card.querySelector('h3')?.textContent || '').toLowerCase();
+        const badgeText = (card.querySelector('.novidade-card__badge')?.textContent || '').toLowerCase();
+        // Fallback heurístico para compatibilidade retroativa
+        return (
+          title.includes('aulas') ||
+          badgeText.includes('aulas') ||
+          badgeText.includes('pré-inscrição') ||
+          title.includes('curso de teologia')
+        );
+      }
+
+      // Oculta cards que já passaram (todos os <time> anteriores a hoje), exceto evergreen
+      function hidePastNovidades() {
+        const todayStart = window.dayjs().startOf('day');
+        document.querySelectorAll('.novidade-card').forEach((card) => {
+          if (isEvergreenCard(card)) return; // mantém visível
+          const dates = getCardDates(card);
+          if (!dates.length) return;
+          const allPast = dates.every((d) => d.isBefore(todayStart, 'day'));
+          if (allPast) {
+            card.classList.add('hidden');
+          } else {
+            card.classList.remove('hidden');
+          }
+        });
+      }
+
+      // Atualiza dinamicamente os selos dos cards de novidades
+      function updateNovidadesBadges() {
+        try {
+          const today = (window.dayjs ? window.dayjs() : null);
+          if (!today) return;
+          const todayStart = today.startOf('day');
+
+          document.querySelectorAll('.novidade-card').forEach((card) => {
+            const badge = card.querySelector('.novidade-card__badge');
+            if (!badge) return;
+
+            const times = Array.from(card.querySelectorAll('time[datetime]'))
+              .map((t) => window.dayjs(t.getAttribute('datetime')))
+              .filter((d) => d && d.isValid());
+            if (times.length === 0) return;
+
+            const isToday = times.some((d) => d.isSame(todayStart, 'day'));
+
+            // Se o selo for "Hoje" mas a data já passou (ou ainda não é hoje), troca para "Gira do mês"
+            if (badge.textContent && badge.textContent.trim().toLowerCase() === 'hoje' && !isToday) {
+              badge.textContent = 'Gira do mês';
+            }
+          });
+        } catch (e) {
+          // Silencioso por segurança; nenhuma dependência crítica
+        }
+      }
+
+      // Destaca a próxima gira automaticamente com selo "Próxima gira" e destaque visual
+      function promoteNextNovidade() {
+        try {
+          const today = window.dayjs();
+          const todayStart = today.startOf('day');
+
+          const cards = Array.from(document.querySelectorAll('.novidade-card'));
+
+          // Limpa promoções anteriores feitas por este script
+          cards.forEach((card) => {
+            if (card.dataset.promoted === 'true') {
+              const badge = card.querySelector('.novidade-card__badge');
+              if (badge && badge.dataset.prevText) {
+                badge.textContent = badge.dataset.prevText;
+              }
+              badge?.removeAttribute('data-prev-text');
+              card.classList.toggle('novidade-card--destaque-principal', card.dataset.addedHighlight === 'true' ? false : card.classList.contains('novidade-card--destaque-principal'));
+              delete card.dataset.promoted;
+              delete card.dataset.addedHighlight;
+            }
+          });
+
+          // Monta lista de candidatos (com datas válidas e não evergreen)
+          const candidates = cards
+            .filter((c) => !isEvergreenCard(c))
+            .map((c) => ({ card: c, dates: getCardDates(c) }))
+            .filter(({ dates }) => dates.length > 0);
+
+          if (!candidates.length) return;
+
+          const isToday = ({ dates }) => dates.some((d) => d.isSame(todayStart, 'day'));
+          const nextAfterToday = ({ dates }) => {
+            const future = dates.filter((d) => d.isAfter(todayStart, 'day')).sort((a, b) => a.valueOf() - b.valueOf());
+            return future[0] || null;
+          };
+
+          const todayCards = candidates.filter(isToday);
+          let target = null;
+
+          if (todayCards.length > 0) {
+            // Se houver evento hoje, promove o próximo futuro (não o de hoje)
+            const futureCandidates = candidates
+              .map((c) => ({ ...c, next: nextAfterToday(c) }))
+              .filter((c) => !!c.next)
+              .sort((a, b) => a.next.valueOf() - b.next.valueOf());
+            target = futureCandidates[0]?.card || null;
+          } else {
+            // Senão, promove o mais próximo a partir de hoje (pode ser hoje se existir)
+            const upcoming = candidates
+              .map(({ card, dates }) => ({ card, next: dates.sort((a, b) => a.valueOf() - b.valueOf()).find((d) => !d.isBefore(todayStart, 'day')) }))
+              .filter((c) => !!c.next)
+              .sort((a, b) => a.next.valueOf() - b.next.valueOf());
+            target = upcoming[0]?.card || null;
+          }
+
+          if (target) {
+            const badge = target.querySelector('.novidade-card__badge');
+            if (badge) {
+              badge.dataset.prevText = (badge.textContent || '').trim();
+              badge.textContent = 'Próxima gira';
+            }
+
+            // aplica destaque visual se ainda não tiver
+            if (!target.classList.contains('novidade-card--destaque-principal')) {
+              target.classList.add('novidade-card--destaque-principal');
+              target.dataset.addedHighlight = 'true';
+            }
+
+            target.dataset.promoted = 'true';
+          }
+        } catch (_) {
+          // Silencioso
+        }
+      }
+
+      // Reordena os cards por data (mais próximo primeiro); evergreen ficam ao final
+      function reorderNovidades() {
+        try {
+          const wrapper = document.querySelector('.novidades-wrapper');
+          if (!wrapper) return;
+
+          const todayStart = window.dayjs().startOf('day');
+          const cards = Array.from(wrapper.querySelectorAll('.novidade-card'));
+
+          const evergreen = cards.filter((c) => isEvergreenCard(c));
+          const events = cards.filter((c) => !isEvergreenCard(c) && !c.classList.contains('hidden'));
+
+          const withKey = events.map((card) => {
+            const dates = getCardDates(card).sort((a, b) => a.valueOf() - b.valueOf());
+            const key = dates.find((d) => !d.isBefore(todayStart, 'day')) || dates[dates.length - 1];
+            return { card, key };
+          });
+
+          withKey.sort((a, b) => a.key.valueOf() - b.key.valueOf());
+
+          // Reanexa na ordem desejada
+          withKey.forEach(({ card }) => wrapper.appendChild(card));
+          evergreen.forEach((card) => wrapper.appendChild(card));
+        } catch (_) {
+          // Silencioso
+        }
+      }
+
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', ensureCarousel, { once: true });
+        document.addEventListener('DOMContentLoaded', () => { ensureCarousel(); hidePastNovidades(); reorderNovidades(); updateNovidadesBadges(); promoteNextNovidade(); }, { once: true });
       } else {
         ensureCarousel();
+        hidePastNovidades();
+        reorderNovidades();
+        updateNovidadesBadges();
+        promoteNextNovidade();
       }
     </script>
   </footer>
