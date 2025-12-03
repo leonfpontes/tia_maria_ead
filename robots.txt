@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tiamariaecaboclajupira.com.br/sitemap.xml

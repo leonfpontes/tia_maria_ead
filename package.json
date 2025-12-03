@@ -8,8 +8,9 @@
   },
   "scripts": {
     "build:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
+    "minify:css": "npx --yes clean-css-cli -o assets/css/main.css assets/css/main.css",
     "watch:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
-    "build": "npm run build:css",
+    "build": "npm run build:css && npm run minify:css",
     "start": "npx --yes http-server -c-1 ."
   },
   "repository": {
