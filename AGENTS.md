@@ -50,6 +50,7 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 
 ## Histórico de Mudanças
 
+- [21/12/2025]: Atualizados os cards de novidades para comunicar recesso, retorno em 28/01/2026 com Ritual Coletivo na força de Oxóssi e gira de caboclos em 30/01/2026.
 - [25/10/2025]: Adicionados botões do Instagram nos cards de Aulas de Curimba e Vivência de Pombogiras, com efeitos de hover visuais, direcionando para as mesmas redes sociais da seção de Redes Sociais.
 - [25/10/2025]: Adicionados botões com logos do WhatsApp e Instagram nos cards de inscrições abertas (Aulas de Curimba, Vivência de Pombogiras e Curso de Teologia), permitindo cliques diretos para as redes sociais.
 - [25/10/2025]: Ajustadas as cores da fonte da badge "Portões abrem às 19h30" no card da Gira Mista para branco, incluindo o ícone, para melhor contraste.

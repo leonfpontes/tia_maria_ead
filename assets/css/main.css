@@ -92,6 +92,35 @@ textarea:focus-visible {
   height: 100%
 }
 
+.novidade-card--faixa-alerta {
+  background: repeating-linear-gradient(-45deg, #111827 0 24px, #111827 24px 32px, #facc15 32px 56px, #facc15 56px 64px);
+  color: #f8fafc;
+  border: 1px solid #0f172a;
+  box-shadow: 0 28px 48px -22px rgba(17, 24, 39, .6)
+}
+
+.novidade-card--faixa-alerta h3,
+.novidade-card--faixa-alerta p,
+.novidade-card--faixa-alerta time,
+.novidade-card--faixa-alerta .novidade-card__detail,
+.novidade-card--faixa-alerta .novidade-card__badge {
+  position: relative;
+  z-index: 1;
+  color: #0f172a
+}
+
+.novidade-card--faixa-alerta .novidade-card__badge {
+  background: #facc15;
+  color: #0f172a;
+  border: 1px solid #0f172a
+}
+
+.novidade-card--faixa-alerta .novidade-card__detail {
+  background: rgba(15, 23, 42, .12);
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, .35)
+}
+
 .novidade-card--caboclos {
   border: 1px solid rgba(22, 101, 52, .35);
   background: linear-gradient(135deg, rgba(22, 101, 52, .98) 0, rgba(4, 120, 87, .95) 50%, rgba(22, 163, 74, .92) 100%);
@@ -1327,6 +1356,52 @@ img[src="assets/img/Ray_Tim.png"] {
   width: 18px;
   height: 18px;
   color: #ecfdf5
+}
+
+/* Override do comunicado de recesso com faixa preta/amarela */
+.novidade-card--faixa-alerta {
+  background: repeating-linear-gradient(-45deg, rgba(17, 24, 39, .75) 0 20px, rgba(17, 24, 39, .75) 20px 28px, rgba(250, 204, 21, .85) 28px 52px, rgba(250, 204, 21, .85) 52px 60px) !important;
+  color: #0f172a;
+  border-color: #0f172a;
+  box-shadow: 0 32px 54px -26px rgba(17, 24, 39, .7)
+}
+
+.novidade-card--faixa-alerta::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .78);
+  z-index: 0;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .08)
+}
+
+.novidade-card--faixa-alerta .novidade-card__glow {
+  display: none
+}
+
+.novidade-card--faixa-alerta h3,
+.novidade-card--faixa-alerta p,
+.novidade-card--faixa-alerta time {
+  color: #0f172a !important;
+  position: relative;
+  z-index: 1
+}
+
+.novidade-card--faixa-alerta .novidade-card__badge {
+  background: #facc15 !important;
+  color: #0f172a !important;
+  border: 1px solid #0f172a !important;
+  position: relative;
+  z-index: 1
+}
+
+.novidade-card--faixa-alerta .novidade-card__detail {
+  background: rgba(15, 23, 42, .12) !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, .35) !important;
+  position: relative;
+  z-index: 1
 }
 
 .novidade-card--gira-mista {
