@@ -350,6 +350,13 @@ textarea:focus-visible {
   display: none !important
 }
 
+/* Oculta o carrossel de background em mobile */
+@media (max-width: 1024px) {
+  .banner-carousel-background {
+    display: none !important
+  }
+}
+
 .banner-carousel-shell .antd-carousel-wrapper {
   position: relative;
   width: 100%;
