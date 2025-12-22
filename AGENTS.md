@@ -50,6 +50,7 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 
 ## Histórico de Mudanças
 
+- [22/12/2025]: Adicionado carrossel de Linhas de Trabalho como background da seção de novidades. O carrossel exibe as 9 artes da pasta Covers (7 Linhas, Caboclos/Boiadeiros, Pretos Velhos, Exus, Pombogiras, Baianos, Malandros, Marinheiros e Oxóssi/Oxum) com autoplay de 4 segundos, posicionado absolutamente atrás do conteúdo com opacidade de 15% para criar efeito visual sutil sem interferir na legibilidade dos cards.
 - [21/12/2025]: Implementadas melhorias completas de SEO: meta tags otimizadas (Open Graph, Twitter Cards), Schema.org JSON-LD para organização religiosa, canonical URL, keywords estratégicas, preload de recursos críticos, alt texts descritivos e título otimizado para busca local. Nenhuma alteração visual.
 - [21/12/2025]: Atualizados os cards de novidades para comunicar recesso, retorno em 28/01/2026 com Ritual Coletivo na força de Oxóssi e gira de caboclos em 30/01/2026.
 - [25/10/2025]: Adicionados botões do Instagram nos cards de Aulas de Curimba e Vivência de Pombogiras, com efeitos de hover visuais, direcionando para as mesmas redes sociais da seção de Redes Sociais.

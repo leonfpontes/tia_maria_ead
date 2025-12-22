@@ -371,18 +371,14 @@
       </div>
     </div>
     <!-- faixa com símbolos -->
-    <div class="bg-white border-t">
+<!--     <div class="bg-white border-t">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between text-sm text-slate-600">
         <span class="inline-flex items-center gap-2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2"/></svg>
           Giras semanais • Estudos • Atendimento à comunidade.
         </span>
-        <!-- <span class="hidden sm:inline-flex items-center gap-2">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="currentColor" stroke-width="2"/></svg>
-          Umbanda é caridade
-        </span> -->
       </div>
-    </div>
+    </div> -->
   </section>
 
   <!-- Sobre o Terreiro -->
@@ -419,13 +415,18 @@
 
   <!-- Novidades -->
   <section id="novidades" class="relative bg-white bg-pedras">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Background Carrossel -->
+    <div class="banner-carousel-shell banner-carousel-background">
+      <div id="banner-carousel"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
   <div class="novidades-header flex items-end justify-between gap-6">
         <div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Novidades</h2>
-          <p class="mt-2 text-slate-600">Acompanhe avisos de gira, campanhas e comunicados da casa.</p>
+          <!-- <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Novidades</h2> -->
+          <!-- <p class="mt-2 text-slate-600">Acompanhe avisos de gira, campanhas e comunicados da casa.</p> -->
         </div>
-        <a href="#redes" class="text-oxossi-600 font-semibold hover:underline">Ver nas redes</a>
+        <!-- <a href="#redes" class="text-oxossi-600 font-semibold hover:underline">Ver nas redes</a> -->
       </div>
 
   <div class="novidades-wrapper mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -929,6 +930,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="assets/js/slider.js"></script>
   <script src="assets/js/auth.js"></script>
   <script>
     // Novo script para corrigir visibilidade do header na rolagem
@@ -953,6 +955,26 @@
 
       window.addEventListener('scroll', toggleHeaderBackground, { passive: true });
       toggleHeaderBackground(); // Executa na carga inicial
+    }
+
+    // Inicializar carrossel de banners das linhas
+    const bannerData = [
+      { src: 'assets/img/Covers/Cover_7_Linhas.png', alt: 'As Sete Linhas da Umbanda' },
+      { src: 'assets/img/Covers/Cover_Caboclos_Boiadeiros.png', alt: 'Linha de Caboclos e Boiadeiros' },
+      { src: 'assets/img/Covers/Cover_Pretos_Velhos.png', alt: 'Linha de Pretos Velhos' },
+      { src: 'assets/img/Covers/Cover_Exus.png', alt: 'Linha de Exus' },
+      { src: 'assets/img/Covers/Cover_Pombogiras.png', alt: 'Linha de Pombogiras' },
+      { src: 'assets/img/Covers/Cover_Baianos.png', alt: 'Linha de Baianos' },
+      { src: 'assets/img/Covers/Cover_Malandros.png', alt: 'Linha de Malandros' },
+      { src: 'assets/img/Covers/Cover_Marinheiros.png', alt: 'Linha de Marinheiros' },
+      { src: 'assets/img/Covers/Cover_Oxossi_Oxum.png', alt: 'Oxóssi e Oxum' }
+    ];
+
+    if (typeof initEventsCarousel === 'function') {
+      initEventsCarousel('banner-carousel', bannerData, { 
+        autoplay: true, 
+        interval: 4000 
+      });
     }
   </script>
 </body>

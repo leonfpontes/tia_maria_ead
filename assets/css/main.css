@@ -317,6 +317,104 @@ textarea:focus-visible {
   display: flex !important
 }
 
+/* Banner Carousel - Carrossel de Linhas */
+.banner-carousel-shell {
+  position: relative;
+  width: 100%;
+  height: 50rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%)
+}
+
+/* Banner como background da seção */
+.banner-carousel-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.60
+}
+
+.banner-carousel-background .antd-carousel-wrapper {
+  height: 100%
+}
+
+.banner-carousel-background .antd-carousel-slide {
+  height: 100%
+}
+
+.banner-carousel-background .slick-arrow,
+.banner-carousel-background .slick-dots {
+  display: none !important
+}
+
+.banner-carousel-shell .antd-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 50rem
+}
+
+.banner-carousel-shell .antd-carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50rem;
+  display: none
+}
+
+.banner-carousel-shell .antd-carousel-slide:first-child {
+  display: block
+}
+
+@media (max-width: 768px) {
+  .banner-carousel-shell .antd-carousel-wrapper {
+    height: 16rem
+  }
+  
+  .banner-carousel-shell .antd-carousel-slide {
+    height: 16rem
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .banner-carousel-shell .antd-carousel-wrapper {
+    height: 22rem
+  }
+  
+  .banner-carousel-shell .antd-carousel-slide {
+    height: 22rem
+  }
+}
+
+.banner-carousel-shell .antd-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block
+}
+
+.banner-carousel-shell .antd-carousel-wrapper .slick-arrow {
+  background: rgba(22, 163, 74, .85);
+  border: 1px solid rgba(187, 247, 208, .5)
+}
+
+.banner-carousel-shell .antd-carousel-wrapper .slick-arrow:hover {
+  background: rgba(22, 163, 74, .95);
+  transform: translateY(-50%) scale(1.12)
+}
+
+.banner-carousel-shell .antd-carousel-wrapper .slick-dots li button {
+  background: rgba(187, 247, 208, .4)
+}
+
+.banner-carousel-shell .antd-carousel-wrapper .slick-dots li.slick-active button {
+  background: rgba(187, 247, 208, .95)
+}
+
 .novidade-card--caboclos .novidade-card__detail svg {
   width: 16px;
   height: 16px;
