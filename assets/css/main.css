@@ -317,6 +317,32 @@ textarea:focus-visible {
   display: flex !important
 }
 
+/* Background estático da seção de novidades */
+.novidades-section {
+  position: relative;
+  overflow: hidden;
+  background: transparent
+}
+
+.novidades-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: url('../img/Covers/Cover_bg_Cards.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat
+}
+
+@media (max-width: 1024px) {
+  .novidades-bg-image {
+    opacity: 0.85
+  }
+}
+
 /* Banner Carousel - Carrossel de Linhas */
 .banner-carousel-shell {
   position: relative;
@@ -714,7 +740,10 @@ textarea:focus-visible {
 }
 
 .hero-gradient {
-  background-image: radial-gradient(260px 180px at 12% 60%, rgba(34, 197, 94, .18) 0, rgba(34, 197, 94, 0) 70%), linear-gradient(135deg, rgba(15, 85, 42, .95) 0, rgba(22, 101, 52, .85) 35%, rgba(255, 182, 193, .85) 65%, #ffb6c1 100%);
+  background-image: url('../img/Covers/Cover_bg_Hero.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: #fff
 }
 

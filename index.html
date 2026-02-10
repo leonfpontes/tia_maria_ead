@@ -365,7 +365,7 @@
             </div>
           </div>
           <div class="hero-media mt-10 lg:mt-0 flex justify-center lg:justify-end">
-            <img src="assets/img/Logo_Terr_White-removebg-preview.png" alt="Símbolo sagrado do Terreiro de Umbanda Tia Maria e Cabocla Jupira, representando fé e espiritualidade" class="w-40 sm:w-56 md:w-64 lg:w-80 xl:w-96 h-auto drop-shadow-lg" loading="lazy" />
+            <img src="assets/img/Logo_White.png" alt="Símbolo sagrado do Terreiro de Umbanda Tia Maria e Cabocla Jupira, representando fé e espiritualidade" class="w-52 sm:w-72 md:w-80 lg:w-96 xl:w-[28rem] h-auto drop-shadow-lg" loading="lazy" />
           </div>
         </div>
       </div>
@@ -414,11 +414,9 @@
   </section>
 
   <!-- Novidades -->
-  <section id="novidades" class="relative bg-white bg-pedras">
-    <!-- Background Carrossel -->
-    <div class="banner-carousel-shell banner-carousel-background">
-      <div id="banner-carousel"></div>
-    </div>
+  <section id="novidades" class="relative novidades-section">
+    <!-- Background estático -->
+    <div class="novidades-bg-image" aria-hidden="true"></div>
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
   <div class="novidades-header flex items-end justify-between gap-6">
@@ -764,10 +762,10 @@
       // Carousel functionality
       // Carousel (Ant Design)
       const carouselData = [
-        {
+        /* {
           src: 'assets/img/Ritual_Oxossi.png',
           alt: 'Retorno Ritual Coletivo na Força de Oxóssi'
-        },
+        }, */
         {
           src: 'assets/img/regras.jpg',
           alt: 'Regras de Curimba'
