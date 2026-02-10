@@ -50,6 +50,8 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 
 ## Histórico de Mudanças
 
+- [10/02/2026]: Card do Ritual Coletivo (23/02) atualizado para tema de Iemanjá com cores azuis claras (gradiente cyan/sky blue) e descrição mencionando "Rainha do Mar". Novo estilo CSS `novidade-card--iemanja` criado.
+- [10/02/2026]: Atualizados os cards de novidades com calendário de fevereiro 2026: Gira de Exu e Pombogira (06/02), Não Teremos Gira (13/02), Gira de Pretos Velhos (20/02), Ritual Coletivo (23/02), Início Desenvolvimento Mediúnico (25/02) e Gira Mista (27/02). Mantidos os temas visuais dos cards (preto-vermelho para Exu/Pombogira, verde para Pretos Velhos, verde-rosa para demais).
 - [22/12/2025]: Adicionado carrossel de Linhas de Trabalho como background da seção de novidades. O carrossel exibe as 9 artes da pasta Covers (7 Linhas, Caboclos/Boiadeiros, Pretos Velhos, Exus, Pombogiras, Baianos, Malandros, Marinheiros e Oxóssi/Oxum) com autoplay de 4 segundos, posicionado absolutamente atrás do conteúdo com opacidade de 15% para criar efeito visual sutil sem interferir na legibilidade dos cards.
 - [21/12/2025]: Implementadas melhorias completas de SEO: meta tags otimizadas (Open Graph, Twitter Cards), Schema.org JSON-LD para organização religiosa, canonical URL, keywords estratégicas, preload de recursos críticos, alt texts descritivos e título otimizado para busca local. Nenhuma alteração visual.
 - [21/12/2025]: Atualizados os cards de novidades para comunicar recesso, retorno em 28/01/2026 com Ritual Coletivo na força de Oxóssi e gira de caboclos em 30/01/2026.

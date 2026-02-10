@@ -1842,3 +1842,110 @@ img[src="assets/img/Ray_Tim.png"] {
   height: 16px;
   color: #d1fae5
 }
+
+/* Card Iemanjá - Azul claro */
+.novidade-card--iemanja {
+  border: 1px solid rgba(56, 189, 248, .35);
+  background: linear-gradient(135deg, rgba(14, 116, 144, .98) 0, rgba(56, 189, 248, .95) 50%, rgba(186, 230, 253, .92) 100%);
+  color: #f0f9ff;
+  box-shadow: 0 28px 48px -22px rgba(14, 116, 144, .65);
+  backdrop-filter: blur(6px);
+  transition: transform .25s ease, box-shadow .25s ease
+}
+
+.novidade-card--iemanja:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 56px -24px rgba(14, 116, 144, .75)
+}
+
+.novidade-card--iemanja .novidade-card__glow {
+  background: radial-gradient(circle at 18% 18%, rgba(186, 230, 253, .55), transparent 58%);
+  opacity: .9
+}
+
+.novidade-card--iemanja:hover .novidade-card__glow {
+  opacity: 1
+}
+
+.novidade-card--iemanja .novidade-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .28);
+  color: #f0f9ff;
+  text-transform: uppercase;
+  letter-spacing: .04em
+}
+
+.novidade-card--iemanja .novidade-card__badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bae6fd;
+  box-shadow: 0 0 0 4px rgba(186, 230, 253, .3)
+}
+
+.novidade-card--iemanja h3,
+.novidade-card--iemanja p,
+.novidade-card--iemanja time {
+  position: relative;
+  z-index: 1
+}
+
+.novidade-card--iemanja time {
+  color: rgba(240, 249, 255, .82);
+  font-weight: 600
+}
+
+.novidade-card--iemanja p {
+  color: rgba(240, 249, 255, .9)
+}
+
+.novidade-card--iemanja .novidade-card__detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(14, 116, 144, .45);
+  border: 1px solid rgba(186, 230, 253, .4);
+  color: #f0f9ff;
+  font-weight: 600
+}
+
+.novidade-card--iemanja .novidade-card__detail svg {
+  width: 16px;
+  height: 16px;
+  color: #bae6fd
+}
+
+/* Card Evento Realizado - Faixa diagonal */
+.novidade-card--realizado {
+  position: relative;
+  opacity: .75
+}
+
+.novidade-card--realizado::before {
+  content: "REALIZADO";
+  position: absolute;
+  top: 18px;
+  right: -35px;
+  background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 6px 40px;
+  transform: rotate(45deg);
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+  text-transform: uppercase
+}
+
+.novidade-card--realizado:hover {
+  opacity: .85
+}
