@@ -651,7 +651,16 @@ textarea:focus-visible {
     border-radius: 24px;
     padding: 1.75rem;
     border: 1px solid rgba(148, 163, 184, .25);
-    box-shadow: 0 24px 48px -32px rgba(15, 23, 42, .35)
+    box-shadow: 0 24px 48px -32px rgba(15, 23, 42, .35);
+    color: #1f2937;
+  }
+
+  .endereco-info h2 {
+    color: #111827 !important;
+  }
+
+  .endereco-info p {
+    color: #374151 !important;
   }
 }
 
