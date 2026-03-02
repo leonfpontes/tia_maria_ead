@@ -336,15 +336,6 @@
     <!-- gradiente Oxóssi -> Xangô -->
     <div class="hero-gradient">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28 text-white relative">
-        <!-- Ornamentação: flecha (Oxóssi) -->
-        <svg class="ornamento absolute -top-10 -left-6 w-40 h-40 text-white" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true">
-          <rect x="46" y="10" width="8" height="80" rx="3"/><polygon points="50,5 60,20 40,20"/>
-        </svg>
-        <!-- Ornamentação: oxé (Xangô) -->
-        <svg class="ornamento absolute -bottom-10 -right-8 w-48 h-48 text-white" viewBox="0 0 120 120" fill="currentColor" aria-hidden="true">
-          <rect x="56" y="20" width="8" height="80" rx="3"/>
-          <path d="M20 40h40v20H20zM60 40h40v20H60z" />
-        </svg>
 
         <div class="hero-grid grid grid-cols-1 lg:grid-cols-2 items-center gap-8">
           <div class="hero-content max-w-2xl">
@@ -405,7 +396,7 @@
           <p class="mt-3 text-slate-600">
             Com seriedade, respeito e responsabilidade espiritual, buscamos formar médiuns conscientes, fortalecer a corrente de trabalho e promover o crescimento coletivo dentro da fé umbandista.
           </p>
-          <p class="mt-3 text-slate-600">
+          <p class="mt-3 text-white/90">
             O Terreiro de Umbanda Tia Maria e Cabocla Jupira é, acima de tudo, um espaço de transformação, onde cada passo é dado com humildade, cada ensinamento é compartilhado com amor e cada trabalho é realizado com dedicação e verdade.
           </p>
         </div>
@@ -429,11 +420,40 @@
 
   <div class="novidades-wrapper mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Próximas giras e comunicados -->
-        <article class="group novidade-card novidade-card--destaque-preto-vermelho novidade-card--realizado rounded-2xl p-5 shadow-2xl transition">
+        <article class="group novidade-card rounded-2xl p-5 shadow-xl transition" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), repeating-linear-gradient(45deg, #000000, #000000 20px, #fbbf24 20px, #fbbf24 40px); border: 3px solid #fbbf24; display: flex; flex-direction: column;">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge bg-red-700 text-white">Realizado</span>
-            <time datetime="2026-02-06">06 fev 2026</time>
+            <span class="novidade-card__badge bg-yellow-500 text-black font-bold">⚠ Aviso</span>
+            <time datetime="2026-03-07" style="color: #fbbf24; font-weight: 700;">07 mar 2026</time>
+          </div>
+          <h3 class="relative mt-3 font-bold text-xl" style="color: #fbbf24; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Não teremos gira!</h3>
+          <p class="relative mt-2 text-sm" style="color: #ffffff; font-weight: 600; text-shadow: 1px 1px 3px rgba(0,0,0,0.9);">Nesta sexta-feira não haverá trabalhos. Retornamos na próxima semana com a Gira de Exu e Pombogira.</p>
+          <div class="novidade-card__detail mt-auto" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: rgba(251, 191, 36, 0.9); color: #000000; font-weight: 700;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width: 16px; height: 16px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>Casa fechada</span>
+          </div>
+          <div class="novidade-card__actions gap-2">
+            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
+              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+        <article class="group novidade-card novidade-card--destaque-preto-vermelho rounded-2xl p-5 shadow-2xl transition" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('assets/img/Cards/bg_card_esquerda.jpg') !important; background-size: cover !important; background-position: center !important;">
+          <div class="novidade-card__glow" aria-hidden="true"></div>
+          <div class="relative flex items-center gap-2 text-xs font-semibold">
+            <span class="novidade-card__badge bg-green-100 text-white">Agenda</span>
+            <time datetime="2026-03-14">14 mar 2026</time>
           </div>
           <h3 class="relative mt-3 font-bold text-xl">Gira de Exu e Pombogira</h3>
           <p class="relative mt-2 text-sm">Noite de firmeza com os guardiões da esquerda. Venha fortalecer seus caminhos com fé e respeito.</p>
@@ -442,30 +462,26 @@
               <path d="M12 8v5l3 2"></path>
               <circle cx="12" cy="12" r="9"></circle>
             </svg>
-            <span>Evento realizado</span>
+            <span>Portões abrem às 19h30</span>
+          </div>
+          <div class="novidade-card__actions gap-2">
+            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
+              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
+              </svg>
+            </a>
           </div>
         </article>
-        <article class="group novidade-card novidade-card--destaque-principal novidade-card--destaque-verde-rosa novidade-card--faixa-alerta rounded-2xl p-5 shadow-xl transition">
+        <article class="group novidade-card novidade-card--pretos-velhos rounded-2xl p-5 shadow-xl transition" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('assets/img/Cards/bg_card_pretos_velhos.jpg') !important; background-size: cover !important; background-position: center !important;">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge bg-pedra-600 text-white">Aviso</span>
-            <time datetime="2026-02-13">13 fev 2026</time>
-          </div>
-          <h3 class="relative mt-3 font-bold text-lg">Não Teremos Gira</h3>
-          <p class="relative mt-2 text-sm">Neste dia não haverá atividades no terreiro. Nos vemos na próxima sexta!</p>
-          <div class="novidade-card__detail">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 8v5l3 2"></path>
-              <circle cx="12" cy="12" r="9"></circle>
-            </svg>
-            <span>Sem atividades nesta data</span>
-          </div>
-        </article>
-        <article class="group novidade-card novidade-card--pretos-velhos rounded-2xl p-5 shadow-xl transition">
-          <div class="novidade-card__glow" aria-hidden="true"></div>
-          <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge">Agenda</span>
-            <time datetime="2026-02-20">20 fev 2026</time>
+            <span class="novidade-card__badge bg-green-100 text-white">Agenda</span>
+            <time datetime="2026-03-21">21 mar 2026</time>
           </div>
           <h3 class="relative mt-3 font-bold text-lg">Gira de Pretos Velhos</h3>
           <p class="relative mt-2 text-sm">Noite de sabedoria e cura com nossos vovôs e vovós. Venha receber o axé ancestral.</p>
@@ -489,72 +505,15 @@
             </a>
           </div>
         </article>
-        <!-- Outras novidades -->
-        <article class="group novidade-card novidade-card--iemanja rounded-2xl p-5 shadow-xl transition">
+        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('assets/img/Cards/bg_card_caboclos_boiadeiros.png') !important; background-size: cover !important; background-position: center !important;">
           <div class="novidade-card__glow" aria-hidden="true"></div>
           <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge">Especial</span>
-            <time datetime="2026-02-23">23 fev 2026</time>
+            <span class="novidade-card__badge bg-green-100 text-white">Agenda</span>
+            <time datetime="2026-03-28" style="color: #ffffff;">28 mar 2026</time>
           </div>
-          <h3 class="relative mt-3 font-bold text-lg">Ritual Coletivo na Força de Iemanjá</h3>
-          <p class="relative mt-2 text-sm">Momento especial de firmeza e fortalecimento espiritual sob as bênçãos da Rainha do Mar.</p>
-          <div class="novidade-card__detail">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 8v5l3 2"></path>
-              <circle cx="12" cy="12" r="9"></circle>
-            </svg>
-            <span>Portões abrem às 19h30</span>
-          </div>
-          <div class="novidade-card__actions gap-2">
-            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
-              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
-              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
-                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
-                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
-              </svg>
-            </a>
-          </div>
-        </article>
-        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
-          <div class="novidade-card__glow" aria-hidden="true"></div>
-          <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge bg-green-100 text-green-700">Início</span>
-            <time datetime="2026-02-25">25 fev 2026</time>
-          </div>
-          <h3 class="relative mt-3 font-bold text-lg">Desenvolvimento Mediúnico</h3>
-          <p class="relative mt-2 text-sm">Início das aulas de Desenvolvimento Mediúnico. Formação de médiuns conscientes na fé umbandista.</p>
-          <div class="novidade-card__detail">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 8v5l3 2"></path>
-              <circle cx="12" cy="12" r="9"></circle>
-            </svg>
-            <span>Informações via WhatsApp</span>
-          </div>
-          <div class="novidade-card__actions gap-2">
-            <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
-              <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
-            </a>
-            <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
-              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
-                <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
-                <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
-              </svg>
-            </a>
-          </div>
-        </article>
-        <article class="group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition">
-          <div class="novidade-card__glow" aria-hidden="true"></div>
-          <div class="relative flex items-center gap-2 text-xs font-semibold">
-            <span class="novidade-card__badge bg-green-100 text-green-700">Agenda</span>
-            <time datetime="2026-02-27">27 fev 2026</time>
-          </div>
-          <h3 class="relative mt-3 font-bold text-lg">Gira Mista</h3>
-          <p class="relative mt-2 text-sm">Gira com diversas linhas de trabalho. Todos são bem-vindos com respeito às orientações da casa.</p>
-          <div class="novidade-card__detail">
+          <h3 class="relative mt-3 font-bold text-lg" style="color: #ffffff;">Gira de Caboclos e Boiadeiros</h3>
+          <p class="relative mt-2 text-sm" style="color: #ffffff;">Noite de força e proteção com os guerreiros da mata. Venha receber as bênçãos dos nossos caboclos.</p>
+          <div class="novidade-card__detail" style="color: #ffffff;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 8v5l3 2"></path>
               <circle cx="12" cy="12" r="9"></circle>
@@ -577,46 +536,32 @@
       </div>
   </section>
 
-      <!-- Carrossel de Eventos -->
-      <section id="carrossel" class="relative bg-slate-50 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">Eventos e Inscrições</h2>
-            <p class="mt-4 text-lg text-slate-600">Confira nossas atividades especiais e oportunidades de participação.</p>
-          </div>
-
-          <div class="antd-carousel-shell">
-            <div id="events-carousel"></div>
-          </div>
-        </div>
-      </section>
-
   <!-- Sobre o Terreiro -->
-  <section id="sobre" class="relative bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <section id="sobre" class="relative py-16" style="background-color: #102117;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 items-center gap-10">
         <div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Nossa história</h2>
-          <p class="mt-4 text-slate-600">
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight" style="color: #ffffff;">Nossa história</h2>
+          <p class="mt-4" style="color: #ffffff;">
             Fundado em junho de 2022, o Terreiro de Umbanda Tia Maria e Cabocla Jupira é uma casa espiritual comprometida com 
             o desenvolvimento humano e a expansão da consciência, fundamentada nos princípios sagrados da Umbanda.
           </p>
-          <p class="mt-3 text-slate-600">
+          <p class="mt-3" style="color: #ffffff;">
             Nosso principal intuito é manter viva a religião de Umbanda, preservando toda a sua ancestralidade, seus fundamentos e sua essência sagrada. Buscamos honrar as tradições que nos foram deixadas pelos mais velhos, 
             valorizando o saber ancestral que sustenta e dá sentido à nossa prática espiritual.
           </p>
-          <p class="mt-3 text-slate-600">
+          <p class="mt-3" style="color: #ffffff;">
             Nossa missão é oferecer um espaço de aprendizado, acolhimento e prática espiritual, onde a fé, a caridade e o amor ao próximo se manifestam como expressões vivas da nossa religião. Acreditamos que o despertar da consciência acontece por meio do autoconhecimento e da vivência espiritual, 
             guiados pelos Orixás e pelas entidades de luz que orientam nossos caminhos de evolução.
           </p>
-          <p class="mt-3 text-slate-600">
+          <p class="mt-3" style="color: #ffffff;">
             Com seriedade, respeito e responsabilidade espiritual, buscamos formar médiuns conscientes, fortalecer a corrente de trabalho e promover o crescimento coletivo dentro da fé umbandista.
           </p>
-          <p class="mt-3 text-slate-600">
-            O Terreiro de Umbanda Tia Maria e Cabocla Jupira é, acima de tudo, um espaço de transformação, onde cada passo é dado com humildade, cada ensinamento é compartilhado com amor e cada trabalho é realizado com dedicação e verdade.
+          <p class="mt-3" style="color: #ffffff;">
+            O Terreiro de Umbanda Tia Maria e Cabocla Jupira é, acima de tudo, um espaço de transformação, onde cada passo é dado com humildade, cada ensinamento é compartilhado com amor e cada trabalho é realizado com dedicação e verdade.
           </p>
         </div>
-        <div class="w-full rounded-2xl overflow-hidden border border-slate-200 bg-white">
+        <div class="w-full rounded-2xl overflow-hidden border border-green-800 bg-white">
           <img src="assets/img/Ray_Tim.png" alt="Mãe Ray e Pai Tim, dirigentes do Terreiro de Umbanda Tia Maria e Cabocla Jupira em Ribeirão Preto" class="w-full h-full" loading="lazy" />
         </div>
       </div>
@@ -624,21 +569,21 @@
   </section>
 
   <!-- Endereço e Como Chegar -->
-  <section id="endereco" class="relative bg-slate-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <section id="endereco" class="relative py-16" style="background-color: #102117;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="endereco-grid grid lg:grid-cols-2 gap-10 items-center">
-        <div class="map-card w-full rounded-2xl overflow-hidden border border-slate-200 bg-white">
+        <div class="map-card w-full rounded-2xl overflow-hidden border border-green-800 bg-white">
           <iframe class="map-frame" src="https://maps.google.com/maps?q=R.+Padre+Anchieta,+490+-+Vila+Tiberio,+Ribeir%C3%A3o+Preto+-+SP,+14050-140&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de localização do Terreiro Tia Maria e Cabocla Jupira em Ribeirão Preto"></iframe>
         </div>
         <div class="endereco-info">
-          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Como Chegar</h2>
-          <p class="mt-4 text-slate-600">
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight" style="color: #ffffff;">Como Chegar</h2>
+          <p class="mt-4" style="color: #ffffff;">
             <strong>Endereço:</strong> Rua Padre Anchieta, nº 490, Vila Tiberio, Ribeirão Preto - SP, 14050-140
           </p>
-          <p class="mt-3 text-slate-600">
+          <p class="mt-3" style="color: #ffffff;">
             <strong>Giras:</strong> todas as sextas-feiras às 20h. Os portões abrem às 19h30.
           </p>
-          <p class="mt-3 text-slate-600">
+          <p class="mt-3" style="color: #ffffff;">
             <strong>Atenção:</strong> é recomendado o uso de vestimentas apropriadas ao ambiente sagrado, evitando-se roupas curtas ou decotadas.
           </p>
         </div>
@@ -773,7 +718,7 @@
         {
           src: 'assets/img/TD6_Inscricao.png',
           alt: 'Inscrição TD6 - Curso de Teologia de Umbanda'
-        },
+        }/* ,
         {
           src: 'assets/img/Curimba_1.jpg',
           alt: 'Magia do Tambor'
@@ -781,7 +726,7 @@
         {
           src: 'assets/img/Curimba_2.jpg',
           alt: 'Toques de Curimba'
-        }
+        } */
       ];
 
       function renderEventsCarousel() {
