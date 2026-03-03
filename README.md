@@ -139,3 +139,52 @@ Isso recompila automaticamente o CSS sempre que `tailwind.input.css` for alterad
 
 Projeto aberto para uso comunitário. Ajuste conforme as necessidades do terreiro, mantendo os créditos culturais originais e respeitando a religião de Umbanda.
 
+
+## Sistema de Senhas
+
+Sistema de senhas de atendimento para as giras, permitindo que os filhos de fé retirem senhas online antes da gira.
+
+### Variáveis de Ambiente Necessárias
+
+| Variável | Descrição |
+|---|---|
+| `DATABASE_URL` | URL de conexão PostgreSQL (ex: `postgres://user:pass@host/db`) |
+| `JWT_SECRET` | Segredo para assinar tokens JWT (use string longa e aleatória) |
+| `SEED_SECRET` | Segredo para criar o primeiro admin via API |
+
+### Executar Migrations
+
+```bash
+psql $DATABASE_URL < db/migrations/001_create_tables.sql
+```
+
+### Criar Primeiro Admin
+
+```bash
+curl -X POST https://seu-dominio.com/api/admin/admins/seed \
+  -H "Authorization: Bearer $SEED_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"SenhaSegura123!","role":"ADMIN"}'
+```
+
+### Rotas da API
+
+#### Públicas
+- `GET /api/public/agenda` – Próxima gira com controle de senhas
+- `POST /api/public/giras/:id/senhas` – Retirar senha (body: `{nome, telefone}`)
+
+#### Admin (requer Bearer token)
+- `POST /api/admin/login` – Login (`{username, password}`)
+- `GET /api/admin/giras` – Listar giras
+- `POST /api/admin/giras` – Criar gira
+- `GET/PUT/DELETE /api/admin/giras/:id` – Gerenciar gira
+- `GET/PUT /api/admin/controles/:giraId` – Gerenciar controle de senhas
+- `GET /api/admin/giras/:id/senhas` – Listar senhas (suporta `?busca=` e `?format=csv`)
+- `PATCH /api/admin/senhas/:id/status` – Atualizar status da senha
+- `POST /api/admin/admins/seed` – Criar primeiro admin (requer `SEED_SECRET`)
+
+### Páginas
+
+- `/senhas` – Página pública para retirada de senhas
+- `/admin` – Painel administrativo completo
+- `/admin/porta` – Painel mobile para operador de porta
