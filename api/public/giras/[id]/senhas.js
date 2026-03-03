@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
   const client = await db.getClient();
   try {
     // Check gira
-    const giraResult = await client.query(
+    const giraResult = await db.query(
       `SELECT id, status, data_inicio FROM giras WHERE id = $1`,
       [giraId]
     );
@@ -78,7 +78,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Check controle
-    const ctrlResult = await client.query(
+    const ctrlResult = await db.query(
       `SELECT * FROM controles_senha WHERE gira_id = $1`,
       [giraId]
     );
@@ -109,7 +109,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Check duplicate
-    const dupResult = await client.query(
+    const dupResult = await db.query(
       `SELECT numero FROM senhas WHERE gira_id = $1 AND nome_normalizado = $2 AND telefone = $3`,
       [giraId, nomeNorm, telefoneNorm]
     );
@@ -121,11 +121,8 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Atomic insert with advisory lock per gira to prevent concurrent number collision
-    await client.query('BEGIN');
-    await client.query(`SELECT pg_advisory_xact_lock($1)`, [parseInt(giraId, 10)]);
-
-    const numResult = await client.query(
+    // Get next number
+    const numResult = await db.query(
       `SELECT COALESCE(MAX(numero), 0) + 1 AS proximo FROM senhas WHERE gira_id = $1`,
       [giraId]
     );
@@ -133,8 +130,7 @@ module.exports = async function handler(req, res) {
 
     // Prevent issuing beyond total
     if (numero > ctrl.total_senhas) {
-      await client.query('ROLLBACK');
-      // Attempt to mark ESGOTADO in its own operation (best-effort)
+      // Attempt to mark ESGOTADO (best-effort)
       db.query(
         `UPDATE controles_senha SET status = 'ESGOTADO', updated_at = NOW() WHERE gira_id = $1 AND status NOT IN ('ESGOTADO','ENCERRADO')`,
         [giraId]
@@ -142,32 +138,28 @@ module.exports = async function handler(req, res) {
       return res.status(423).json({ error: 'ESGOTADO', mensagem: 'Todas as senhas foram retiradas.' });
     }
 
-    await client.query(
+    const insertResult = await db.query(
       `INSERT INTO senhas (gira_id, numero, nome, telefone, nome_normalizado, status)
-       VALUES ($1, $2, $3, $4, $5, 'ATIVA')`,
+       VALUES ($1, $2, $3, $4, $5, 'ATIVA')
+       RETURNING numero, nome`,
       [giraId, numero, nome.trim(), telefoneNorm, nomeNorm]
     );
 
     // Mark ESGOTADO when last ticket is issued
     if (numero >= ctrl.total_senhas) {
-      await client.query(
+      db.query(
         `UPDATE controles_senha SET status = 'ESGOTADO', updated_at = NOW() WHERE gira_id = $1`,
         [giraId]
-      );
+      ).catch(err => console.error('Failed to mark ESGOTADO', err));
     }
 
-    await client.query('COMMIT');
-
     return res.status(201).json({
-      numero,
-      nome: nome.trim(),
+      numero: insertResult.rows[0].numero,
+      nome: insertResult.rows[0].nome,
       telefone_mascarado: maskPhone(telefoneNorm),
     });
   } catch (err) {
-    await client.query('ROLLBACK').catch(() => {});
     console.error('senhas POST error', err);
-    return res.status(500).json({ error: 'ERRO_INTERNO' });
-  } finally {
-    client.release();
+    return res.status(500).json({ error: 'ERRO_INTERNO', mensagem: err.message });
   }
 };

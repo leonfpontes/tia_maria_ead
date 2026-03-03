@@ -8,21 +8,35 @@ const isSqliteMode = process.env.DB_DRIVER === 'sqlite';
 let pool;
 let sqliteContextPromise;
 
-function pgToSqliteSql(text) {
-  return text
-    .replace(/\$\d+/g, '?')
-    .replace(/\bILIKE\b/g, 'LIKE')
-    .replace(/::text/g, '')
-    .replace(/::timestamptz/g, '')
-    .replace(/NOW\(\)/g, 'CURRENT_TIMESTAMP');
-}
-
 function normalizeParams(params = []) {
   return params.map((value) => {
     if (value === undefined) return null;
     if (value instanceof Date) return value.toISOString();
     return value;
   });
+}
+
+function convertPgQueryToSqlite(text, params = []) {
+  const normalizedParams = normalizeParams(params);
+  const orderedParams = [];
+  let hasPgPlaceholders = false;
+
+  const sql = text
+    .replace(/\$(\d+)/g, (_, index) => {
+      hasPgPlaceholders = true;
+      const paramIndex = Number(index) - 1;
+      orderedParams.push(paramIndex >= 0 ? normalizedParams[paramIndex] : null);
+      return '?';
+    })
+    .replace(/\bILIKE\b/g, 'LIKE')
+    .replace(/::text/g, '')
+    .replace(/::timestamptz/g, '')
+    .replace(/NOW\(\)/g, 'CURRENT_TIMESTAMP');
+
+  return {
+    sql,
+    params: hasPgPlaceholders ? orderedParams : normalizedParams,
+  };
 }
 
 async function getSqliteContext() {
@@ -56,8 +70,9 @@ function persistSqliteDb(ctx) {
 async function runSqlite(text, params = []) {
   const ctx = await getSqliteContext();
   const database = ctx.db;
-  const convertedSql = pgToSqliteSql(text);
-  const normalizedParams = normalizeParams(params);
+  const converted = convertPgQueryToSqlite(text, params);
+  const convertedSql = converted.sql;
+  const convertedParams = converted.params;
   const trimmed = convertedSql.trim();
   const upper = trimmed.toUpperCase();
 
@@ -73,7 +88,7 @@ async function runSqlite(text, params = []) {
 
   if (upper.startsWith('SELECT')) {
     const statement = database.prepare(convertedSql);
-    statement.bind(normalizedParams);
+    statement.bind(convertedParams);
     const rows = [];
     while (statement.step()) {
       rows.push(statement.getAsObject());
@@ -84,17 +99,15 @@ async function runSqlite(text, params = []) {
 
   if (upper.includes('RETURNING')) {
     const statement = database.prepare(convertedSql);
-    statement.bind(normalizedParams);
-    const rows = [];
-    while (statement.step()) {
-      rows.push(statement.getAsObject());
-    }
+    statement.bind(convertedParams);
+    statement.step();
+    const resultObj = statement.getAsObject();
     statement.free();
     persistSqliteDb(ctx);
-    return { rows, rowCount: rows.length };
+    return { rows: [resultObj], rowCount: 1 };
   }
 
-  database.run(convertedSql, normalizedParams);
+  database.run(convertedSql, convertedParams);
   persistSqliteDb(ctx);
   return { rows: [], rowCount: 0 };
 }
