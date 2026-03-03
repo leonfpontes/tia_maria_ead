@@ -53,7 +53,15 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Corrigir timezone de atendimento (UTC-3) no modo local via normalização de timestamps SQLite para ISO UTC no backend - Status: Concluída em 03/03/2026
+- [x] Corrigir responsividade mobile das rotas de operação (`/admin`, `/admin/porta`, `/senhas`) e ajustar encoding UTF-8 para nomes com acentuação no ambiente local - Status: Concluída em 03/03/2026
 - [x] Adicionar modo de teste local com SQLite (adapter em `server/db.js`, migration SQLite, script `setup:sqlite` e instruções no README) - Status: Concluída em 03/03/2026
+- [x] Melhorar navegação de topo com toggle visual entre `Admin` e `Porta` (estado ativo/inativo, alinhamento e textos centralizados) em `admin/index.html` e `admin/porta.html` - Status: Concluída em 03/03/2026
+- [x] Alinhar paleta de cores do header da página admin com a paleta do header da landing (`index.html`) - Status: Concluída em 03/03/2026
+- [x] Substituir modal de Nova/Editar Gira por drawer lateral no admin, mantendo os mesmos campos e salvamento - Status: Concluída em 03/03/2026
+- [x] Melhorar usabilidade da aba `Config Senhas` no admin (badge antes de `Gira: ...` e campos empilhados verticalmente) - Status: Concluída em 03/03/2026
+- [x] Ajustar largura da aba `Config Senhas` para ocupar 1/3 da página em telas grandes, mantendo full width no mobile - Status: Concluída em 03/03/2026
+- [x] Substituir a aba `Config Senhas` por drawer lateral acionado por ícone de senha na lista de giras, mantendo ações de salvar/liberar/encerrar - Status: Concluída em 03/03/2026
 - [x] Atualizar cards de novidades para recesso e agenda de janeiro/2026 (Ritual Coletivo Oxóssi 28/01 e Gira de Caboclos 30/01) - Status: Concluída em 21/12/2025
 - [x] Criar documentação para agentes (agente.md e backlog.md) - Status: Concluída em 23/10/2025
 - [x] Analisar código completo do projeto - Status: Concluída em 23/10/2025

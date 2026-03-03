@@ -67,6 +67,19 @@ function persistSqliteDb(ctx) {
   fs.writeFileSync(ctx.filePath, Buffer.from(exported));
 }
 
+function normalizeSqliteRowTimestamps(row) {
+  const normalized = { ...row };
+  const sqliteDateTimePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+
+  for (const [key, value] of Object.entries(normalized)) {
+    if (typeof value === 'string' && sqliteDateTimePattern.test(value)) {
+      normalized[key] = `${value.replace(' ', 'T')}.000Z`;
+    }
+  }
+
+  return normalized;
+}
+
 async function runSqlite(text, params = []) {
   const ctx = await getSqliteContext();
   const database = ctx.db;
@@ -91,7 +104,7 @@ async function runSqlite(text, params = []) {
     statement.bind(convertedParams);
     const rows = [];
     while (statement.step()) {
-      rows.push(statement.getAsObject());
+      rows.push(normalizeSqliteRowTimestamps(statement.getAsObject()));
     }
     statement.free();
     return { rows, rowCount: rows.length };
@@ -101,7 +114,7 @@ async function runSqlite(text, params = []) {
     const statement = database.prepare(convertedSql);
     statement.bind(convertedParams);
     statement.step();
-    const resultObj = statement.getAsObject();
+    const resultObj = normalizeSqliteRowTimestamps(statement.getAsObject());
     statement.free();
     persistSqliteDb(ctx);
     return { rows: [resultObj], rowCount: 1 };

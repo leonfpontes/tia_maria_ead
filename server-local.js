@@ -24,6 +24,7 @@ const apiHandlers = {
   'PUT /api/admin/giras/[id]': require('./api/admin/giras/[id].js'),
   'GET /api/admin/giras/[id]/senhas': require('./api/admin/giras/[id]/senhas.js'),
   'POST /api/admin/giras/[id]/senhas': require('./api/admin/giras/[id]/senhas.js'),
+  'PATCH /api/admin/senhas/[id]/status': require('./api/admin/senhas/[id]/status.js'),
   'GET /api/public/agenda': require('./api/public/agenda.js'),
   'POST /api/public/giras/[id]/senhas': require('./api/public/giras/[id]/senhas.js'),
 };
@@ -161,6 +162,9 @@ const server = http.createServer((req, res) => {
   } else if (method === 'POST' && apiPath.match(/^\/api\/admin\/giras\/[^/]+\/senhas$/)) {
     handler = apiHandlers['POST /api/admin/giras/[id]/senhas'];
     params.id = apiPath.split('/')[4];
+  } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+\/status$/)) {
+    handler = apiHandlers['PATCH /api/admin/senhas/[id]/status'];
+    params.id = apiPath.split('/')[4];
   } else if (method === 'GET' && apiPath === '/api/public/agenda') {
     handler = apiHandlers['GET /api/public/agenda'];
   } else if (method === 'POST' && apiPath.match(/^\/api\/public\/giras\/[^/]+\/senhas$/)) {
@@ -170,18 +174,33 @@ const server = http.createServer((req, res) => {
 
   if (handler) {
     // Convert handler to Vercel-like req/res format
-    let body = '';
+    const bodyChunks = [];
     req.on('data', chunk => {
-      body += chunk.toString();
+      bodyChunks.push(Buffer.from(chunk));
     });
     req.on('end', async () => {
       try {
+        const rawBuffer = bodyChunks.length ? Buffer.concat(bodyChunks) : Buffer.alloc(0);
+        const utf8Body = rawBuffer.length ? rawBuffer.toString('utf8') : '';
         let parsedBody;
-        if (body) {
+        if (utf8Body) {
           try {
-            parsedBody = JSON.parse(body);
+            parsedBody = JSON.parse(utf8Body);
           } catch {
-            parsedBody = body;
+            parsedBody = utf8Body;
+          }
+
+          if (typeof parsedBody === 'object' && parsedBody !== null) {
+            const hasReplacementChar = JSON.stringify(parsedBody).includes('\uFFFD');
+            if (hasReplacementChar) {
+              try {
+                const latin1Body = rawBuffer.toString('latin1');
+                const repaired = JSON.parse(latin1Body);
+                parsedBody = repaired;
+              } catch {
+                // keep utf8 parsed body
+              }
+            }
           }
         }
 
@@ -198,7 +217,7 @@ const server = http.createServer((req, res) => {
 
         const response = {
           _statusCode: 200,
-          _headers: { 'Content-Type': 'application/json' },
+          _headers: { 'Content-Type': 'application/json; charset=utf-8' },
           _ended: false,
           setHeader(name, value) {
             this._headers[name] = value;
@@ -212,6 +231,16 @@ const server = http.createServer((req, res) => {
             if (this._ended) return this;
             res.writeHead(this._statusCode, this._headers);
             res.end(JSON.stringify(payload));
+            this._ended = true;
+            return this;
+          },
+          send(payload = '') {
+            if (this._ended) return this;
+            if (!this._headers['Content-Type']) {
+              this._headers['Content-Type'] = 'text/plain; charset=utf-8';
+            }
+            res.writeHead(this._statusCode, this._headers);
+            res.end(payload);
             this._ended = true;
             return this;
           },
@@ -232,14 +261,14 @@ const server = http.createServer((req, res) => {
 
         // Fallback for handlers that return data directly
         if (result && result.statusCode) {
-          res.writeHead(result.statusCode, result.headers || { 'Content-Type': 'application/json' });
+          res.writeHead(result.statusCode, result.headers || { 'Content-Type': 'application/json; charset=utf-8' });
           res.end(result.body || JSON.stringify({}));
         } else {
           response.status(200).json(result ?? {});
         }
       } catch (err) {
         console.error('Error handling request:', err);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({ error: err.message }));
       }
     });
@@ -247,7 +276,7 @@ const server = http.createServer((req, res) => {
   }
 
   // 404
-  res.writeHead(404, { 'Content-Type': 'application/json' });
+  res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify({ error: 'Not found' }));
 });
 

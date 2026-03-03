@@ -5,19 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin – Terreiro Tia Maria e Cabocla Jupira</title>
   <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/vendor/materialize/materialize.min.css" />
   <link rel="stylesheet" href="/assets/css/tailwind.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="icon" type="image/x-icon" href="/assets/img/Logo_Terr_White-removebg-preview.png" />
   <style>
-    body { font-family: 'Inter', sans-serif; background: #0f1a0f; color: #e8f5e9; min-height: 100vh; }
+    body { font-family: Roboto, Arial, sans-serif; background: #0f1a0f; color: #e8f5e9; min-height: 100vh; }
     .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); border-radius: .75rem; }
     .input-field { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: .5rem; padding: .65rem .9rem; color: #e8f5e9; width: 100%; font-size: .95rem; }
     .input-field:focus { outline: none; border-color: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.2); }
     .input-field::placeholder { color: rgba(232,245,233,.35); }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; font-weight: 600; border-radius: .5rem; padding: .5rem 1rem; font-size: .875rem; cursor: pointer; transition: opacity .15s; border: none; }
-    .btn:hover { opacity: .85; } .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .btn { font-weight: 600; border-radius: .5rem; text-transform: none; }
+    .btn:hover { opacity: .92; } .btn:disabled { opacity: .45; cursor: not-allowed; }
     .btn-green  { background: #2d6a2d; color: #fff; }
     .btn-blue   { background: #1e40af; color: #fff; }
     .btn-yellow { background: #92400e; color: #fef08a; }
@@ -44,6 +43,114 @@
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .modal-box { background: #1a2a1a; border: 1px solid rgba(255,255,255,.12); border-radius: 1rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
     select.input-field option { background: #1a2a1a; }
+    .gira-row { cursor: pointer; }
+    .gira-row.selected td { background: rgba(74,222,128,.10); }
+    .btn-icon { min-width: 2.2rem; padding: .35rem .5rem; font-size: 1rem; line-height: 1; }
+    .admin-nav {
+      background: rgba(255,255,255,.92);
+      border-bottom: 1px solid rgba(148,163,184,.35);
+      backdrop-filter: blur(8px);
+    }
+    .admin-brand { color: #166534; }
+    .admin-nav-user { color: #334155; }
+    .admin-nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .38rem .8rem;
+      border-radius: .65rem;
+      font-size: .8rem;
+      font-weight: 700;
+      line-height: 1;
+      min-width: 82px;
+      justify-content: center;
+      border: 1px solid transparent;
+      transition: all .15s ease;
+    }
+    .admin-nav-toggle.active {
+      background: #16a34a;
+      color: #fff;
+      border-color: #15803d;
+      box-shadow: 0 4px 12px rgba(22,163,74,.28);
+    }
+    .admin-nav-toggle.inactive {
+      background: #f8fafc;
+      color: #334155;
+      border-color: rgba(148,163,184,.45);
+    }
+    .admin-nav-toggle.inactive:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: rgba(22,163,74,.35);
+    }
+    .admin-nav-logout {
+      background: #fff;
+      color: #166534;
+      border: 1px solid rgba(22,163,74,.35);
+    }
+    .admin-nav-logout:hover { background: #f0fdf4; }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 60; display: flex; justify-content: flex-end; }
+    .drawer-panel {
+      width: min(440px, 100vw);
+      height: 100vh;
+      background: #122012;
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -12px 0 30px rgba(0,0,0,.35);
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    @media (max-width: 640px) {
+      .tab-strip { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+      .tab-btn { padding: .55rem .85rem; font-size: .8rem; flex: 0 0 auto; }
+      .btn { padding: .45rem .7rem; font-size: .8rem; }
+      th, td { padding: .5rem .55rem; font-size: .78rem; }
+      .nav-actions { gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+      .search-wrap { width: 100%; display: flex; }
+      .search-wrap #busca-senha { width: 100% !important; min-width: 0; }
+      .search-wrap .btn { flex: 0 0 auto; }
+      #nav-username { display: none; }
+      .table-responsive table { min-width: 680px; }
+      .tab-toolbar { align-items: stretch; }
+      .tab-toolbar > * { width: 100%; }
+      .drawer-panel { width: 100vw; }
+    }
+    @media (max-width: 768px) {
+      .table-responsive { overflow-x: visible; }
+      .table-responsive table { min-width: 0; border-collapse: separate; border-spacing: 0 .65rem; }
+      .table-responsive thead { display: none; }
+      .table-responsive tbody tr {
+        display: block;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: .75rem;
+        overflow: hidden;
+      }
+      .table-responsive tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: .75rem;
+        padding: .55rem .7rem;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+      }
+      .table-responsive tbody td:last-child { border-bottom: 0; }
+      .table-responsive tbody td::before {
+        content: attr(data-label);
+        color: #6b9e68;
+        font-size: .75rem;
+        font-weight: 600;
+        flex: 0 0 88px;
+      }
+      .table-responsive tbody td[data-label="Ações"] { display: block; }
+      .table-responsive tbody td[data-label="Ações"]::before { display: block; margin-bottom: .4rem; }
+      .actions-wrap { display: flex; flex-wrap: wrap; gap: .4rem; }
+      .actions-wrap .btn { font-size: .76rem; padding: .35rem .55rem; }
+      .table-responsive tbody tr td[colspan] {
+        display: block;
+        text-align: center;
+      }
+      .table-responsive tbody tr td[colspan]::before { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -75,16 +182,19 @@
   <div id="dashboard" class="hidden min-h-screen flex flex-col">
 
     <!-- Nav -->
-    <nav class="sticky top-0 z-40" style="background:rgba(15,26,15,.97);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)">
+    <nav class="sticky top-0 z-40 admin-nav">
       <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <img src="/assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo" class="h-8 w-8 object-contain" />
-          <span class="font-bold text-sm" style="color:#a8d5a2">Admin</span>
+          <span class="font-bold text-sm admin-brand">Admin</span>
         </div>
-        <div class="flex items-center gap-3">
-          <a href="/admin/porta" class="btn btn-gray btn-sm">📱 Porta</a>
-          <span id="nav-username" class="text-sm" style="color:#6b9e68"></span>
-          <button onclick="doLogout()" class="btn btn-red btn-sm">Sair</button>
+        <div class="flex items-center gap-2 nav-actions">
+          <div class="flex items-center gap-2">
+            <a href="/admin" class="admin-nav-toggle active" aria-current="page">Admin</a>
+            <a href="/admin/porta" class="admin-nav-toggle inactive">📱 Porta</a>
+          </div>
+          <span id="nav-username" class="text-sm admin-nav-user"></span>
+          <button onclick="doLogout()" class="btn btn-sm admin-nav-logout">Sair</button>
         </div>
       </div>
     </nav>
@@ -92,9 +202,8 @@
     <div class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
 
       <!-- Tabs -->
-      <div class="flex gap-1 border-b mb-6" style="border-color:rgba(255,255,255,.08)">
+      <div class="flex gap-1 border-b mb-6 tab-strip" style="border-color:rgba(255,255,255,.08)">
         <button class="tab-btn active" onclick="switchTab('tab-giras', this)">Giras</button>
-        <button class="tab-btn" onclick="switchTab('tab-config', this)">Config Senhas</button>
         <button class="tab-btn" onclick="switchTab('tab-lista', this)">Lista de Senhas</button>
       </div>
 
@@ -102,12 +211,12 @@
       <div id="tab-giras">
         <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h2 class="font-bold text-lg" style="color:#a8d5a2">Giras</h2>
-          <button class="btn btn-green" onclick="openModalNovaGira()">+ Nova Gira</button>
+          <button class="btn btn-green" onclick="openNovaGiraDrawer()">+ Nova Gira</button>
         </div>
-        <div class="card overflow-x-auto">
+        <div class="card overflow-x-auto table-responsive">
           <table>
             <thead>
-              <tr><th>Título</th><th>Linha</th><th>Data</th><th>Status</th><th>Senhas</th><th>Ações</th></tr>
+              <tr><th>Título</th><th>Linha</th><th>Data</th><th>Status</th><th>Senhas</th><th>Editar</th></tr>
             </thead>
             <tbody id="giras-tbody">
               <tr><td colspan="6" class="text-center py-8" style="color:#6b9e68">Carregando...</td></tr>
@@ -116,55 +225,19 @@
         </div>
       </div>
 
-      <!-- Tab: Config Senhas -->
-      <div id="tab-config" class="hidden">
-        <h2 class="font-bold text-lg mb-4" style="color:#a8d5a2">Configuração de Senhas</h2>
-        <div id="config-no-gira" class="card p-8 text-center" style="color:#6b9e68">
-          Selecione uma gira na aba "Giras" clicando em "Selecionar".
-        </div>
-        <div id="config-form-area" class="hidden space-y-4">
-          <p class="text-sm" style="color:#a8d5a2">Gira: <strong id="config-gira-nome"></strong></p>
-          <div class="card p-6 space-y-4">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label class="block text-sm mb-1" style="color:#a8d5a2">Total de Senhas</label>
-                <input id="cfg-total" type="number" min="1" class="input-field" value="50" />
-              </div>
-              <div>
-                <label class="block text-sm mb-1" style="color:#a8d5a2">Início da Liberação</label>
-                <input id="cfg-inicio" type="datetime-local" class="input-field" />
-              </div>
-              <div>
-                <label class="block text-sm mb-1" style="color:#a8d5a2">Fim da Liberação (opcional)</label>
-                <input id="cfg-fim" type="datetime-local" class="input-field" />
-              </div>
-              <div class="flex items-end">
-                <span id="cfg-status-badge" class="badge badge-rascunho">–</span>
-              </div>
-            </div>
-            <p id="cfg-error" class="text-sm text-red-400 hidden"></p>
-            <div class="flex flex-wrap gap-2">
-              <button class="btn btn-blue" onclick="salvarControle()">💾 Salvar</button>
-              <button class="btn btn-green" onclick="acao('liberar')">🟢 Liberar Agora</button>
-              <button class="btn btn-yellow" onclick="acao('encerrar')">🔒 Encerrar Agora</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Tab: Lista Senhas -->
       <div id="tab-lista" class="hidden">
-        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2 tab-toolbar">
           <h2 class="font-bold text-lg" style="color:#a8d5a2">Lista de Senhas</h2>
-          <div class="flex gap-2">
-            <input id="busca-senha" type="text" class="input-field" placeholder="Buscar por nome ou número..." style="width:200px" oninput="debounceLoad()" />
+          <div class="flex gap-2 search-wrap">
+            <input id="busca-senha" type="text" class="input-field" placeholder="Buscar por nome ou número..." oninput="debounceLoad()" />
             <button class="btn btn-gray" onclick="exportCSV()">📥 CSV</button>
           </div>
         </div>
         <div id="lista-no-gira" class="card p-8 text-center" style="color:#6b9e68">
           Selecione uma gira na aba "Giras" clicando em "Selecionar".
         </div>
-        <div id="lista-table-area" class="hidden card overflow-x-auto">
+        <div id="lista-table-area" class="hidden card overflow-x-auto table-responsive">
           <table>
             <thead>
               <tr><th>#</th><th>Nome</th><th>Telefone</th><th>Status</th><th>Criado</th><th>Ações</th></tr>
@@ -179,46 +252,84 @@
     </div><!-- /max-w -->
   </div><!-- /dashboard -->
 
-  <!-- Modal Nova Gira -->
-  <div id="modal-gira" class="modal-overlay hidden">
-    <div class="modal-box p-6 space-y-4">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-lg" style="color:#a8d5a2" id="modal-gira-title">Nova Gira</h3>
-        <button onclick="closeModalGira()" class="text-gray-400 hover:text-white text-xl leading-none">×</button>
+  <div id="gira-drawer-overlay" class="drawer-overlay hidden" onclick="closeGiraDrawer(event)">
+    <aside class="drawer-panel" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg" style="color:#a8d5a2" id="gira-drawer-title">Nova Gira</h3>
+        <button class="btn btn-gray btn-sm" onclick="closeGiraDrawer()">Fechar</button>
       </div>
-      <div>
-        <label class="block text-sm mb-1" style="color:#a8d5a2">Título *</label>
-        <input id="gf-titulo" type="text" class="input-field" placeholder="Ex: Gira de Caboclos" />
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Título *</label>
+          <input id="gf-titulo" type="text" class="input-field" placeholder="Ex: Gira de Caboclos" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Linha</label>
+          <input id="gf-linha" type="text" class="input-field" placeholder="Ex: Caboclos e Boiadeiros" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Data e Hora *</label>
+          <input id="gf-data" type="datetime-local" class="input-field" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Observações</label>
+          <textarea id="gf-obs" class="input-field" rows="3" placeholder="Informações adicionais..."></textarea>
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Status</label>
+          <select id="gf-status" class="input-field">
+            <option value="RASCUNHO">Rascunho</option>
+            <option value="PUBLICADA">Publicada</option>
+            <option value="ENCERRADA">Encerrada</option>
+          </select>
+        </div>
+        <p id="gf-error" class="text-sm text-red-400 hidden"></p>
+        <input type="hidden" id="gf-id" value="" />
+        <div class="flex justify-end gap-2">
+          <button class="btn btn-gray" onclick="closeGiraDrawer()">Cancelar</button>
+          <button class="btn btn-green" onclick="salvarGira()">💾 Salvar</button>
+        </div>
       </div>
-      <div>
-        <label class="block text-sm mb-1" style="color:#a8d5a2">Linha</label>
-        <input id="gf-linha" type="text" class="input-field" placeholder="Ex: Caboclos e Boiadeiros" />
-      </div>
-      <div>
-        <label class="block text-sm mb-1" style="color:#a8d5a2">Data e Hora *</label>
-        <input id="gf-data" type="datetime-local" class="input-field" />
-      </div>
-      <div>
-        <label class="block text-sm mb-1" style="color:#a8d5a2">Observações</label>
-        <textarea id="gf-obs" class="input-field" rows="3" placeholder="Informações adicionais..."></textarea>
-      </div>
-      <div>
-        <label class="block text-sm mb-1" style="color:#a8d5a2">Status</label>
-        <select id="gf-status" class="input-field">
-          <option value="RASCUNHO">Rascunho</option>
-          <option value="PUBLICADA">Publicada</option>
-          <option value="ENCERRADA">Encerrada</option>
-        </select>
-      </div>
-      <p id="gf-error" class="text-sm text-red-400 hidden"></p>
-      <input type="hidden" id="gf-id" value="" />
-      <div class="flex justify-end gap-2">
-        <button class="btn btn-gray" onclick="closeModalGira()">Cancelar</button>
-        <button class="btn btn-green" onclick="salvarGira()">💾 Salvar</button>
-      </div>
-    </div>
+    </aside>
   </div>
 
+  <div id="config-drawer-overlay" class="drawer-overlay hidden" onclick="closeConfigDrawer(event)">
+    <aside class="drawer-panel" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg" style="color:#a8d5a2">Configuração de Senhas</h3>
+        <button class="btn btn-gray btn-sm" onclick="closeConfigDrawer()">Fechar</button>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="cfg-status-badge" class="badge badge-rascunho">–</span>
+          <p class="text-sm" style="color:#a8d5a2">Gira: <strong id="config-gira-nome"></strong></p>
+        </div>
+        <div class="card p-4 space-y-4">
+          <div>
+            <label class="block text-sm mb-1" style="color:#a8d5a2">Total de Senhas</label>
+            <input id="cfg-total" type="number" min="1" class="input-field" value="50" />
+          </div>
+          <div>
+            <label class="block text-sm mb-1" style="color:#a8d5a2">Início da Liberação</label>
+            <input id="cfg-inicio" type="datetime-local" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm mb-1" style="color:#a8d5a2">Fim da Liberação (opcional)</label>
+            <input id="cfg-fim" type="datetime-local" class="input-field" />
+          </div>
+          <p class="text-xs" style="color:#6b9e68">Defina início obrigatório e fim opcional da retirada.</p>
+          <p id="cfg-error" class="text-sm text-red-400 hidden"></p>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-blue" onclick="salvarControle()">💾 Salvar</button>
+            <button class="btn btn-green" onclick="acao('liberar')">🟢 Liberar Agora</button>
+            <button class="btn btn-yellow" onclick="acao('encerrar')">🔒 Encerrar Agora</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="/assets/vendor/materialize/materialize.min.js"></script>
   <script>
     let token = localStorage.getItem('admin_token');
     let authUser = JSON.parse(localStorage.getItem('admin_user') || 'null');
@@ -290,10 +401,9 @@
     function switchTab(id, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      ['tab-giras','tab-config','tab-lista'].forEach(t => document.getElementById(t).classList.add('hidden'));
+      ['tab-giras','tab-lista'].forEach(t => document.getElementById(t).classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
       if (id === 'tab-lista' && selectedGiraId) loadSenhas();
-      if (id === 'tab-config' && selectedGiraId) loadControle();
     }
 
     // ---- GIRAS ----
@@ -310,17 +420,18 @@
           const data = g.data_inicio ? new Date(g.data_inicio).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'}) : '–';
           const st = (g.status||'').toLowerCase();
           const senhas = g.controle_status ? `${g.emitidas||0}/${g.total_senhas||'?'}` : '–';
-          return `<tr>
-            <td class="font-medium">${esc(g.titulo)}</td>
-            <td style="color:#a8d5a2">${esc(g.linha||'–')}</td>
-            <td class="whitespace-nowrap">${data}</td>
-            <td><span class="badge badge-${st}">${g.status}</span></td>
-            <td>${senhas}</td>
-            <td>
-              <div class="flex gap-1 flex-wrap">
-                <button class="btn btn-gray btn-sm" onclick="selectGira(${g.id},'${esc(g.titulo)}')">Selecionar</button>
-                <button class="btn btn-blue btn-sm" onclick="openModalEditarGira(${g.id})">Editar</button>
-                ${g.status==='RASCUNHO'?`<button class="btn btn-red btn-sm" onclick="excluirGira(${g.id})">Excluir</button>`:''}
+          const selectedClass = Number(selectedGiraId) === Number(g.id) ? ' selected' : '';
+          return `<tr class="gira-row${selectedClass}" onclick="selectGira(${g.id},'${esc(g.titulo)}', this)">
+            <td data-label="Título" class="font-medium">${esc(normalizeDisplayText(g.titulo))}</td>
+            <td data-label="Linha" style="color:#a8d5a2">${esc(normalizeDisplayText(g.linha||'–'))}</td>
+            <td data-label="Data" class="whitespace-nowrap">${data}</td>
+            <td data-label="Status"><span class="badge badge-${st}">${g.status}</span></td>
+            <td data-label="Senhas">${senhas}</td>
+            <td data-label="Editar">
+              <div class="actions-wrap">
+                <button class="btn btn-gray btn-sm btn-icon" title="Configurar senhas" onclick="event.stopPropagation();openConfigDrawer(${g.id},'${esc(g.titulo)}', this)">🔑</button>
+                <button class="btn btn-blue btn-sm btn-icon" title="Editar gira" onclick="event.stopPropagation();openEditarGiraDrawer(${g.id})">✏️</button>
+                ${g.status==='RASCUNHO'?`<button class="btn btn-red btn-sm" onclick="event.stopPropagation();excluirGira(${g.id})">Excluir</button>`:''}
               </div>
             </td>
           </tr>`;
@@ -328,16 +439,38 @@
       } catch(e) { console.error(e); }
     }
 
-    function selectGira(id, nome) {
+    function selectGira(id, nome, rowEl) {
       selectedGiraId = id; selectedGiraNome = nome;
-      document.getElementById('config-gira-nome').textContent = nome;
-      document.getElementById('config-no-gira').classList.add('hidden');
-      document.getElementById('config-form-area').classList.remove('hidden');
       document.getElementById('lista-no-gira').classList.add('hidden');
       document.getElementById('lista-table-area').classList.remove('hidden');
+      document.querySelectorAll('.gira-row').forEach(el => el.classList.remove('selected'));
+      if (rowEl) rowEl.classList.add('selected');
     }
 
-    function openModalNovaGira() {
+    async function openConfigDrawer(id, nome, btnEl) {
+      selectedGiraId = id;
+      selectedGiraNome = nome;
+      document.getElementById('config-gira-nome').textContent = nome;
+      const row = btnEl ? btnEl.closest('tr') : null;
+      document.querySelectorAll('.gira-row').forEach(el => el.classList.remove('selected'));
+      if (row) row.classList.add('selected');
+      document.getElementById('cfg-total').value = 50;
+      document.getElementById('cfg-inicio').value = '';
+      document.getElementById('cfg-fim').value = '';
+      const badge = document.getElementById('cfg-status-badge');
+      badge.className = 'badge badge-rascunho';
+      badge.textContent = '–';
+      document.getElementById('cfg-error').classList.add('hidden');
+      document.getElementById('config-drawer-overlay').classList.remove('hidden');
+      await loadControle();
+    }
+
+    function closeConfigDrawer(event) {
+      if (event && event.target && event.target.id !== 'config-drawer-overlay') return;
+      document.getElementById('config-drawer-overlay').classList.add('hidden');
+    }
+
+    function openNovaGiraDrawer() {
       document.getElementById('gf-id').value = '';
       document.getElementById('gf-titulo').value = '';
       document.getElementById('gf-linha').value = '';
@@ -345,11 +478,11 @@
       document.getElementById('gf-obs').value = '';
       document.getElementById('gf-status').value = 'RASCUNHO';
       document.getElementById('gf-error').classList.add('hidden');
-      document.getElementById('modal-gira-title').textContent = 'Nova Gira';
-      document.getElementById('modal-gira').classList.remove('hidden');
+      document.getElementById('gira-drawer-title').textContent = 'Nova Gira';
+      document.getElementById('gira-drawer-overlay').classList.remove('hidden');
     }
 
-    async function openModalEditarGira(id) {
+    async function openEditarGiraDrawer(id) {
       try {
         const r = await api(`/api/admin/giras/${id}`);
         const g = await r.json();
@@ -360,13 +493,14 @@
         document.getElementById('gf-obs').value = g.observacoes || '';
         document.getElementById('gf-status').value = g.status || 'RASCUNHO';
         document.getElementById('gf-error').classList.add('hidden');
-        document.getElementById('modal-gira-title').textContent = 'Editar Gira';
-        document.getElementById('modal-gira').classList.remove('hidden');
+        document.getElementById('gira-drawer-title').textContent = 'Editar Gira';
+        document.getElementById('gira-drawer-overlay').classList.remove('hidden');
       } catch(e) { console.error(e); }
     }
 
-    function closeModalGira() {
-      document.getElementById('modal-gira').classList.add('hidden');
+    function closeGiraDrawer(event) {
+      if (event && event.target && event.target.id !== 'gira-drawer-overlay') return;
+      document.getElementById('gira-drawer-overlay').classList.add('hidden');
     }
 
     async function salvarGira() {
@@ -384,7 +518,7 @@
         const method = id ? 'PUT' : 'POST';
         const r = await api(url, { method, body: JSON.stringify(body) });
         const data = await r.json();
-        if (r.ok) { closeModalGira(); loadGiras(); }
+        if (r.ok) { closeGiraDrawer(); loadGiras(); }
         else {
           document.getElementById('gf-error').textContent = data.mensagem || 'Erro ao salvar.';
           document.getElementById('gf-error').classList.remove('hidden');
@@ -409,8 +543,8 @@
         if (r.status === 404) return;
         const ctrl = await r.json();
         document.getElementById('cfg-total').value = ctrl.total_senhas || 50;
-        document.getElementById('cfg-inicio').value = ctrl.liberacao_inicio ? ctrl.liberacao_inicio.slice(0,16) : '';
-        document.getElementById('cfg-fim').value = ctrl.liberacao_fim ? ctrl.liberacao_fim.slice(0,16) : '';
+        document.getElementById('cfg-inicio').value = toDatetimeLocalValue(ctrl.liberacao_inicio);
+        document.getElementById('cfg-fim').value = toDatetimeLocalValue(ctrl.liberacao_fim);
         const st = (ctrl.status||'AGUARDANDO').toLowerCase();
         const badge = document.getElementById('cfg-status-badge');
         badge.className = `badge badge-${st === 'aguardando' ? 'rascunho' : st === 'aberto' ? 'publicada' : st === 'esgotado' ? 'cancelada' : 'encerrada'}`;
@@ -421,10 +555,17 @@
     async function salvarControle() {
       if (!selectedGiraId) return;
       document.getElementById('cfg-error').classList.add('hidden');
+      const inicio = document.getElementById('cfg-inicio').value;
+      const fim = document.getElementById('cfg-fim').value || null;
+      if (!inicio) {
+        document.getElementById('cfg-error').textContent = 'Informe a data/hora de início da liberação.';
+        document.getElementById('cfg-error').classList.remove('hidden');
+        return;
+      }
       const body = {
         total_senhas: parseInt(document.getElementById('cfg-total').value, 10),
-        liberacao_inicio: document.getElementById('cfg-inicio').value,
-        liberacao_fim: document.getElementById('cfg-fim').value || null,
+        liberacao_inicio: inicio,
+        liberacao_fim: fim,
       };
       try {
         const r = await api(`/api/admin/controles/${selectedGiraId}`, { method: 'PUT', body: JSON.stringify(body) });
@@ -467,13 +608,13 @@
           const stLower = (s.status||'').toLowerCase().replace('_','');
           const stBadge = {'ativa':'ativa','atendida':'atendida','no_show':'no_show','cancelada':'cancelada-s'}[s.status?.toLowerCase()] || 'ativa';
           return `<tr>
-            <td class="font-bold" style="color:#4ade80">#${String(s.numero).padStart(2,'0')}</td>
-            <td>${esc(s.nome)}</td>
-            <td style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(s.telefone)}</td>
-            <td><span class="badge badge-${stBadge}">${s.status}</span></td>
-            <td class="text-xs" style="color:#6b9e68">${criado}</td>
-            <td>
-              <div class="flex gap-1 flex-wrap">
+            <td data-label="#" class="font-bold" style="color:#4ade80">#${String(s.numero).padStart(2,'0')}</td>
+            <td data-label="Nome">${esc(normalizeDisplayText(s.nome))}</td>
+            <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(s.telefone)}</td>
+            <td data-label="Status"><span class="badge badge-${stBadge}">${s.status}</span></td>
+            <td data-label="Criado" class="text-xs" style="color:#6b9e68">${criado}</td>
+            <td data-label="Ações">
+              <div class="actions-wrap">
                 ${s.status!=='ATENDIDA'?`<button class="btn btn-green btn-sm" onclick="alterarStatus(${s.id},'ATENDIDA')">✓</button>`:''}
                 ${s.status==='ATIVA'?`<button class="btn btn-yellow btn-sm" onclick="alterarStatus(${s.id},'NO_SHOW')">No-Show</button>`:''}
                 ${s.status!=='CANCELADA'&&s.status!=='ATENDIDA'?`<button class="btn btn-red btn-sm" onclick="alterarStatus(${s.id},'CANCELADA')">Cancelar</button>`:''}
@@ -511,6 +652,25 @@
     function esc(s) {
       if (!s) return '';
       return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function normalizeDisplayText(value) {
+      if (value === null || value === undefined) return '';
+      const text = String(value);
+      try {
+        const decoded = decodeURIComponent(escape(text));
+        return decoded;
+      } catch {
+        return text;
+      }
+    }
+
+    function toDatetimeLocalValue(isoLike) {
+      if (!isoLike) return '';
+      const date = new Date(isoLike);
+      if (Number.isNaN(date.getTime())) return '';
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
     }
 
     init();
