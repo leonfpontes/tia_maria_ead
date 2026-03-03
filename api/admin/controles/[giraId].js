@@ -91,7 +91,7 @@ module.exports = async function handler(req, res) {
        ON CONFLICT (gira_id) DO UPDATE
          SET total_senhas = COALESCE($2, controles_senha.total_senhas),
              liberacao_inicio = COALESCE($3, controles_senha.liberacao_inicio),
-             liberacao_fim = $4,
+             liberacao_fim = CASE WHEN $4::timestamptz IS NOT NULL THEN $4::timestamptz ELSE controles_senha.liberacao_fim END,
              updated_at = NOW()
        RETURNING *`,
       [giraId, total_senhas || 50, liberacao_inicio, liberacao_fim || null]

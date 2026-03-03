@@ -31,9 +31,9 @@ module.exports = async function handler(req, res) {
     const row = giraResult.rows[0];
     const now = new Date();
 
-    // Count emitidas (ATIVA senhas)
+    // Count all issued senhas regardless of status
     const emitidasResult = await db.query(
-      `SELECT COUNT(*) AS emitidas FROM senhas WHERE gira_id = $1 AND status = 'ATIVA'`,
+      `SELECT COUNT(*) AS emitidas FROM senhas WHERE gira_id = $1`,
       [row.id]
     );
     const emitidas = parseInt(emitidasResult.rows[0].emitidas, 10);

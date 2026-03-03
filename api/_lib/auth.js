@@ -1,7 +1,17 @@
 'use strict';
 const jwt = require('jsonwebtoken');
 
-const SECRET = () => process.env.JWT_SECRET || 'dev-secret-change-me';
+const SECRET = () => {
+  const s = process.env.JWT_SECRET;
+  if (!s) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('JWT_SECRET não configurado. Configure a variável de ambiente.');
+    }
+    console.warn('[auth] JWT_SECRET não configurado. Use apenas em desenvolvimento!');
+    return 'dev-secret-change-me';
+  }
+  return s;
+};
 
 function signToken(payload) {
   return jwt.sign(payload, SECRET(), { expiresIn: '8h' });

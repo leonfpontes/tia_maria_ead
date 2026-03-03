@@ -5,7 +5,10 @@ let pool;
 
 function getPool() {
   if (!pool) {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+    const sslConfig = process.env.NODE_ENV === 'production'
+      ? { ssl: true }
+      : { ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false } };
+    pool = new Pool({ connectionString: process.env.DATABASE_URL, ...sslConfig });
   }
   return pool;
 }

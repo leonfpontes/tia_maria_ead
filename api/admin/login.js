@@ -37,7 +37,11 @@ module.exports = async function handler(req, res) {
   const result = await db.query(`SELECT * FROM admins WHERE username = $1`, [username]);
   const admin = result.rows[0];
 
-  if (!admin || !(await bcrypt.compare(password, admin.password_hash))) {
+  // Always run bcrypt compare to prevent timing-based username enumeration
+  const dummyHash = '$2a$12$invalidhashfortimingprotectiononly000000000000000000000';
+  const passwordMatches = await bcrypt.compare(password, admin ? admin.password_hash : dummyHash);
+
+  if (!admin || !passwordMatches) {
     await db.query(
       `INSERT INTO auditoria (tipo, dados, ip) VALUES ('LOGIN_FALHOU', $1, $2)`,
       [JSON.stringify({ username }), ip]

@@ -257,8 +257,8 @@
           : '';
         const actions = s.status === 'ATIVA' ? `
           <div class="flex gap-1 ml-auto">
-            <button class="btn btn-green" style="padding:.45rem .9rem;font-size:.8rem" onclick="patchStatus(${s.id},'ATENDIDA')">✓ Atendida</button>
-            <button class="btn btn-yellow" style="padding:.45rem .9rem;font-size:.8rem" onclick="patchStatus(${s.id},'NO_SHOW')">No-Show</button>
+            <button class="btn btn-green btn-acao" data-id="${Number(s.id)}" data-status="ATENDIDA" style="padding:.45rem .9rem;font-size:.8rem">✓ Atendida</button>
+            <button class="btn btn-yellow btn-acao" data-id="${Number(s.id)}" data-status="NO_SHOW" style="padding:.45rem .9rem;font-size:.8rem">No-Show</button>
           </div>` : '';
         return `<div class="senha-card${isProxima?' proxima':''}">
           <div class="senha-num ${numClass}">#${String(s.numero).padStart(2,'0')}</div>
@@ -281,6 +281,15 @@
         if (r.ok) loadSenhas(document.getElementById('busca-input').value);
       } catch(e) { console.error(e); }
     }
+
+    // Event delegation for action buttons (avoids inline onclick with dynamic IDs)
+    document.getElementById('lista-senhas').addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn-acao');
+      if (!btn) return;
+      const id = parseInt(btn.dataset.id, 10);
+      const status = btn.dataset.status;
+      if (id && status) patchStatus(id, status);
+    });
 
     function debounceSearch() {
       clearTimeout(searchDebounce);

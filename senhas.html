@@ -140,7 +140,7 @@
             <p>⏰ Chegue no horário. Portões abrem às 19h30.</p>
             <p>🌿 Veste branco ou cor da linha.</p>
           </div>
-          <button onclick="window.location.reload()" class="mt-4 text-sm underline" style="color:#6b9e68">Retirar outra senha</button>
+          <button id="btn-retirar-outra" class="mt-4 text-sm underline" style="color:#6b9e68">Retirar outra senha</button>
         </div>
       </div>
 
@@ -359,6 +359,10 @@
         btn.disabled = false;
         btn.textContent = 'Retirar Minha Senha';
       }
+    });
+
+    document.getElementById('btn-retirar-outra').addEventListener('click', function() {
+      window.location.reload();
     });
 
     loadAgenda();
