@@ -5,10 +5,9 @@ let pool;
 
 function getPool() {
   if (!pool) {
-    const sslConfig = process.env.NODE_ENV === 'production'
-      ? { ssl: true }
-      : { ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false } };
-    pool = new Pool({ connectionString: process.env.DATABASE_URL, ...sslConfig });
+    // SSL config: Neon requer rejectUnauthorized: false
+    const sslConfig = { rejectUnauthorized: false };
+    pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: sslConfig });
   }
   return pool;
 }
