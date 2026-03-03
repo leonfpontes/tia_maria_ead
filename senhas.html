@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Senhas de Atendimento – Terreiro Tia Maria e Cabocla Jupira</title>
+  <meta name="description" content="Retire sua senha de atendimento para a próxima gira do Terreiro Tia Maria e Cabocla Jupira." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/css/tailwind.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="icon" type="image/x-icon" href="/assets/img/Logo_Terr_White-removebg-preview.png" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #0f1a0f; color: #e8f5e9; min-height: 100vh; }
+    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); border-radius: 1rem; }
+    .badge { display: inline-flex; align-items: center; gap: .35rem; padding: .25rem .75rem; border-radius: 9999px; font-size: .8rem; font-weight: 600; }
+    .badge-aguardando { background: rgba(234,179,8,.15); color: #fbbf24; border: 1px solid rgba(234,179,8,.3); }
+    .badge-aberto     { background: rgba(34,197,94,.15);  color: #4ade80; border: 1px solid rgba(34,197,94,.3); }
+    .badge-esgotado   { background: rgba(239,68,68,.15);  color: #f87171; border: 1px solid rgba(239,68,68,.3); }
+    .badge-encerrado  { background: rgba(156,163,175,.15); color: #9ca3af; border: 1px solid rgba(156,163,175,.3); }
+    .btn-primary { background: linear-gradient(135deg,#2d6a2d,#4a9e4a); color: #fff; font-weight: 700; border-radius: .75rem; padding: .85rem 2rem; font-size: 1rem; width: 100%; transition: opacity .2s; }
+    .btn-primary:hover { opacity: .9; }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .input-field { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: .6rem; padding: .75rem 1rem; color: #e8f5e9; width: 100%; font-size: 1rem; }
+    .input-field:focus { outline: none; border-color: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.2); }
+    .input-field::placeholder { color: rgba(232,245,233,.4); }
+    .comprovante { background: linear-gradient(135deg,rgba(45,106,45,.3),rgba(74,158,74,.2)); border: 2px solid rgba(74,222,128,.4); border-radius: 1rem; padding: 2rem; text-align: center; }
+    .numero-senha { font-size: 4rem; font-weight: 900; color: #4ade80; line-height: 1; }
+    .progress-bar-outer { background: rgba(255,255,255,.1); border-radius: 9999px; height: .6rem; overflow: hidden; }
+    .progress-bar-inner { height: 100%; background: linear-gradient(90deg,#2d6a2d,#4ade80); border-radius: 9999px; transition: width .5s; }
+    #countdown { font-size: 1.5rem; font-weight: 700; color: #fbbf24; font-variant-numeric: tabular-nums; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="sticky top-0 z-50" style="background:rgba(15,26,15,.95);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3" aria-label="Voltar ao site principal">
+        <img src="/assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo Terreiro" class="h-10 w-10 object-contain" />
+        <div>
+          <div class="font-bold text-sm leading-tight" style="color:#a8d5a2">Terreiro Tia Maria</div>
+          <div class="text-xs" style="color:#6b9e68">e Cabocla Jupira</div>
+        </div>
+      </a>
+      <a href="/" class="text-sm" style="color:#a8d5a2">← Voltar ao site</a>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6 text-center" style="color:#a8d5a2">Senhas de Atendimento</h1>
+
+    <!-- Loading -->
+    <div id="state-loading" class="text-center py-16">
+      <div class="inline-block w-10 h-10 border-4 border-green-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+      <p class="text-sm" style="color:#6b9e68">Carregando informações...</p>
+    </div>
+
+    <!-- No gira -->
+    <div id="state-no-gira" class="hidden card p-8 text-center">
+      <div class="text-4xl mb-4">🌿</div>
+      <h2 class="text-xl font-bold mb-2" style="color:#a8d5a2">Nenhuma gira programada</h2>
+      <p class="text-sm" style="color:#6b9e68">Em breve traremos o novo calendário de giras. Acompanhe nossas redes sociais!</p>
+    </div>
+
+    <!-- Gira Card -->
+    <div id="state-gira" class="hidden space-y-6">
+
+      <!-- Info da Gira -->
+      <div class="card p-6">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <p class="text-xs uppercase tracking-wider mb-1" style="color:#6b9e68">Próxima Gira</p>
+            <h2 id="gira-titulo" class="text-xl font-bold" style="color:#e8f5e9"></h2>
+            <p id="gira-linha" class="text-sm mt-1" style="color:#a8d5a2"></p>
+          </div>
+          <span id="controle-badge" class="badge badge-aguardando">AGUARDANDO</span>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-4 text-sm">
+          <div>
+            <span style="color:#6b9e68">📅 Data:</span>
+            <span id="gira-data" class="ml-1 font-medium"></span>
+          </div>
+        </div>
+        <p id="gira-observacoes" class="mt-3 text-sm hidden" style="color:#a8d5a2"></p>
+      </div>
+
+      <!-- Progresso -->
+      <div id="progresso-box" class="card p-4">
+        <div class="flex justify-between text-sm mb-2">
+          <span style="color:#6b9e68">Senhas retiradas</span>
+          <span id="progresso-texto" class="font-bold" style="color:#a8d5a2">0 / 50</span>
+        </div>
+        <div class="progress-bar-outer">
+          <div id="progresso-bar" class="progress-bar-inner" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Status: AGUARDANDO com countdown -->
+      <div id="estado-aguardando" class="hidden card p-6 text-center">
+        <div class="text-3xl mb-3">⏳</div>
+        <p class="text-sm mb-2" style="color:#6b9e68">Retirada de senhas abre em:</p>
+        <div id="countdown">--:--:--</div>
+        <p id="liberacao-data-texto" class="mt-2 text-xs" style="color:#6b9e68"></p>
+      </div>
+
+      <!-- Status: ABERTO com formulário -->
+      <div id="estado-aberto" class="hidden card p-6">
+        <div class="flex items-center gap-2 mb-5">
+          <span class="text-xl">🎟️</span>
+          <h3 class="font-bold text-lg" style="color:#4ade80">Retirar Senha</h3>
+        </div>
+
+        <div id="form-area">
+          <form id="form-senha" class="space-y-4" novalidate>
+            <div>
+              <label for="input-nome" class="block text-sm font-medium mb-1" style="color:#a8d5a2">Nome completo *</label>
+              <input id="input-nome" type="text" class="input-field" placeholder="Seu nome completo" required autocomplete="name" />
+              <p id="erro-nome" class="text-xs mt-1 text-red-400 hidden"></p>
+            </div>
+            <div>
+              <label for="input-tel" class="block text-sm font-medium mb-1" style="color:#a8d5a2">Telefone (WhatsApp) *</label>
+              <input id="input-tel" type="tel" class="input-field" placeholder="+55 (11) 99999-9999" required autocomplete="tel" />
+              <p id="erro-tel" class="text-xs mt-1 text-red-400 hidden"></p>
+            </div>
+            <p id="erro-geral" class="text-sm text-red-400 hidden"></p>
+            <button type="submit" id="btn-retirar" class="btn-primary">Retirar Minha Senha</button>
+          </form>
+        </div>
+
+        <!-- Comprovante (mostrado após sucesso) -->
+        <div id="comprovante" class="hidden comprovante">
+          <p class="text-sm mb-1" style="color:#a8d5a2">Sua Senha</p>
+          <div class="numero-senha" id="comp-numero">#--</div>
+          <p id="comp-nome" class="mt-3 font-semibold text-lg"></p>
+          <div class="mt-4 p-3 rounded-lg text-left text-sm space-y-1" style="background:rgba(0,0,0,.3);color:#a8d5a2">
+            <p>✅ Senha retirada com sucesso!</p>
+            <p>📱 Guarde este número. Você será chamado na ordem.</p>
+            <p>⏰ Chegue no horário. Portões abrem às 19h30.</p>
+            <p>🌿 Veste branco ou cor da linha.</p>
+          </div>
+          <button onclick="window.location.reload()" class="mt-4 text-sm underline" style="color:#6b9e68">Retirar outra senha</button>
+        </div>
+      </div>
+
+      <!-- Status: ESGOTADO -->
+      <div id="estado-esgotado" class="hidden card p-6 text-center">
+        <div class="text-4xl mb-3">🔴</div>
+        <h3 class="text-lg font-bold mb-2" style="color:#f87171">Senhas Esgotadas</h3>
+        <p class="text-sm" style="color:#6b9e68">Todas as senhas para esta gira foram retiradas.</p>
+        <p id="proxima-liberacao" class="mt-3 text-sm hidden" style="color:#a8d5a2"></p>
+      </div>
+
+      <!-- Status: ENCERRADO / CANCELADA -->
+      <div id="estado-encerrado" class="hidden card p-6 text-center">
+        <div class="text-4xl mb-3">🔒</div>
+        <h3 id="encerrado-titulo" class="text-lg font-bold mb-2" style="color:#9ca3af">Encerrado</h3>
+        <p id="encerrado-msg" class="text-sm" style="color:#6b9e68"></p>
+      </div>
+
+    </div><!-- /state-gira -->
+  </main>
+
+  <footer class="text-center py-8 text-xs" style="color:#4a6e47;border-top:1px solid rgba(255,255,255,.05);margin-top:2rem">
+    <p>Terreiro de Umbanda Tia Maria e Cabocla Jupira – Ribeirão Preto SP</p>
+    <p class="mt-1"><a href="/" style="color:#4a6e47" class="underline">← Voltar ao site principal</a></p>
+  </footer>
+
+  <script>
+    let giraData = null;
+    let controleData = null;
+    let countdownInterval = null;
+
+    function show(id) {
+      document.querySelectorAll('#state-loading,#state-no-gira,#state-gira').forEach(el => el.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function showEstado(id) {
+      ['estado-aguardando','estado-aberto','estado-esgotado','estado-encerrado'].forEach(e => {
+        document.getElementById(e).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function setBadge(status) {
+      const badge = document.getElementById('controle-badge');
+      const map = {
+        AGUARDANDO: ['badge-aguardando','⏳ AGUARDANDO'],
+        ABERTO:     ['badge-aberto',    '🟢 ABERTO'],
+        ESGOTADO:   ['badge-esgotado',  '🔴 ESGOTADO'],
+        ENCERRADO:  ['badge-encerrado', '🔒 ENCERRADO'],
+        CANCELADA:  ['badge-encerrado', '❌ CANCELADA'],
+      };
+      const [cls, txt] = map[status] || map['ENCERRADO'];
+      badge.className = `badge ${cls}`;
+      badge.textContent = txt;
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      return new Date(iso).toLocaleString('pt-BR', {
+        weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo'
+      });
+    }
+
+    function updateProgressBar(emitidas, total) {
+      const pct = total > 0 ? Math.min(100, (emitidas / total) * 100) : 0;
+      document.getElementById('progresso-texto').textContent = `${emitidas} / ${total}`;
+      document.getElementById('progresso-bar').style.width = `${pct}%`;
+    }
+
+    function startCountdown(targetISO) {
+      if (countdownInterval) clearInterval(countdownInterval);
+      const el = document.getElementById('countdown');
+      function tick() {
+        const diff = new Date(targetISO) - new Date();
+        if (diff <= 0) {
+          clearInterval(countdownInterval);
+          el.textContent = '00:00:00';
+          setTimeout(() => loadAgenda(), 1000);
+          return;
+        }
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      }
+      tick();
+      countdownInterval = setInterval(tick, 1000);
+    }
+
+    function computeEffectiveStatus(gira, controle) {
+      if (gira.status === 'CANCELADA') return 'CANCELADA';
+      const now = new Date();
+      if (controle.status === 'ENCERRADO') return 'ENCERRADO';
+      if (controle.status === 'ESGOTADO') return 'ESGOTADO';
+      if (now < new Date(controle.liberacao_inicio)) return 'AGUARDANDO';
+      if (now >= new Date(gira.data_inicio)) return 'ENCERRADO';
+      if (controle.liberacao_fim && now >= new Date(controle.liberacao_fim)) return 'ENCERRADO';
+      return 'ABERTO';
+    }
+
+    async function loadAgenda() {
+      try {
+        const r = await fetch('/api/public/agenda');
+        const data = await r.json();
+
+        if (!data.gira) { show('state-no-gira'); return; }
+
+        giraData = data.gira;
+        controleData = data.controle;
+        const emitidas = data.emitidas || 0;
+
+        document.getElementById('gira-titulo').textContent = giraData.titulo;
+        const linhaEl = document.getElementById('gira-linha');
+        if (giraData.linha) { linhaEl.textContent = `Linha: ${giraData.linha}`; linhaEl.classList.remove('hidden'); }
+        document.getElementById('gira-data').textContent = formatDate(giraData.data_inicio);
+        const obsEl = document.getElementById('gira-observacoes');
+        if (giraData.observacoes) { obsEl.textContent = giraData.observacoes; obsEl.classList.remove('hidden'); }
+
+        updateProgressBar(emitidas, controleData.total_senhas);
+
+        const efectivo = computeEffectiveStatus(giraData, controleData);
+        setBadge(efectivo);
+
+        show('state-gira');
+
+        if (efectivo === 'AGUARDANDO') {
+          document.getElementById('liberacao-data-texto').textContent = `Abre em: ${formatDate(controleData.liberacao_inicio)}`;
+          startCountdown(controleData.liberacao_inicio);
+          showEstado('estado-aguardando');
+        } else if (efectivo === 'ABERTO') {
+          showEstado('estado-aberto');
+        } else if (efectivo === 'ESGOTADO') {
+          if (data.proxima_liberacao) {
+            const el = document.getElementById('proxima-liberacao');
+            el.textContent = `Próxima liberação: ${formatDate(data.proxima_liberacao)}`;
+            el.classList.remove('hidden');
+          }
+          showEstado('estado-esgotado');
+        } else if (efectivo === 'CANCELADA') {
+          document.getElementById('encerrado-titulo').textContent = '❌ Gira Cancelada';
+          document.getElementById('encerrado-msg').textContent = 'Esta gira foi cancelada. Fique atento às nossas redes sociais para novidades.';
+          showEstado('estado-encerrado');
+        } else {
+          document.getElementById('encerrado-titulo').textContent = '🔒 Retirada Encerrada';
+          document.getElementById('encerrado-msg').textContent = 'O período de retirada de senhas foi encerrado.';
+          showEstado('estado-encerrado');
+        }
+      } catch (e) {
+        console.error(e);
+        show('state-no-gira');
+      }
+    }
+
+    document.getElementById('form-senha').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('input-nome').value.trim();
+      const tel  = document.getElementById('input-tel').value.trim();
+
+      document.getElementById('erro-nome').classList.add('hidden');
+      document.getElementById('erro-tel').classList.add('hidden');
+      document.getElementById('erro-geral').classList.add('hidden');
+
+      let ok = true;
+      if (nome.length < 2) {
+        document.getElementById('erro-nome').textContent = 'Digite seu nome completo.';
+        document.getElementById('erro-nome').classList.remove('hidden');
+        ok = false;
+      }
+      if (!tel) {
+        document.getElementById('erro-tel').textContent = 'Digite seu telefone com DDD.';
+        document.getElementById('erro-tel').classList.remove('hidden');
+        ok = false;
+      }
+      if (!ok) return;
+
+      const btn = document.getElementById('btn-retirar');
+      btn.disabled = true;
+      btn.textContent = 'Aguarde...';
+
+      try {
+        const r = await fetch(`/api/public/giras/${giraData.id}/senhas`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, telefone: tel }),
+        });
+        const data = await r.json();
+
+        if (r.ok) {
+          document.getElementById('comp-numero').textContent = `#${String(data.numero).padStart(2,'0')}`;
+          document.getElementById('comp-nome').textContent = data.nome;
+          document.getElementById('form-area').classList.add('hidden');
+          document.getElementById('comprovante').classList.remove('hidden');
+          loadAgenda();
+        } else {
+          const msgs = {
+            JA_CADASTRADO: `Você já retirou a senha #${data.numero} para esta gira.`,
+            ESGOTADO: 'Todas as senhas foram retiradas.',
+            NAO_LIBERADO: 'Retirada ainda não está aberta.',
+            ENCERRADO: 'Retirada de senhas encerrada.',
+            CANCELADA: 'Esta gira foi cancelada.',
+            RATE_LIMIT: 'Muitas tentativas. Aguarde 1 minuto.',
+            DADOS_INVALIDOS: data.mensagem || 'Dados inválidos.',
+            NOME_INVALIDO: 'Nome inválido.',
+            TELEFONE_INVALIDO: 'Telefone inválido. Use formato: (11) 99999-9999',
+          };
+          const msg = msgs[data.error] || data.mensagem || 'Erro ao retirar senha. Tente novamente.';
+          document.getElementById('erro-geral').textContent = msg;
+          document.getElementById('erro-geral').classList.remove('hidden');
+        }
+      } catch(err) {
+        document.getElementById('erro-geral').textContent = 'Erro de conexão. Tente novamente.';
+        document.getElementById('erro-geral').classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Retirar Minha Senha';
+      }
+    });
+
+    loadAgenda();
+  </script>
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin – Terreiro Tia Maria e Cabocla Jupira</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/css/tailwind.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="icon" type="image/x-icon" href="/assets/img/Logo_Terr_White-removebg-preview.png" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #0f1a0f; color: #e8f5e9; min-height: 100vh; }
+    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); border-radius: .75rem; }
+    .input-field { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: .5rem; padding: .65rem .9rem; color: #e8f5e9; width: 100%; font-size: .95rem; }
+    .input-field:focus { outline: none; border-color: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.2); }
+    .input-field::placeholder { color: rgba(232,245,233,.35); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; font-weight: 600; border-radius: .5rem; padding: .5rem 1rem; font-size: .875rem; cursor: pointer; transition: opacity .15s; border: none; }
+    .btn:hover { opacity: .85; } .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-green  { background: #2d6a2d; color: #fff; }
+    .btn-blue   { background: #1e40af; color: #fff; }
+    .btn-yellow { background: #92400e; color: #fef08a; }
+    .btn-red    { background: #7f1d1d; color: #fca5a5; }
+    .btn-gray   { background: rgba(255,255,255,.1); color: #d1d5db; }
+    .btn-sm { padding: .3rem .65rem; font-size: .78rem; }
+    .badge { display: inline-flex; align-items: center; padding: .2rem .6rem; border-radius: 9999px; font-size: .75rem; font-weight: 600; }
+    .badge-rascunho  { background: rgba(107,114,128,.2); color: #9ca3af; }
+    .badge-publicada { background: rgba(34,197,94,.15); color: #4ade80; }
+    .badge-encerrada { background: rgba(156,163,175,.15); color: #9ca3af; }
+    .badge-cancelada { background: rgba(239,68,68,.15); color: #f87171; }
+    .badge-ativa      { background: rgba(34,197,94,.15); color: #4ade80; }
+    .badge-atendida   { background: rgba(96,165,250,.15); color: #93c5fd; }
+    .badge-no_show    { background: rgba(234,179,8,.15); color: #fbbf24; }
+    .badge-cancelada-s{ background: rgba(239,68,68,.15); color: #f87171; }
+    .tab-btn { padding: .5rem 1.2rem; font-size: .875rem; font-weight: 600; border-radius: .5rem .5rem 0 0; cursor: pointer; transition: background .15s; color: #6b9e68; }
+    .tab-btn.active { background: rgba(255,255,255,.08); color: #4ade80; border-bottom: 2px solid #4ade80; }
+    .tab-btn:hover:not(.active) { background: rgba(255,255,255,.04); }
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    th { text-align: left; padding: .6rem .8rem; font-weight: 600; color: #6b9e68; border-bottom: 1px solid rgba(255,255,255,.08); }
+    td { padding: .6rem .8rem; border-bottom: 1px solid rgba(255,255,255,.05); }
+    tr:hover td { background: rgba(255,255,255,.03); }
+    .hidden { display: none !important; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-box { background: #1a2a1a; border: 1px solid rgba(255,255,255,.12); border-radius: 1rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+    select.input-field option { background: #1a2a1a; }
+  </style>
+</head>
+<body>
+
+  <!-- Login Panel -->
+  <div id="login-panel" class="min-h-screen flex items-center justify-center px-4">
+    <div class="card p-8 w-full max-w-sm">
+      <div class="text-center mb-6">
+        <img src="/assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo" class="h-16 w-16 object-contain mx-auto mb-3" />
+        <h1 class="text-xl font-bold" style="color:#a8d5a2">Painel Administrativo</h1>
+        <p class="text-xs mt-1" style="color:#6b9e68">Terreiro Tia Maria e Cabocla Jupira</p>
+      </div>
+      <form id="login-form" class="space-y-4" novalidate>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Usuário</label>
+          <input id="l-user" type="text" class="input-field" placeholder="username" autocomplete="username" required />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Senha</label>
+          <input id="l-pass" type="password" class="input-field" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <p id="login-error" class="text-xs text-red-400 hidden"></p>
+        <button type="submit" id="login-btn" class="btn btn-green w-full">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden min-h-screen flex flex-col">
+
+    <!-- Nav -->
+    <nav class="sticky top-0 z-40" style="background:rgba(15,26,15,.97);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="/assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo" class="h-8 w-8 object-contain" />
+          <span class="font-bold text-sm" style="color:#a8d5a2">Admin</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="/admin/porta" class="btn btn-gray btn-sm">📱 Porta</a>
+          <span id="nav-username" class="text-sm" style="color:#6b9e68"></span>
+          <button onclick="doLogout()" class="btn btn-red btn-sm">Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
+
+      <!-- Tabs -->
+      <div class="flex gap-1 border-b mb-6" style="border-color:rgba(255,255,255,.08)">
+        <button class="tab-btn active" onclick="switchTab('tab-giras', this)">Giras</button>
+        <button class="tab-btn" onclick="switchTab('tab-config', this)">Config Senhas</button>
+        <button class="tab-btn" onclick="switchTab('tab-lista', this)">Lista de Senhas</button>
+      </div>
+
+      <!-- Tab: Giras -->
+      <div id="tab-giras">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="font-bold text-lg" style="color:#a8d5a2">Giras</h2>
+          <button class="btn btn-green" onclick="openModalNovaGira()">+ Nova Gira</button>
+        </div>
+        <div class="card overflow-x-auto">
+          <table>
+            <thead>
+              <tr><th>Título</th><th>Linha</th><th>Data</th><th>Status</th><th>Senhas</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="giras-tbody">
+              <tr><td colspan="6" class="text-center py-8" style="color:#6b9e68">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Config Senhas -->
+      <div id="tab-config" class="hidden">
+        <h2 class="font-bold text-lg mb-4" style="color:#a8d5a2">Configuração de Senhas</h2>
+        <div id="config-no-gira" class="card p-8 text-center" style="color:#6b9e68">
+          Selecione uma gira na aba "Giras" clicando em "Selecionar".
+        </div>
+        <div id="config-form-area" class="hidden space-y-4">
+          <p class="text-sm" style="color:#a8d5a2">Gira: <strong id="config-gira-nome"></strong></p>
+          <div class="card p-6 space-y-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm mb-1" style="color:#a8d5a2">Total de Senhas</label>
+                <input id="cfg-total" type="number" min="1" class="input-field" value="50" />
+              </div>
+              <div>
+                <label class="block text-sm mb-1" style="color:#a8d5a2">Início da Liberação</label>
+                <input id="cfg-inicio" type="datetime-local" class="input-field" />
+              </div>
+              <div>
+                <label class="block text-sm mb-1" style="color:#a8d5a2">Fim da Liberação (opcional)</label>
+                <input id="cfg-fim" type="datetime-local" class="input-field" />
+              </div>
+              <div class="flex items-end">
+                <span id="cfg-status-badge" class="badge badge-rascunho">–</span>
+              </div>
+            </div>
+            <p id="cfg-error" class="text-sm text-red-400 hidden"></p>
+            <div class="flex flex-wrap gap-2">
+              <button class="btn btn-blue" onclick="salvarControle()">💾 Salvar</button>
+              <button class="btn btn-green" onclick="acao('liberar')">🟢 Liberar Agora</button>
+              <button class="btn btn-yellow" onclick="acao('encerrar')">🔒 Encerrar Agora</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Lista Senhas -->
+      <div id="tab-lista" class="hidden">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="font-bold text-lg" style="color:#a8d5a2">Lista de Senhas</h2>
+          <div class="flex gap-2">
+            <input id="busca-senha" type="text" class="input-field" placeholder="Buscar por nome ou número..." style="width:200px" oninput="debounceLoad()" />
+            <button class="btn btn-gray" onclick="exportCSV()">📥 CSV</button>
+          </div>
+        </div>
+        <div id="lista-no-gira" class="card p-8 text-center" style="color:#6b9e68">
+          Selecione uma gira na aba "Giras" clicando em "Selecionar".
+        </div>
+        <div id="lista-table-area" class="hidden card overflow-x-auto">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Nome</th><th>Telefone</th><th>Status</th><th>Criado</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="senhas-tbody">
+              <tr><td colspan="6" class="text-center py-8" style="color:#6b9e68">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /max-w -->
+  </div><!-- /dashboard -->
+
+  <!-- Modal Nova Gira -->
+  <div id="modal-gira" class="modal-overlay hidden">
+    <div class="modal-box p-6 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-lg" style="color:#a8d5a2" id="modal-gira-title">Nova Gira</h3>
+        <button onclick="closeModalGira()" class="text-gray-400 hover:text-white text-xl leading-none">×</button>
+      </div>
+      <div>
+        <label class="block text-sm mb-1" style="color:#a8d5a2">Título *</label>
+        <input id="gf-titulo" type="text" class="input-field" placeholder="Ex: Gira de Caboclos" />
+      </div>
+      <div>
+        <label class="block text-sm mb-1" style="color:#a8d5a2">Linha</label>
+        <input id="gf-linha" type="text" class="input-field" placeholder="Ex: Caboclos e Boiadeiros" />
+      </div>
+      <div>
+        <label class="block text-sm mb-1" style="color:#a8d5a2">Data e Hora *</label>
+        <input id="gf-data" type="datetime-local" class="input-field" />
+      </div>
+      <div>
+        <label class="block text-sm mb-1" style="color:#a8d5a2">Observações</label>
+        <textarea id="gf-obs" class="input-field" rows="3" placeholder="Informações adicionais..."></textarea>
+      </div>
+      <div>
+        <label class="block text-sm mb-1" style="color:#a8d5a2">Status</label>
+        <select id="gf-status" class="input-field">
+          <option value="RASCUNHO">Rascunho</option>
+          <option value="PUBLICADA">Publicada</option>
+          <option value="ENCERRADA">Encerrada</option>
+        </select>
+      </div>
+      <p id="gf-error" class="text-sm text-red-400 hidden"></p>
+      <input type="hidden" id="gf-id" value="" />
+      <div class="flex justify-end gap-2">
+        <button class="btn btn-gray" onclick="closeModalGira()">Cancelar</button>
+        <button class="btn btn-green" onclick="salvarGira()">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let token = localStorage.getItem('admin_token');
+    let authUser = JSON.parse(localStorage.getItem('admin_user') || 'null');
+    let selectedGiraId = null;
+    let selectedGiraNome = '';
+    let buscarDebounce = null;
+
+    function api(path, opts = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(opts.headers||{}) };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      return fetch(path, { ...opts, headers }).then(async r => {
+        if (r.status === 401) { doLogout(); throw new Error('401'); }
+        return r;
+      });
+    }
+
+    function init() {
+      if (token && authUser) {
+        showDashboard();
+      } else {
+        document.getElementById('login-panel').classList.remove('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('login-panel').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('nav-username').textContent = authUser?.username || '';
+      loadGiras();
+    }
+
+    function doLogout() {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
+      token = null; authUser = null;
+      document.getElementById('login-panel').classList.remove('hidden');
+      document.getElementById('dashboard').classList.add('hidden');
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true; btn.textContent = 'Entrando...';
+      document.getElementById('login-error').classList.add('hidden');
+      try {
+        const r = await fetch('/api/admin/login', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ username: document.getElementById('l-user').value, password: document.getElementById('l-pass').value })
+        });
+        const data = await r.json();
+        if (r.ok) {
+          token = data.token; authUser = data.admin;
+          localStorage.setItem('admin_token', token);
+          localStorage.setItem('admin_user', JSON.stringify(authUser));
+          showDashboard();
+        } else {
+          document.getElementById('login-error').textContent = data.mensagem || 'Credenciais inválidas.';
+          document.getElementById('login-error').classList.remove('hidden');
+        }
+      } catch(err) {
+        document.getElementById('login-error').textContent = 'Erro de conexão.';
+        document.getElementById('login-error').classList.remove('hidden');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Entrar';
+      }
+    });
+
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['tab-giras','tab-config','tab-lista'].forEach(t => document.getElementById(t).classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      if (id === 'tab-lista' && selectedGiraId) loadSenhas();
+      if (id === 'tab-config' && selectedGiraId) loadControle();
+    }
+
+    // ---- GIRAS ----
+    async function loadGiras() {
+      try {
+        const r = await api('/api/admin/giras');
+        const rows = await r.json();
+        const tbody = document.getElementById('giras-tbody');
+        if (!Array.isArray(rows) || rows.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8" style="color:#6b9e68">Nenhuma gira cadastrada.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = rows.map(g => {
+          const data = g.data_inicio ? new Date(g.data_inicio).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'}) : '–';
+          const st = (g.status||'').toLowerCase();
+          const senhas = g.controle_status ? `${g.emitidas||0}/${g.total_senhas||'?'}` : '–';
+          return `<tr>
+            <td class="font-medium">${esc(g.titulo)}</td>
+            <td style="color:#a8d5a2">${esc(g.linha||'–')}</td>
+            <td class="whitespace-nowrap">${data}</td>
+            <td><span class="badge badge-${st}">${g.status}</span></td>
+            <td>${senhas}</td>
+            <td>
+              <div class="flex gap-1 flex-wrap">
+                <button class="btn btn-gray btn-sm" onclick="selectGira(${g.id},'${esc(g.titulo)}')">Selecionar</button>
+                <button class="btn btn-blue btn-sm" onclick="openModalEditarGira(${g.id})">Editar</button>
+                ${g.status==='RASCUNHO'?`<button class="btn btn-red btn-sm" onclick="excluirGira(${g.id})">Excluir</button>`:''}
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+      } catch(e) { console.error(e); }
+    }
+
+    function selectGira(id, nome) {
+      selectedGiraId = id; selectedGiraNome = nome;
+      document.getElementById('config-gira-nome').textContent = nome;
+      document.getElementById('config-no-gira').classList.add('hidden');
+      document.getElementById('config-form-area').classList.remove('hidden');
+      document.getElementById('lista-no-gira').classList.add('hidden');
+      document.getElementById('lista-table-area').classList.remove('hidden');
+    }
+
+    function openModalNovaGira() {
+      document.getElementById('gf-id').value = '';
+      document.getElementById('gf-titulo').value = '';
+      document.getElementById('gf-linha').value = '';
+      document.getElementById('gf-data').value = '';
+      document.getElementById('gf-obs').value = '';
+      document.getElementById('gf-status').value = 'RASCUNHO';
+      document.getElementById('gf-error').classList.add('hidden');
+      document.getElementById('modal-gira-title').textContent = 'Nova Gira';
+      document.getElementById('modal-gira').classList.remove('hidden');
+    }
+
+    async function openModalEditarGira(id) {
+      try {
+        const r = await api(`/api/admin/giras/${id}`);
+        const g = await r.json();
+        document.getElementById('gf-id').value = g.id;
+        document.getElementById('gf-titulo').value = g.titulo || '';
+        document.getElementById('gf-linha').value = g.linha || '';
+        document.getElementById('gf-data').value = g.data_inicio ? g.data_inicio.slice(0,16) : '';
+        document.getElementById('gf-obs').value = g.observacoes || '';
+        document.getElementById('gf-status').value = g.status || 'RASCUNHO';
+        document.getElementById('gf-error').classList.add('hidden');
+        document.getElementById('modal-gira-title').textContent = 'Editar Gira';
+        document.getElementById('modal-gira').classList.remove('hidden');
+      } catch(e) { console.error(e); }
+    }
+
+    function closeModalGira() {
+      document.getElementById('modal-gira').classList.add('hidden');
+    }
+
+    async function salvarGira() {
+      const id = document.getElementById('gf-id').value;
+      const body = {
+        titulo: document.getElementById('gf-titulo').value.trim(),
+        linha: document.getElementById('gf-linha').value.trim() || null,
+        data_inicio: document.getElementById('gf-data').value,
+        observacoes: document.getElementById('gf-obs').value.trim() || null,
+        status: document.getElementById('gf-status').value,
+      };
+      document.getElementById('gf-error').classList.add('hidden');
+      try {
+        const url = id ? `/api/admin/giras/${id}` : '/api/admin/giras';
+        const method = id ? 'PUT' : 'POST';
+        const r = await api(url, { method, body: JSON.stringify(body) });
+        const data = await r.json();
+        if (r.ok) { closeModalGira(); loadGiras(); }
+        else {
+          document.getElementById('gf-error').textContent = data.mensagem || 'Erro ao salvar.';
+          document.getElementById('gf-error').classList.remove('hidden');
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function excluirGira(id) {
+      if (!confirm('Excluir esta gira? Esta ação é irreversível.')) return;
+      try {
+        const r = await api(`/api/admin/giras/${id}`, { method: 'DELETE' });
+        if (r.ok || r.status === 204) loadGiras();
+        else { const d = await r.json(); alert(d.mensagem || 'Não foi possível excluir.'); }
+      } catch(e) { console.error(e); }
+    }
+
+    // ---- CONTROLE ----
+    async function loadControle() {
+      if (!selectedGiraId) return;
+      try {
+        const r = await api(`/api/admin/controles/${selectedGiraId}`);
+        if (r.status === 404) return;
+        const ctrl = await r.json();
+        document.getElementById('cfg-total').value = ctrl.total_senhas || 50;
+        document.getElementById('cfg-inicio').value = ctrl.liberacao_inicio ? ctrl.liberacao_inicio.slice(0,16) : '';
+        document.getElementById('cfg-fim').value = ctrl.liberacao_fim ? ctrl.liberacao_fim.slice(0,16) : '';
+        const st = (ctrl.status||'AGUARDANDO').toLowerCase();
+        const badge = document.getElementById('cfg-status-badge');
+        badge.className = `badge badge-${st === 'aguardando' ? 'rascunho' : st === 'aberto' ? 'publicada' : st === 'esgotado' ? 'cancelada' : 'encerrada'}`;
+        badge.textContent = ctrl.status || '–';
+      } catch(e) { console.error(e); }
+    }
+
+    async function salvarControle() {
+      if (!selectedGiraId) return;
+      document.getElementById('cfg-error').classList.add('hidden');
+      const body = {
+        total_senhas: parseInt(document.getElementById('cfg-total').value, 10),
+        liberacao_inicio: document.getElementById('cfg-inicio').value,
+        liberacao_fim: document.getElementById('cfg-fim').value || null,
+      };
+      try {
+        const r = await api(`/api/admin/controles/${selectedGiraId}`, { method: 'PUT', body: JSON.stringify(body) });
+        const data = await r.json();
+        if (r.ok) { alert('Configuração salva!'); loadControle(); }
+        else {
+          document.getElementById('cfg-error').textContent = data.mensagem || 'Erro ao salvar.';
+          document.getElementById('cfg-error').classList.remove('hidden');
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function acao(action) {
+      if (!selectedGiraId) return;
+      const confirmMsg = action === 'liberar' ? 'Liberar retirada de senhas agora?' : 'Encerrar retirada de senhas?';
+      if (!confirm(confirmMsg)) return;
+      try {
+        const r = await api(`/api/admin/controles/${selectedGiraId}`, { method: 'PUT', body: JSON.stringify({ action }) });
+        if (r.ok) loadControle();
+        else { const d = await r.json(); alert(d.mensagem || 'Erro.'); }
+      } catch(e) { console.error(e); }
+    }
+
+    // ---- SENHAS ----
+    async function loadSenhas() {
+      if (!selectedGiraId) return;
+      const busca = document.getElementById('busca-senha').value;
+      let url = `/api/admin/giras/${selectedGiraId}/senhas`;
+      if (busca) url += `?busca=${encodeURIComponent(busca)}`;
+      try {
+        const r = await api(url);
+        const rows = await r.json();
+        const tbody = document.getElementById('senhas-tbody');
+        if (!Array.isArray(rows) || rows.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8" style="color:#6b9e68">Nenhuma senha.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = rows.map(s => {
+          const criado = s.created_at ? new Date(s.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}) : '–';
+          const stLower = (s.status||'').toLowerCase().replace('_','');
+          const stBadge = {'ativa':'ativa','atendida':'atendida','no_show':'no_show','cancelada':'cancelada-s'}[s.status?.toLowerCase()] || 'ativa';
+          return `<tr>
+            <td class="font-bold" style="color:#4ade80">#${String(s.numero).padStart(2,'0')}</td>
+            <td>${esc(s.nome)}</td>
+            <td style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(s.telefone)}</td>
+            <td><span class="badge badge-${stBadge}">${s.status}</span></td>
+            <td class="text-xs" style="color:#6b9e68">${criado}</td>
+            <td>
+              <div class="flex gap-1 flex-wrap">
+                ${s.status!=='ATENDIDA'?`<button class="btn btn-green btn-sm" onclick="alterarStatus(${s.id},'ATENDIDA')">✓</button>`:''}
+                ${s.status==='ATIVA'?`<button class="btn btn-yellow btn-sm" onclick="alterarStatus(${s.id},'NO_SHOW')">No-Show</button>`:''}
+                ${s.status!=='CANCELADA'&&s.status!=='ATENDIDA'?`<button class="btn btn-red btn-sm" onclick="alterarStatus(${s.id},'CANCELADA')">Cancelar</button>`:''}
+                ${s.status!=='ATIVA'?`<button class="btn btn-gray btn-sm" onclick="alterarStatus(${s.id},'ATIVA')">Ativar</button>`:''}
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+      } catch(e) { console.error(e); }
+    }
+
+    async function alterarStatus(id, status) {
+      try {
+        const r = await api(`/api/admin/senhas/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+        if (r.ok) loadSenhas();
+        else { const d = await r.json(); alert(d.mensagem || 'Erro.'); }
+      } catch(e) { console.error(e); }
+    }
+
+    function debounceLoad() {
+      clearTimeout(buscarDebounce);
+      buscarDebounce = setTimeout(loadSenhas, 350);
+    }
+
+    async function exportCSV() {
+      if (!selectedGiraId) return;
+      const r = await api(`/api/admin/giras/${selectedGiraId}/senhas?format=csv`);
+      const text = await r.text();
+      const blob = new Blob([text], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `senhas-gira-${selectedGiraId}.csv`; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    init();
+  </script>
+</body>
+</html>
