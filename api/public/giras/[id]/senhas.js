@@ -1,8 +1,8 @@
 'use strict';
-const db = require('../../../_lib/db');
-const { normalizePhone } = require('../../../_lib/phone');
-const { normalizeName } = require('../../../_lib/normalizeName');
-const { checkRateLimit } = require('../../../_lib/rateLimit');
+const db = require('../../../lib/db');
+const { normalizePhone } = require('../../../lib/phone');
+const { normalizeName } = require('../../../lib/normalizeName');
+const { checkRateLimit } = require('../../../lib/rateLimit');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

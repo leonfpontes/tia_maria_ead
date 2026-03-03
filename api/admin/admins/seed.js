@@ -1,6 +1,6 @@
 'use strict';
 const bcrypt = require('bcryptjs');
-const db = require('../../../_lib/db');
+const db = require('../../../lib/db');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

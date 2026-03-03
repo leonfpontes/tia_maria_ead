@@ -1,6 +1,6 @@
 'use strict';
-const db = require('../../_lib/db');
-const { requireAuth } = require('../../_lib/auth');
+const db = require('../../lib/db');
+const { requireAuth } = require('../../lib/auth');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
