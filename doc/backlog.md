@@ -53,6 +53,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Adicionar modo de teste local com SQLite (adapter em `server/db.js`, migration SQLite, script `setup:sqlite` e instruções no README) - Status: Concluída em 03/03/2026
 - [x] Atualizar cards de novidades para recesso e agenda de janeiro/2026 (Ritual Coletivo Oxóssi 28/01 e Gira de Caboclos 30/01) - Status: Concluída em 21/12/2025
 - [x] Criar documentação para agentes (agente.md e backlog.md) - Status: Concluída em 23/10/2025
 - [x] Analisar código completo do projeto - Status: Concluída em 23/10/2025

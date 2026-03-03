@@ -5,7 +5,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-     "api/!(lib)/**/*.js": { "maxDuration": 10 }
+    "api/**/*.js": { "maxDuration": 10 }
   },
   "headers": [
     {

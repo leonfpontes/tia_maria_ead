@@ -50,6 +50,7 @@ Ao trabalhar neste projeto, siga estas diretrizes:
 
 ## Histórico de Mudanças
 
+- [03/03/2026]: Adicionado modo de teste local com SQLite: novo adapter dual em `server/db.js` (PostgreSQL em produção e SQLite local via `DB_DRIVER=sqlite`), migration `db/migrations/001_create_tables.sqlite.sql`, script `scripts/setup-sqlite.js` para criação automática do banco e admin local, e documentação de execução no `README.md`.
 - [02/03/2026]: **IMPLEMENTAÇÃO SISTEMA DE CARDS COMPONENTIZADOS** - Criado sistema completo de gerenciamento de cards para eventos e giras. Implementados 3 novos arquivos: `assets/js/cards-manager.js` (templates e lógica), `assets/js/cards-data.js` (dados dos cards) e `doc/CARDS_README.md` (documentação completa). O sistema oferece 6 tipos de cards pré-configurados (aviso, exu_pombogira, pretos_velhos, caboclos_boiadeiros, gira_neutra, evento) e permite adicionar/editar/remover cards simplesmente modificando objetos JavaScript, sem necessidade de editar HTML. Mantida compatibilidade visual total com design existente.
 - [02/03/2026]: Aplicadas imagens de fundo nos cards de Exu/Pombogira (bg_card_esquerda.jpg), Pretos Velhos (bg_card_pretos_velhos.jpg) e Caboclos/Boiadeiros (bg_card_caboclos_boiadeiros.png) com overlay de 20% de preto para legibilidade. Ajustadas cores de texto para branco nos cards com background escuro.
 - [10/02/2026]: Card do Ritual Coletivo (23/02) atualizado para tema de Iemanjá com cores azuis claras (gradiente cyan/sky blue) e descrição mencionando "Rainha do Mar". Novo estilo CSS `novidade-card--iemanja` criado.

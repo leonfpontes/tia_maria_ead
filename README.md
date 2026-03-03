@@ -44,6 +44,35 @@ Para executar o projeto localmente:
 
 3. **Parar o servidor**: Pressione `Ctrl + C` no terminal.
 
+## Teste local da API com SQLite (modo simples)
+
+Se quiser testar o fluxo de senhas/admin localmente sem Neon/Postgres:
+
+1. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+2. Crie o banco SQLite e usuário admin local:
+   ```bash
+   npm run setup:sqlite
+   ```
+   - Usuário padrão: `admin`
+   - Senha padrão: `admin123`
+
+3. Rode a API local da Vercel em modo desenvolvimento:
+   ```bash
+   set DB_DRIVER=sqlite
+   set SQLITE_PATH=./local.sqlite
+   set JWT_SECRET=dev-secret-local
+   npm run dev:api
+   ```
+   > No PowerShell, use `$env:DB_DRIVER="sqlite"`, `$env:SQLITE_PATH="./local.sqlite"`, `$env:JWT_SECRET="dev-secret-local"`.
+
+4. Abra no navegador:
+   - `http://localhost:3000/admin`
+   - `http://localhost:3000/senhas.html`
+
 ## Desenvolvimento
 
 ### Build do CSS

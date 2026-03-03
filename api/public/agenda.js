@@ -1,5 +1,5 @@
 'use strict';
-const db = require('../lib/db');
+const db = require('../../server/db');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
