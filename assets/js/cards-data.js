@@ -17,7 +17,7 @@ const CARDS_DADOS = [
   // Card de aviso - Não haverá gira
   {
     tipo: 'aviso',
-    data: '2026-03-07',
+    data: '2026-03-06',
     titulo: 'Não teremos gira!',
     descricao: 'Nesta sexta-feira não haverá trabalhos. Retornamos na próxima semana com a Gira de Exu e Pombogira.',
     horario: 'Casa fechada',
@@ -28,7 +28,7 @@ const CARDS_DADOS = [
   // Card de Gira de Exu e Pombogira
   {
     tipo: 'exu_pombogira',
-    data: '2026-03-14',
+    data: '2026-03-13',
     titulo: 'Gira de Exu e Pombogira',
     descricao: 'Noite de firmeza com os guardiões da esquerda. Venha fortalecer seus caminhos com fé e respeito.',
     horario: 'Portões abrem às 19h30'
@@ -37,7 +37,7 @@ const CARDS_DADOS = [
   // Card de Gira de Pretos Velhos
   {
     tipo: 'pretos_velhos',
-    data: '2026-03-21',
+    data: '2026-03-20',
     titulo: 'Gira de Pretos Velhos',
     descricao: 'Noite de sabedoria e cura com nossos vovôs e vovós. Venha receber o axé ancestral.',
     horario: 'Portões abrem às 19h30'
@@ -46,7 +46,7 @@ const CARDS_DADOS = [
   // Card de Gira de Caboclos e Boiadeiros
   {
     tipo: 'caboclos_boiadeiros',
-    data: '2026-03-28',
+    data: '2026-03-27',
     titulo: 'Gira de Caboclos e Boiadeiros',
     descricao: 'Noite de força e proteção com os guerreiros da mata. Venha receber as bênçãos dos nossos caboclos.',
     horario: 'Portões abrem às 19h30'
