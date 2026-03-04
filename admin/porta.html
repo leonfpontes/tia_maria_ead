@@ -81,6 +81,19 @@
     .metric-val { font-size: 1.75rem; font-weight: 800; }
     .hidden { display: none !important; }
     select.input-field option { background: #1a2a1a; }
+    select.input-field {
+      appearance: auto;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      font-size: 1rem;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    select.input-field:active {
+      transform: scale(0.98);
+    }
     .senha-actions { display: flex; gap: .35rem; margin-left: auto; }
     @media (max-width: 640px) {
       #nav-user { display: none; }
@@ -254,28 +267,41 @@
 
     async function loadGirasSelect() {
       try {
+        console.log('[PORTA] Carregando giras...');
         const r = await api('/api/admin/giras');
         const giras = await r.json();
+        console.log('[PORTA] Giras carregadas:', giras);
         const sel = document.getElementById('gira-select');
         sel.innerHTML = '<option value="">Selecione uma gira...</option>';
-        (giras || []).filter(g => g.status === 'PUBLICADA').forEach(g => {
+        const girasPublicadas = (giras || []).filter(g => g.status === 'PUBLICADA');
+        console.log('[PORTA] Giras PUBLICADAS:', girasPublicadas);
+        girasPublicadas.forEach(g => {
           const opt = document.createElement('option');
           opt.value = g.id;
           opt.textContent = `${g.titulo} – ${g.data_inicio ? new Date(g.data_inicio).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'}) : ''}`;
           sel.appendChild(opt);
+          console.log('[PORTA] Adicionada opção:', opt.textContent);
         });
-      } catch(e) { console.error(e); }
+        if (girasPublicadas.length === 0) {
+          sel.innerHTML += '<option disabled>Nenhuma gira publicada</option>';
+        }
+      } catch(e) { 
+        console.error('[PORTA] Erro ao carregar giras:', e);
+      }
     }
 
     function onGiraChange() {
       const val = document.getElementById('gira-select').value;
+      console.log('[PORTA] onGiraChange chamado, valor:', val);
       if (refreshInterval) clearInterval(refreshInterval);
       if (!val) {
         selectedGiraId = null;
         document.getElementById('porta-content').classList.add('hidden');
+          console.log('[PORTA] Nenhuma gira selecionada, ocultando conteúdo');
         return;
       }
       selectedGiraId = val;
+        console.log('[PORTA] Gira selecionada:', selectedGiraId);
       document.getElementById('porta-content').classList.remove('hidden');
       loadSenhas();
       refreshInterval = setInterval(() => {

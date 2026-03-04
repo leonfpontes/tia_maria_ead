@@ -42,25 +42,16 @@
     .hidden { display: none !important; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .modal-box { background: #1a2a1a; border: 1px solid rgba(255,255,255,.12); border-radius: 1rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
-    select.input-field option { background: #1a2a1a; color: #e8f5e9; }
     select.input-field {
       appearance: auto;
       cursor: pointer;
-      min-height: 42px !important;
-      height: auto !important;
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-    select.input-field:focus {
-      outline: none;
-      border-color: #4ade80;
-      box-shadow: 0 0 0 3px rgba(74,222,128,.2);
-    }
-    .gira-drawer-select {
-      position: relative;
-      min-height: 42px;
+      display: block;
       width: 100%;
+      min-height: 42px;
+    }
+    select.input-field option {
+      background: #1a2a1a;
+      color: #e8f5e9;
     }
     .gira-row { cursor: pointer; }
     .gira-row.selected td { background: rgba(74,222,128,.10); }
@@ -115,25 +106,27 @@
       background: #122012;
       border-left: 1px solid rgba(255,255,255,.12);
       box-shadow: -12px 0 30px rgba(0,0,0,.35);
-      padding: 1rem;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 0;
     }
-    .drawer-panel > div:first-child {
+    .drawer-header {
       flex-shrink: 0;
-      margin-bottom: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .drawer-panel > .space-y-4 {
+    .drawer-body {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-right: .5rem;
-      padding-bottom: 2rem;
-      min-height: 0;
+      padding: 1rem;
+      padding-bottom: 3rem;
     }
-    .drawer-panel .space-y-4 > div {
+    .drawer-body > div {
       margin-bottom: 1rem;
+    }
+    .drawer-body > div:last-child {
+      margin-bottom: 0;
     }
     .drawer-panel > .space-y-4::-webkit-scrollbar {
       width: 6px;
@@ -303,11 +296,11 @@
 
   <div id="gira-drawer-overlay" class="drawer-overlay hidden" onclick="closeGiraDrawer(event)">
     <aside class="drawer-panel" onclick="event.stopPropagation()">
-      <div class="flex justify-between items-center mb-4">
+      <div class="drawer-header flex justify-between items-center">
         <h3 class="font-bold text-lg" style="color:#a8d5a2" id="gira-drawer-title">Nova Gira</h3>
         <button class="btn btn-gray btn-sm" onclick="closeGiraDrawer()">Fechar</button>
       </div>
-      <div class="space-y-4">
+      <div class="drawer-body">
         <div>
           <label class="block text-sm mb-1" style="color:#a8d5a2">Título *</label>
           <input id="gf-titulo" type="text" class="input-field" placeholder="Ex: Gira de Caboclos" />
@@ -325,18 +318,16 @@
           <textarea id="gf-obs" class="input-field" rows="3" placeholder="Informações adicionais..."></textarea>
         </div>
         <div>
-          <label class="block text-sm mb-1" style="color:#a8d5a2">Status</label>
-          <div class="gira-drawer-select">
-            <select id="gf-status" class="input-field">
-              <option value="RASCUNHO">Rascunho</option>
-              <option value="PUBLICADA">Publicada</option>
-              <option value="ENCERRADA">Encerrada</option>
-            </select>
-          </div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Status *</label>
+          <select id="gf-status" class="input-field">
+            <option value="RASCUNHO">Rascunho</option>
+            <option value="PUBLICADA">Publicada</option>
+            <option value="ENCERRADA">Encerrada</option>
+          </select>
         </div>
         <p id="gf-error" class="text-sm text-red-400 hidden"></p>
         <input type="hidden" id="gf-id" value="" />
-        <div class="flex justify-end gap-2">
+        <div class="flex justify-end gap-2" style="margin-top: 1.5rem;">
           <button class="btn btn-gray" onclick="closeGiraDrawer()">Cancelar</button>
           <button class="btn btn-green" onclick="salvarGira()">💾 Salvar</button>
         </div>
