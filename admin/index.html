@@ -46,6 +46,11 @@
     select.input-field {
       appearance: auto;
       cursor: pointer;
+      min-height: 42px !important;
+      height: auto !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     select.input-field:focus {
       outline: none;
@@ -54,7 +59,8 @@
     }
     .gira-drawer-select {
       position: relative;
-      z-index: 70;
+      min-height: 42px;
+      width: 100%;
     }
     .gira-row { cursor: pointer; }
     .gira-row.selected td { background: rgba(74,222,128,.10); }
@@ -112,6 +118,7 @@
       padding: 1rem;
       display: flex;
       flex-direction: column;
+      gap: 0;
     }
     .drawer-panel > div:first-child {
       flex-shrink: 0;
@@ -120,7 +127,13 @@
     .drawer-panel > .space-y-4 {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding-right: .5rem;
+      padding-bottom: 2rem;
+      min-height: 0;
+    }
+    .drawer-panel .space-y-4 > div {
+      margin-bottom: 1rem;
     }
     .drawer-panel > .space-y-4::-webkit-scrollbar {
       width: 6px;
@@ -518,6 +531,16 @@
       document.getElementById('gf-error').classList.add('hidden');
       document.getElementById('gira-drawer-title').textContent = 'Nova Gira';
       document.getElementById('gira-drawer-overlay').classList.remove('hidden');
+      
+      // DEBUG: Verificar visibilidade do select
+      setTimeout(() => {
+        const select = document.getElementById('gf-status');
+        console.log('[DEBUG] Select element:', select);
+        console.log('[DEBUG] Select offsetHeight:', select?.offsetHeight);
+        console.log('[DEBUG] Select visibility:', select ? getComputedStyle(select).visibility : 'N/A');
+        console.log('[DEBUG] Select display:', select ? getComputedStyle(select).display : 'N/A');
+        console.log('[DEBUG] Select height:', select ? getComputedStyle(select).height : 'N/A');
+      }, 100);
     }
 
     async function openEditarGiraDrawer(id) {
