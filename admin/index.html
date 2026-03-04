@@ -569,7 +569,7 @@
       const body = {
         titulo: document.getElementById('gf-titulo').value.trim(),
         linha: document.getElementById('gf-linha').value.trim() || null,
-        data_inicio: document.getElementById('gf-data').value,
+        data_inicio: fromDatetimeLocalToSaoPaulo(document.getElementById('gf-data').value),
         observacoes: document.getElementById('gf-obs').value.trim() || null,
         status: document.getElementById('gf-status').value,
       };
@@ -625,8 +625,8 @@
       }
       const body = {
         total_senhas: parseInt(document.getElementById('cfg-total').value, 10),
-        liberacao_inicio: inicio,
-        liberacao_fim: fim,
+        liberacao_inicio: fromDatetimeLocalToSaoPaulo(inicio),
+        liberacao_fim: fim ? fromDatetimeLocalToSaoPaulo(fim) : null,
       };
       try {
         const r = await api(`/api/admin/controles/${selectedGiraId}`, { method: 'PUT', body: JSON.stringify(body) });
@@ -732,6 +732,17 @@
       if (Number.isNaN(date.getTime())) return '';
       const pad = (n) => String(n).padStart(2, '0');
       return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    /**
+     * Converte valor do datetime-local (sem timezone) para ISO timestamp em horário de São Paulo
+     * Ex: "2026-03-13T12:00" → "2026-03-13T12:00:00-03:00"
+     */
+    function fromDatetimeLocalToSaoPaulo(localValue) {
+      if (!localValue) return null;
+      // Adiciona segundos e timezone de São Paulo (UTC-3)
+      // NOTA: Isso assume horário de verão desligado. Para produção robusta, usar biblioteca de timezone.
+      return localValue + ':00-03:00';
     }
 
     init();
