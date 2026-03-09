@@ -185,6 +185,9 @@ Sistema de senhas de atendimento para as giras, permitindo que os filhos de fé 
 
 ```bash
 psql $DATABASE_URL < db/migrations/001_create_tables.sql
+psql $DATABASE_URL < db/migrations/002_add_email_to_senhas.sql
+psql $DATABASE_URL < db/migrations/003_add_fila_campos.sql
+psql $DATABASE_URL < db/migrations/004_add_tipo_card_to_giras.sql
 ```
 
 ### Criar Primeiro Admin
@@ -200,7 +203,8 @@ curl -X POST https://seu-dominio.com/api/admin/admins/seed \
 
 #### Públicas
 - `GET /api/public/agenda` – Próxima gira com controle de senhas
-- `POST /api/public/giras/:id/senhas` – Retirar senha (body: `{nome, telefone}`)
+- `GET /api/public/giras/cards` – Cards de giras publicadas para renderização automática na home
+- `POST /api/public/giras/:id/senhas` – Retirar senha (body: `{nome, telefone, email, is_preferencial}`)
 
 #### Admin (requer Bearer token)
 - `POST /api/admin/login` – Login (`{username, password}`)

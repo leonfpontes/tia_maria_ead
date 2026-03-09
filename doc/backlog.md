@@ -53,6 +53,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Integrar cadastro de giras do `/admin` com cards automáticos da home usando templates componentizados existentes (novo `tipo_card`, API pública `/api/public/giras/cards`, select fixo de tipo no admin e render dinâmico na `index.html`) - Status: Concluída em 09/03/2026
 - [x] Implementar fila por ordem de chegada com prioridade preferencial (check-in na porta, ordenação backend, ação de check-in em `/admin/porta` e `Lista de Senhas`, checkbox preferencial em `/senhas`, atualização de e-mail de confirmação) - Status: Concluída em 09/03/2026
 - [x] Corrigir timezone de atendimento (UTC-3) no modo local via normalização de timestamps SQLite para ISO UTC no backend - Status: Concluída em 03/03/2026
 - [x] Corrigir responsividade mobile das rotas de operação (`/admin`, `/admin/porta`, `/senhas`) e ajustar encoding UTF-8 para nomes com acentuação no ambiente local - Status: Concluída em 03/03/2026

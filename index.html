@@ -771,13 +771,32 @@
   <script src="assets/js/cards-manager.js"></script>
   <script src="assets/js/cards-data.js"></script>
   <script>
-    // Renderiza os cards quando o DOM estiver pronto
+    async function carregarCardsHome() {
+      const fallbackCards = Array.isArray(window.CARDS_DADOS) ? window.CARDS_DADOS : [];
+
+      try {
+        const response = await fetch('/api/public/giras/cards');
+        if (!response.ok) throw new Error('Falha ao carregar cards do backend');
+
+        const data = await response.json();
+        const cards = Array.isArray(data?.cards) ? data.cards : [];
+
+        if (cards.length > 0) {
+          window.CardsManager.renderizarCards(cards);
+          return;
+        }
+
+        window.CardsManager.renderizarCards(fallbackCards);
+      } catch (error) {
+        console.warn('[cards] fallback estático ativado:', error.message);
+        window.CardsManager.renderizarCards(fallbackCards);
+      }
+    }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        window.CardsManager.renderizarCards(window.CARDS_DADOS);
-      });
+      document.addEventListener('DOMContentLoaded', carregarCardsHome);
     } else {
-      window.CardsManager.renderizarCards(window.CARDS_DADOS);
+      carregarCardsHome();
     }
   </script>
   <script>

@@ -2,6 +2,33 @@
 const db = require('../../../server/db');
 const { requireAuth } = require('../../../server/auth');
 
+const VALID_TIPO_CARD = [
+  'EXU_POMBOGIRA',
+  'PRETOS_VELHOS',
+  'CABOCLOS_BOIADEIROS',
+  'MALANDROS',
+  'GIRA_MISTA',
+  'NAO_HAVERA_GIRA'
+];
+
+function linhaFromTipoCard(tipoCard) {
+  switch (tipoCard) {
+    case 'EXU_POMBOGIRA':
+      return 'Exus e Pombogiras';
+    case 'PRETOS_VELHOS':
+      return 'Pretos Velhos';
+    case 'CABOCLOS_BOIADEIROS':
+      return 'Caboclos e Boiadeiros';
+    case 'MALANDROS':
+      return 'Malandros';
+    case 'NAO_HAVERA_GIRA':
+      return 'Não haverá Gira';
+    case 'GIRA_MISTA':
+    default:
+      return 'Gira Mista';
+  }
+}
+
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
@@ -38,26 +65,38 @@ module.exports = async function handler(req, res) {
     const auth = requireAuth(req, res, ['ADMIN']);
     if (!auth) return;
 
-    const { titulo, linha, data_inicio, observacoes, status, motivo_cancelamento } = req.body || {};
+    const currentResult = await db.query(`SELECT * FROM giras WHERE id = $1`, [id]);
+    if (currentResult.rows.length === 0) return res.status(404).json({ error: 'NAO_ENCONTRADA' });
 
-    if (status === 'CANCELADA' && !motivo_cancelamento) {
+    const current = currentResult.rows[0];
+    const { titulo, tipo_card, data_inicio, observacoes, status, motivo_cancelamento } = req.body || {};
+
+    if (typeof tipo_card !== 'undefined' && !VALID_TIPO_CARD.includes(tipo_card)) {
+      return res.status(400).json({ error: 'TIPO_INVALIDO', mensagem: 'tipo_card inválido.' });
+    }
+
+    const finalStatus = typeof status !== 'undefined' ? status : current.status;
+    if (finalStatus === 'CANCELADA' && !(motivo_cancelamento || current.motivo_cancelamento)) {
       return res.status(400).json({ error: 'DADOS_INVALIDOS', mensagem: 'motivo_cancelamento é obrigatório ao cancelar.' });
     }
+
+    const finalTipoCard = typeof tipo_card !== 'undefined' ? tipo_card : (current.tipo_card || 'GIRA_MISTA');
+    const finalLinha = linhaFromTipoCard(finalTipoCard);
 
     const result = await db.query(
       `UPDATE giras
        SET titulo = COALESCE($1, titulo),
-           linha = COALESCE($2, linha),
-           data_inicio = COALESCE($3, data_inicio),
-           observacoes = COALESCE($4, observacoes),
-           status = COALESCE($5, status),
-           motivo_cancelamento = COALESCE($6, motivo_cancelamento),
+           linha = $2,
+           tipo_card = $3,
+           data_inicio = COALESCE($4, data_inicio),
+           observacoes = COALESCE($5, observacoes),
+           status = COALESCE($6, status),
+           motivo_cancelamento = COALESCE($7, motivo_cancelamento),
            updated_at = NOW()
-       WHERE id = $7
+       WHERE id = $8
        RETURNING *`,
-      [titulo, linha, data_inicio, observacoes, status, motivo_cancelamento, id]
+      [titulo, finalLinha, finalTipoCard, data_inicio, observacoes, status, motivo_cancelamento, id]
     );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'NAO_ENCONTRADA' });
 
     await db.query(
       `INSERT INTO auditoria (tipo, referencia_id, admin_id, dados, ip) VALUES ('GIRA_ATUALIZADA', $1, $2, $3, $4)`,

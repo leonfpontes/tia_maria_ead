@@ -261,7 +261,7 @@
         <div class="card overflow-x-auto table-responsive">
           <table>
             <thead>
-              <tr><th>Título</th><th>Linha</th><th>Data</th><th>Status</th><th>Senhas</th><th>Editar</th></tr>
+              <tr><th>Título</th><th>Tipo</th><th>Data</th><th>Status</th><th>Senhas</th><th>Editar</th></tr>
             </thead>
             <tbody id="giras-tbody">
               <tr><td colspan="6" class="text-center py-8" style="color:#6b9e68">Carregando...</td></tr>
@@ -318,8 +318,15 @@
           <input id="gf-titulo" type="text" class="input-field" placeholder="Ex: Gira de Caboclos" />
         </div>
         <div>
-          <label class="block text-sm mb-1" style="color:#a8d5a2">Linha</label>
-          <input id="gf-linha" type="text" class="input-field" placeholder="Ex: Caboclos e Boiadeiros" />
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Tipo da Gira *</label>
+          <select id="gf-tipo-card" class="input-field">
+            <option value="EXU_POMBOGIRA">Exus e Pombogiras</option>
+            <option value="PRETOS_VELHOS">Pretos Velhos</option>
+            <option value="CABOCLOS_BOIADEIROS">Caboclos e Boiadeiros</option>
+            <option value="MALANDROS">Malandros</option>
+            <option value="GIRA_MISTA">Gira Mista</option>
+            <option value="NAO_HAVERA_GIRA">Não haverá Gira</option>
+          </select>
         </div>
         <div>
           <label class="block text-sm mb-1" style="color:#a8d5a2">Data e Hora *</label>
@@ -477,7 +484,7 @@
           const selectedClass = Number(selectedGiraId) === Number(g.id) ? ' selected' : '';
           return `<tr class="gira-row${selectedClass}" onclick="selectGira(${g.id},'${esc(g.titulo)}', this)">
             <td data-label="Título" class="font-medium">${esc(normalizeDisplayText(g.titulo))}</td>
-            <td data-label="Linha" style="color:#a8d5a2">${esc(normalizeDisplayText(g.linha||'–'))}</td>
+            <td data-label="Tipo" style="color:#a8d5a2">${esc(normalizeDisplayText(formatTipoCardLabel(g.tipo_card, g.linha)))}</td>
             <td data-label="Data" class="whitespace-nowrap">${data}</td>
             <td data-label="Status"><span class="badge badge-${st}">${g.status}</span></td>
             <td data-label="Senhas">${senhas}</td>
@@ -527,7 +534,7 @@
     function openNovaGiraDrawer() {
       document.getElementById('gf-id').value = '';
       document.getElementById('gf-titulo').value = '';
-      document.getElementById('gf-linha').value = '';
+      document.getElementById('gf-tipo-card').value = 'GIRA_MISTA';
       document.getElementById('gf-data').value = '';
       document.getElementById('gf-obs').value = '';
       document.getElementById('gf-status').value = 'RASCUNHO';
@@ -552,7 +559,7 @@
         const g = await r.json();
         document.getElementById('gf-id').value = g.id;
         document.getElementById('gf-titulo').value = g.titulo || '';
-        document.getElementById('gf-linha').value = g.linha || '';
+        document.getElementById('gf-tipo-card').value = g.tipo_card || inferTipoCardFromLinha(g.linha);
         document.getElementById('gf-data').value = g.data_inicio ? g.data_inicio.slice(0,16) : '';
         document.getElementById('gf-obs').value = g.observacoes || '';
         document.getElementById('gf-status').value = g.status || 'RASCUNHO';
@@ -571,7 +578,7 @@
       const id = document.getElementById('gf-id').value;
       const body = {
         titulo: document.getElementById('gf-titulo').value.trim(),
-        linha: document.getElementById('gf-linha').value.trim() || null,
+        tipo_card: document.getElementById('gf-tipo-card').value,
         data_inicio: fromDatetimeLocalToSaoPaulo(document.getElementById('gf-data').value),
         observacoes: document.getElementById('gf-obs').value.trim() || null,
         status: document.getElementById('gf-status').value,
@@ -796,6 +803,28 @@
       // Adiciona segundos e timezone de São Paulo (UTC-3)
       // NOTA: Isso assume horário de verão desligado. Para produção robusta, usar biblioteca de timezone.
       return localValue + ':00-03:00';
+    }
+
+    function inferTipoCardFromLinha(linha) {
+      const text = String(linha || '').toLowerCase();
+      if (text.includes('exu') || text.includes('pombogira')) return 'EXU_POMBOGIRA';
+      if (text.includes('preto') && text.includes('velho')) return 'PRETOS_VELHOS';
+      if (text.includes('caboclo') || text.includes('boiadeiro')) return 'CABOCLOS_BOIADEIROS';
+      if (text.includes('malandro')) return 'MALANDROS';
+      if (text.includes('não haverá') || text.includes('nao havera')) return 'NAO_HAVERA_GIRA';
+      return 'GIRA_MISTA';
+    }
+
+    function formatTipoCardLabel(tipoCard, linhaFallback) {
+      switch (tipoCard) {
+        case 'EXU_POMBOGIRA': return 'Exus e Pombogiras';
+        case 'PRETOS_VELHOS': return 'Pretos Velhos';
+        case 'CABOCLOS_BOIADEIROS': return 'Caboclos e Boiadeiros';
+        case 'MALANDROS': return 'Malandros';
+        case 'NAO_HAVERA_GIRA': return 'Não haverá Gira';
+        case 'GIRA_MISTA': return 'Gira Mista';
+        default: return linhaFallback || 'Gira Mista';
+      }
     }
 
     init();
