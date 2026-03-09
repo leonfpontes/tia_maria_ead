@@ -74,12 +74,29 @@
     .badge-cancelada { background: rgba(239,68,68,.15); color: #f87171; }
     .badge-pref { background: rgba(250,204,21,.2); color: #fef08a; border: 1px solid rgba(250,204,21,.35); }
     .badge-fila { background: rgba(59,130,246,.18); color: #bfdbfe; }
-    .senha-card { border-radius: .6rem; padding: .75rem 1rem; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); display: flex; align-items: center; gap: 1rem; }
+    .senha-card {
+      border-radius: .6rem;
+      padding: .75rem 1rem;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: .85rem;
+      row-gap: .35rem;
+      align-items: start;
+    }
     .senha-card.proxima { border-color: #4ade80; background: rgba(74,222,128,.07); }
     .senha-num { font-size: 1.75rem; font-weight: 900; color: #4ade80; min-width: 3rem; text-align: center; line-height: 1; font-variant-numeric: tabular-nums; }
     .senha-num.atendida { color: #93c5fd; }
     .senha-num.no_show  { color: #fbbf24; }
     .senha-num.cancelada { color: #6b7280; }
+    .senha-main { min-width: 0; display: flex; flex-direction: column; gap: .2rem; }
+    .senha-name-row { display: flex; align-items: center; gap: .45rem; min-width: 0; flex-wrap: wrap; }
+    .senha-name { font-weight: 700; min-width: 0; word-break: break-word; }
+    .senha-proxima { color: #4ade80; font-size: .75rem; font-weight: 800; white-space: nowrap; }
+    .senha-chegada { font-size: .76rem; color: #93c5fd; }
+    .senha-chegada--aguardando { color: #fbbf24; }
+    .senha-meta { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; min-width: 0; }
     .metric { text-align: center; }
     .metric-val { font-size: 1.75rem; font-weight: 800; }
     .hidden { display: none !important; }
@@ -97,7 +114,19 @@
     select.input-field:active {
       transform: scale(0.98);
     }
-    .senha-actions { display: flex; gap: .35rem; margin-left: auto; }
+    .senha-actions {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .35rem;
+      margin-top: .2rem;
+    }
+    .senha-actions .btn {
+      width: 100%;
+      padding: .45rem .55rem !important;
+      font-size: .8rem !important;
+      white-space: nowrap;
+    }
     .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 60; display: flex; justify-content: flex-end; }
     .drawer-panel {
       width: min(440px, 100vw);
@@ -154,11 +183,10 @@
     @media (max-width: 640px) {
       .drawer-panel { width: 100vw; }
       #nav-user { display: none; }
-      .senha-card { flex-wrap: wrap; align-items: flex-start; padding: .7rem .75rem; gap: .6rem; }
+      .senha-card { padding: .7rem .75rem; gap: .45rem; }
       .senha-num { min-width: 2.8rem; font-size: 1.6rem; }
-      .senha-card .flex-1 { width: calc(100% - 3.6rem); }
-      .senha-actions { width: 100%; margin-left: 0; display: grid; grid-template-columns: 1fr 1fr; }
-      .senha-actions .btn { width: 100%; padding: .45rem .4rem !important; font-size: .82rem !important; }
+      .senha-actions { grid-template-columns: 1fr 1fr; }
+      .senha-actions .btn { padding: .45rem .4rem !important; font-size: .82rem !important; }
       .metric-val { font-size: 1.5rem; }
       .nav-actions { gap: .4rem; }
       .admin-nav-toggle { min-width: 74px; padding: .35rem .62rem; font-size: .76rem; }
@@ -199,9 +227,7 @@
       .senha-actions {
         grid-template-columns: 1fr;
       }
-      .senha-card .flex-1 {
-        width: 100%;
-      }
+      .senha-proxima { font-size: .7rem; }
       .input-field {
         font-size: .9rem;
         padding: .58rem .75rem;
@@ -459,9 +485,6 @@
         const atendidaInfo = s.status === 'ATENDIDA' && s.atendida_em
           ? `<span class="text-xs" style="color:#6b9e68">${new Date(s.atendida_em).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'})}</span>`
           : '';
-        const chegadaInfo = s.chegada_em
-          ? `<div class="text-xs mt-1" style="color:#93c5fd">✓ Chegou às ${new Date(s.chegada_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'})}</div>`
-          : `<div class="text-xs mt-1" style="color:#fbbf24">🕐 Aguardando check-in na porta</div>`;
         const filaBadge = s.status === 'ATIVA' && s.chegada_em && filaPosMap.has(Number(s.id))
           ? `<span class="badge badge-fila">#${filaPosMap.get(Number(s.id))} na fila</span>`
           : '';
@@ -484,15 +507,19 @@
             <button class="btn btn-gray btn-acao" data-id="${Number(s.id)}" data-status="ATIVA" style="padding:.45rem .9rem;font-size:.8rem">↩ Desfazer</button>
           </div>`
             : '';
+        const chegadaMarkup = s.chegada_em
+          ? `<div class="senha-chegada">✓ Chegou às ${new Date(s.chegada_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'})}</div>`
+          : `<div class="senha-chegada senha-chegada--aguardando">🕐 Aguardando check-in na porta</div>`;
+
         return `<div class="senha-card${isProxima?' proxima':''}">
           <div class="senha-num ${numClass}">#${String(s.numero).padStart(2,'0')}</div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="font-semibold truncate">${esc(normalizeDisplayText(s.nome))}</div>
-              ${isProxima ? '<span class="text-xs font-bold whitespace-nowrap" style="color:#4ade80"> <--- PRÓXIMO</span>' : ''}
+          <div class="senha-main">
+            <div class="senha-name-row">
+              <div class="senha-name">${esc(normalizeDisplayText(s.nome))}</div>
+              ${isProxima ? '<span class="senha-proxima">PRÓXIMO →</span>' : ''}
             </div>
-            ${chegadaInfo}
-            <div class="flex items-center gap-2 mt-1">
+            ${chegadaMarkup}
+            <div class="senha-meta">
               <span class="badge badge-${st === 'no_show' ? 'no_show' : st}">${s.status}</span>
               ${prefBadge}
               ${filaBadge}
