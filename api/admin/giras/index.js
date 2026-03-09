@@ -50,7 +50,21 @@ module.exports = async function handler(req, res) {
     const result = await db.query(
       `SELECT g.id, g.titulo, g.linha, g.tipo_card, g.data_inicio, g.observacoes, g.status, g.motivo_cancelamento,
               cs.total_senhas, cs.liberacao_inicio, cs.liberacao_fim, cs.status AS controle_status,
-              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status <> 'CANCELADA') AS emitidas
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status <> 'CANCELADA') AS emitidas,
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status = 'ATENDIDA') AS atendidas,
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status = 'NO_SHOW') AS no_show,
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.is_preferencial = true AND s.status <> 'CANCELADA') AS preferenciais,
+              (
+                SELECT COUNT(DISTINCT a.referencia_id)
+                FROM auditoria a
+                WHERE a.tipo = 'WALK_IN_CRIADA'
+                  AND EXISTS (
+                    SELECT 1
+                    FROM senhas s
+                    WHERE s.id = a.referencia_id
+                      AND s.gira_id = g.id
+                  )
+              ) AS walk_in
        FROM giras g
        LEFT JOIN controles_senha cs ON cs.gira_id = g.id
        ORDER BY g.data_inicio DESC`

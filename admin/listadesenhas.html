@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista de Senhas – Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/vendor/materialize/materialize.min.css" />
+  <link rel="stylesheet" href="/assets/css/tailwind.css" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <style>
+    body { font-family: Roboto, Arial, sans-serif; background: #0f1a0f; color: #e8f5e9; min-height: 100vh; }
+    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); border-radius: .75rem; }
+    .input-field { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15); border-radius: .5rem; padding: .65rem .9rem; color: #e8f5e9; width: 100%; font-size: .95rem; }
+    .input-field:focus { outline: none; border-color: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.2); }
+    .btn { font-weight: 600; border-radius: .5rem; text-transform: none; }
+    .btn-blue { background: #1e40af; color: #fff; }
+    .btn-green { background: #2d6a2d; color: #fff; }
+    .btn-yellow { background: #92400e; color: #fef08a; }
+    .btn-red { background: #7f1d1d; color: #fca5a5; }
+    .btn-gray { background: rgba(255,255,255,.1); color: #d1d5db; }
+    .btn-sm { padding: .3rem .65rem; font-size: .78rem; }
+    .badge { display: inline-flex; align-items: center; padding: .2rem .6rem; border-radius: 9999px; font-size: .75rem; font-weight: 600; }
+    .badge-ativa { background: rgba(34,197,94,.15); color: #4ade80; }
+    .badge-atendida { background: rgba(96,165,250,.15); color: #93c5fd; }
+    .badge-no_show { background: rgba(234,179,8,.15); color: #fbbf24; }
+    .badge-cancelada-s { background: rgba(239,68,68,.15); color: #f87171; }
+    .badge-pref { background: rgba(250,204,21,.2); color: #fef08a; border: 1px solid rgba(250,204,21,.35); }
+    .badge-fila { background: rgba(59,130,246,.18); color: #bfdbfe; }
+    .row-preferencial td { background: rgba(250,204,21,.05); }
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    th { text-align: left; padding: .6rem .8rem; font-weight: 600; color: #6b9e68; border-bottom: 1px solid rgba(255,255,255,.08); }
+    td { padding: .6rem .8rem; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .actions-wrap { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .admin-nav { background: rgba(255,255,255,.92); border-bottom: 1px solid rgba(148,163,184,.35); backdrop-filter: blur(8px); }
+    .admin-brand { color: #166534; }
+    .admin-nav-user { color: #334155; }
+    .admin-nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .38rem .8rem;
+      border-radius: .65rem;
+      font-size: .8rem;
+      font-weight: 700;
+      line-height: 1;
+      min-width: 82px;
+      justify-content: center;
+      border: 1px solid transparent;
+      transition: all .15s ease;
+    }
+    .admin-nav-toggle.active {
+      background: #16a34a;
+      color: #fff;
+      border-color: #15803d;
+      box-shadow: 0 4px 12px rgba(22,163,74,.28);
+    }
+    .admin-nav-toggle.inactive {
+      background: #f8fafc;
+      color: #334155;
+      border-color: rgba(148,163,184,.45);
+    }
+    .admin-nav-toggle.inactive:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: rgba(22,163,74,.35);
+    }
+    .admin-nav-logout {
+      background: #fff;
+      color: #166534;
+      border: 1px solid rgba(22,163,74,.35);
+    }
+    .admin-nav-logout:hover { background: #f0fdf4; }
+    .btn:hover { opacity: .92; }
+    @media (max-width: 768px) {
+      .table-responsive { overflow-x: visible; }
+      .table-responsive table { min-width: 0; border-collapse: separate; border-spacing: 0 .65rem; }
+      .table-responsive thead { display: none; }
+      .table-responsive tbody tr { display:block; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:.75rem; overflow:hidden; }
+      .table-responsive tbody td { display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; padding:.55rem .7rem; border-bottom:1px solid rgba(255,255,255,.06); }
+      .table-responsive tbody td:last-child { border-bottom: 0; }
+      .table-responsive tbody td::before { content: attr(data-label); color:#6b9e68; font-size:.75rem; font-weight:600; flex:0 0 88px; }
+      .table-responsive tbody td[data-label="Ações"] { display:block; }
+      .table-responsive tbody td[data-label="Ações"]::before { display:block; margin-bottom:.4rem; }
+    }
+    @media (max-width: 640px) {
+      .nav-actions { gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+      #nav-username { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="login-panel" class="min-h-screen flex items-center justify-center px-4 hidden">
+    <div class="card p-8 w-full max-w-sm">
+      <h1 class="text-xl font-bold mb-4" style="color:#a8d5a2">Login Admin</h1>
+      <form id="login-form" class="space-y-4" novalidate>
+        <input id="l-user" type="text" class="input-field" placeholder="Usuário" autocomplete="username" required />
+        <input id="l-pass" type="password" class="input-field" placeholder="Senha" autocomplete="current-password" required />
+        <p id="login-error" class="text-xs text-red-400 hidden"></p>
+        <button type="submit" id="login-btn" class="btn btn-green w-full">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboard" class="hidden min-h-screen flex flex-col">
+    <nav class="sticky top-0 z-40 admin-nav">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="/assets/img/Logo_Terr_White-removebg-preview.png" alt="Logo" class="h-8 w-8 object-contain" />
+          <span class="font-bold text-sm admin-brand">Lista de Senhas</span>
+        </div>
+        <div class="flex items-center gap-2 nav-actions">
+          <div class="flex items-center gap-2">
+            <a href="/admin" class="admin-nav-toggle inactive">Admin</a>
+            <a href="/admin/porta" class="admin-nav-toggle inactive">📱 Porta</a>
+          </div>
+          <span id="nav-username" class="text-sm admin-nav-user"></span>
+          <button onclick="doLogout()" class="btn btn-sm admin-nav-logout">Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="font-bold text-lg" style="color:#a8d5a2">Lista de Senhas</h2>
+          <p id="gira-context" class="text-sm" style="color:#6b9e68"></p>
+        </div>
+        <a href="/admin" class="btn btn-gray">← Voltar para Giras</a>
+      </div>
+
+      <div id="sem-gira" class="card p-8 text-center hidden" style="color:#6b9e68">
+        Selecione uma gira na página de Admin para abrir a Lista de Senhas.
+        <div class="mt-4">
+          <a href="/admin" class="btn btn-blue">Ir para Giras</a>
+        </div>
+      </div>
+
+      <div id="lista-wrapper" class="hidden">
+        <div class="card p-3 mb-4">
+          <div class="flex gap-2 flex-wrap">
+            <input id="busca-senha" type="text" class="input-field" style="min-width:220px;flex:1" placeholder="Buscar por nome ou número..." oninput="debounceLoad()" />
+            <select id="filtro-pref" class="input-field" onchange="loadSenhas()" style="max-width:170px;">
+              <option value="todos">Todos</option>
+              <option value="preferencial">Só preferenciais</option>
+            </select>
+            <select id="filtro-checkin" class="input-field" onchange="loadSenhas()" style="max-width:170px;">
+              <option value="todos">Todos</option>
+              <option value="com-checkin">Só com check-in</option>
+              <option value="sem-checkin">Só sem check-in</option>
+            </select>
+            <button class="btn btn-blue" onclick="loadSenhas()">↻ Atualizar</button>
+            <button class="btn btn-gray" onclick="exportCSV()">📥 CSV</button>
+          </div>
+        </div>
+
+        <div class="card overflow-x-auto table-responsive">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Nome</th><th>Pref.</th><th>Chegada</th><th>Telefone</th><th>Status</th><th>Criado</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="senhas-tbody">
+              <tr><td colspan="8" class="text-center py-8" style="color:#6b9e68">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let token = localStorage.getItem('admin_token');
+    let authUser = JSON.parse(localStorage.getItem('admin_user') || 'null');
+    let selectedGiraId = null;
+    let buscarDebounce = null;
+
+    function api(path, opts = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      return fetch(path, { ...opts, headers }).then(async r => {
+        if (r.status === 401) { doLogout(); throw new Error('401'); }
+        return r;
+      });
+    }
+
+    function doLogout() {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
+      window.location.href = '/admin';
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;');
+    }
+
+    function normalizeDisplayText(value) {
+      if (value === null || value === undefined) return '';
+      const text = String(value);
+      try { return decodeURIComponent(escape(text)); } catch { return text; }
+    }
+
+    async function loadSenhas() {
+      if (!selectedGiraId) return;
+      const busca = document.getElementById('busca-senha').value;
+      const filtroPref = document.getElementById('filtro-pref').value;
+      const filtroCheckin = document.getElementById('filtro-checkin').value;
+      let url = `/api/admin/giras/${selectedGiraId}/senhas`;
+      if (busca) url += `?busca=${encodeURIComponent(busca)}`;
+
+      const r = await api(url);
+      const rows = await r.json();
+      let rowsFiltrados = Array.isArray(rows) ? [...rows] : [];
+
+      if (filtroPref === 'preferencial') rowsFiltrados = rowsFiltrados.filter(s => Boolean(s.is_preferencial));
+      if (filtroCheckin === 'com-checkin') rowsFiltrados = rowsFiltrados.filter(s => Boolean(s.chegada_em));
+      if (filtroCheckin === 'sem-checkin') rowsFiltrados = rowsFiltrados.filter(s => !s.chegada_em);
+
+      const tbody = document.getElementById('senhas-tbody');
+      if (!rowsFiltrados.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-8" style="color:#6b9e68">Nenhuma senha.</td></tr>';
+        return;
+      }
+
+      const filaPosMap = new Map();
+      let filaPos = 0;
+      rowsFiltrados.forEach(s => {
+        if (s.status === 'ATIVA' && s.chegada_em) {
+          filaPos += 1;
+          filaPosMap.set(Number(s.id), filaPos);
+        }
+      });
+
+      tbody.innerHTML = rowsFiltrados.map(s => {
+        const criado = s.created_at ? new Date(s.created_at).toLocaleString('pt-BR', { timeZone:'America/Sao_Paulo' }) : '–';
+        const stBadge = { 'ativa':'ativa','atendida':'atendida','no_show':'no_show','cancelada':'cancelada-s' }[s.status?.toLowerCase()] || 'ativa';
+        const chegada = s.chegada_em
+          ? new Date(s.chegada_em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' })
+          : '—';
+        const filaBadge = filaPosMap.has(Number(s.id)) ? `<span class="badge badge-fila">#${filaPosMap.get(Number(s.id))}</span>` : '';
+        const checkinBtn = s.status === 'ATIVA' && !s.chegada_em
+          ? `<button class="btn btn-blue btn-sm" onclick="realizarCheckin(${s.id})">Check-in</button>`
+          : '';
+
+        return `<tr class="${s.is_preferencial ? 'row-preferencial' : ''}">
+          <td data-label="#" class="font-bold" style="color:#4ade80">#${String(s.numero).padStart(2,'0')}</td>
+          <td data-label="Nome">${esc(normalizeDisplayText(s.nome))}</td>
+          <td data-label="Pref.">${s.is_preferencial ? '<span class="badge badge-pref">⭐ Sim</span>' : '—'}</td>
+          <td data-label="Chegada" style="color:#93c5fd">${chegada} ${filaBadge}</td>
+          <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(s.telefone)}</td>
+          <td data-label="Status"><span class="badge badge-${stBadge}">${s.status}</span></td>
+          <td data-label="Criado" class="text-xs" style="color:#6b9e68">${criado}</td>
+          <td data-label="Ações">
+            <div class="actions-wrap">
+              ${checkinBtn}
+              ${s.status !== 'ATENDIDA' ? `<button class="btn btn-green btn-sm" onclick="alterarStatus(${s.id},'ATENDIDA')">✓</button>` : ''}
+              ${s.status === 'ATIVA' ? `<button class="btn btn-yellow btn-sm" onclick="alterarStatus(${s.id},'NO_SHOW')">No-Show</button>` : ''}
+              ${s.status !== 'CANCELADA' && s.status !== 'ATENDIDA' ? `<button class="btn btn-red btn-sm" onclick="alterarStatus(${s.id},'CANCELADA')">Cancelar</button>` : ''}
+              ${s.status !== 'ATIVA' ? `<button class="btn btn-gray btn-sm" onclick="alterarStatus(${s.id},'ATIVA')">Ativar</button>` : ''}
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function realizarCheckin(id) {
+      const r = await api(`/api/admin/senhas/${id}/checkin`, { method: 'PATCH' });
+      if (r.ok) loadSenhas();
+      else {
+        const d = await r.json();
+        alert(d.mensagem || 'Erro ao registrar check-in.');
+      }
+    }
+
+    async function alterarStatus(id, status) {
+      const r = await api(`/api/admin/senhas/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+      if (r.ok) loadSenhas();
+      else {
+        const d = await r.json();
+        alert(d.mensagem || 'Erro.');
+      }
+    }
+
+    function debounceLoad() {
+      clearTimeout(buscarDebounce);
+      buscarDebounce = setTimeout(loadSenhas, 350);
+    }
+
+    async function exportCSV() {
+      if (!selectedGiraId) return;
+      const r = await api(`/api/admin/giras/${selectedGiraId}/senhas?format=csv`);
+      const text = await r.text();
+      const blob = new Blob([text], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `senhas-gira-${selectedGiraId}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function init() {
+      if (!token || !authUser) {
+        document.getElementById('login-panel').classList.remove('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+        return;
+      } else {
+        document.getElementById('login-panel').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('nav-username').textContent = authUser?.username || '';
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const giraId = params.get('giraId');
+      const giraNome = params.get('giraNome');
+
+      if (!giraId) {
+        document.getElementById('sem-gira').classList.remove('hidden');
+        document.getElementById('lista-wrapper').classList.add('hidden');
+        return;
+      }
+
+      selectedGiraId = Number(giraId);
+      document.getElementById('sem-gira').classList.add('hidden');
+      document.getElementById('lista-wrapper').classList.remove('hidden');
+
+      const titulo = giraNome ? decodeURIComponent(giraNome) : `Gira #${giraId}`;
+      document.getElementById('gira-context').textContent = `Gira selecionada: ${titulo}`;
+
+      await loadSenhas();
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
+      document.getElementById('login-error').classList.add('hidden');
+      try {
+        const r = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({ username: document.getElementById('l-user').value, password: document.getElementById('l-pass').value })
+        });
+        const data = await r.json();
+        if (r.ok) {
+          token = data.token;
+          authUser = data.admin;
+          localStorage.setItem('admin_token', token);
+          localStorage.setItem('admin_user', JSON.stringify(authUser));
+          init();
+        } else {
+          document.getElementById('login-error').textContent = data.mensagem || 'Credenciais inválidas.';
+          document.getElementById('login-error').classList.remove('hidden');
+        }
+      } catch {
+        document.getElementById('login-error').textContent = 'Erro de conexão.';
+        document.getElementById('login-error').classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

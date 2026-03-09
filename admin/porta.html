@@ -335,7 +335,9 @@
         console.log('[PORTA] Giras carregadas:', giras);
         const sel = document.getElementById('gira-select');
         sel.innerHTML = '<option value="">Selecione uma gira...</option>';
-        const girasPublicadas = (giras || []).filter(g => g.status === 'PUBLICADA');
+        const girasPublicadas = (giras || [])
+          .filter(g => g.status === 'PUBLICADA')
+          .sort((a, b) => new Date(b.data_inicio) - new Date(a.data_inicio));
         console.log('[PORTA] Giras PUBLICADAS:', girasPublicadas);
         girasPublicadas.forEach(g => {
           const opt = document.createElement('option');

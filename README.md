@@ -208,7 +208,7 @@ curl -X POST https://seu-dominio.com/api/admin/admins/seed \
 
 #### Admin (requer Bearer token)
 - `POST /api/admin/login` – Login (`{username, password}`)
-- `GET /api/admin/giras` – Listar giras
+- `GET /api/admin/giras` – Listar giras com métricas por gira (`emitidas`, `atendidas`, `no_show`, `walk_in`, `preferenciais`) para uso no dashboard do `/admin`
 - `POST /api/admin/giras` – Criar gira
 - `GET/PUT/DELETE /api/admin/giras/:id` – Gerenciar gira
 - `GET/PUT /api/admin/controles/:giraId` – Gerenciar controle de senhas
@@ -219,7 +219,8 @@ curl -X POST https://seu-dominio.com/api/admin/admins/seed \
 ### Páginas
 
 - `/senhas` – Página pública para retirada de senhas
-- `/admin` – Painel administrativo completo
+- `/admin` – Painel administrativo de giras (com filtros por nome/período e ocultação de giras antigas), cards de big numbers e gráfico de barras em timeline da distribuição de senhas por gira no recorte atual
+- `/admin/listadesenhas` – Lista de senhas por gira (acesso via botão de ação na tabela de giras em `/admin`)
 - `/admin/porta` – Painel mobile para operador de porta
 
 Na home, os cards de gira exibem o CTA `Senha de Atendimento` apontando para `/senhas` (cards de aviso não exibem este botão).

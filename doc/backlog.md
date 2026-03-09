@@ -53,6 +53,9 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Adicionar gráfico de barras em timeline na rota `/admin` para distribuição de senhas por gira (`emitidas`, `atendidas`, `preferenciais`, `no-show`, `walk-in`) conectado aos filtros existentes (nome/período/ocultar antigas) - Status: Concluída em 09/03/2026
+- [x] Implementar cards de big numbers na rota `/admin` (emitidas, atendidas, no-show, walk-in e preferenciais) conectados aos filtros existentes de nome/período/ocultar antigas, com atualização em tempo real da listagem filtrada - Status: Concluída em 09/03/2026
+- [x] Reestruturar usabilidade do admin removendo tabs da rota `/admin`, criar rota dedicada `/admin/listadesenhas`, adicionar botão de ação na lista de giras para abrir a nova rota e incluir filtros de giras (nome, período e ocultar antigas por padrão) com ordenação por data desc - Status: Concluída em 09/03/2026
 - [x] Corrigir contador de senhas para desconsiderar status `CANCELADA` e recompor disponibilidade após cancelamento no backoffice - Status: Concluída em 09/03/2026
 - [x] Hotfix de data inválida nos cards da home (`NaN undefined ...`) com normalização do campo `data` na API pública e fallback robusto no formatter de data do frontend - Status: Concluída em 09/03/2026
 - [x] Refinar estilo do botão `Senha de Atendimento` por tipo de card na home, com variações visuais contextualizadas e contraste adequado sem alterar o destino `/senhas` - Status: Concluída em 09/03/2026
