@@ -31,9 +31,11 @@ module.exports = async function handler(req, res) {
     const row = giraResult.rows[0];
     const now = new Date();
 
-    // Count all issued senhas regardless of status
+    // Emitidas para contador publico: desconsidera canceladas.
     const emitidasResult = await db.query(
-      `SELECT COUNT(*) AS emitidas FROM senhas WHERE gira_id = $1`,
+      `SELECT COUNT(*) AS emitidas
+       FROM senhas
+       WHERE gira_id = $1 AND status <> 'CANCELADA'`,
       [row.id]
     );
     const emitidas = parseInt(emitidasResult.rows[0].emitidas, 10);

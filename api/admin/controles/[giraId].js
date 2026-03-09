@@ -70,10 +70,12 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'DADOS_INVALIDOS', mensagem: 'liberacao_inicio é obrigatório.' });
     }
 
-    // Cannot reduce total_senhas below emitidas
+    // Nao permite reduzir total abaixo das emitidas ativas (canceladas nao contam).
     if (total_senhas !== undefined) {
       const emitidasResult = await db.query(
-        `SELECT COUNT(*) AS emitidas FROM senhas WHERE gira_id = $1`,
+        `SELECT COUNT(*) AS emitidas
+         FROM senhas
+         WHERE gira_id = $1 AND status <> 'CANCELADA'`,
         [giraId]
       );
       const emitidas = parseInt(emitidasResult.rows[0].emitidas, 10);

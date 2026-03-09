@@ -53,6 +53,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Corrigir contador de senhas para desconsiderar status `CANCELADA` e recompor disponibilidade após cancelamento no backoffice - Status: Concluída em 09/03/2026
 - [x] Hotfix de data inválida nos cards da home (`NaN undefined ...`) com normalização do campo `data` na API pública e fallback robusto no formatter de data do frontend - Status: Concluída em 09/03/2026
 - [x] Refinar estilo do botão `Senha de Atendimento` por tipo de card na home, com variações visuais contextualizadas e contraste adequado sem alterar o destino `/senhas` - Status: Concluída em 09/03/2026
 - [x] Refinar responsividade do botão `Senha de Atendimento` nos cards da home com rótulo curto em mobile (`Senha`) e rótulo completo em desktop (`Senha de Atendimento`) mantendo link para `/senhas` - Status: Concluída em 09/03/2026

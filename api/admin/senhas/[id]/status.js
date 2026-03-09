@@ -61,5 +61,33 @@ module.exports = async function handler(req, res) {
     [id, auth.id, JSON.stringify({ de: senha.status, para: status }), getIp(req)]
   );
 
+  // Recalcula disponibilidade da gira: canceladas nao contam para lotacao.
+  const giraId = result.rows[0].gira_id;
+  const controleResult = await db.query(
+    `SELECT total_senhas, status FROM controles_senha WHERE gira_id = $1`,
+    [giraId]
+  );
+
+  if (controleResult.rows.length > 0) {
+    const controle = controleResult.rows[0];
+    if (controle.status !== 'ENCERRADO') {
+      const emitidasResult = await db.query(
+        `SELECT COUNT(*) AS emitidas_ativas
+         FROM senhas
+         WHERE gira_id = $1 AND status <> 'CANCELADA'`,
+        [giraId]
+      );
+      const emitidasAtivas = parseInt(emitidasResult.rows[0].emitidas_ativas, 10);
+      const novoStatus = emitidasAtivas >= Number(controle.total_senhas) ? 'ESGOTADO' : 'ABERTO';
+
+      await db.query(
+        `UPDATE controles_senha
+         SET status = $1, updated_at = NOW()
+         WHERE gira_id = $2 AND status <> 'ENCERRADO'`,
+        [novoStatus, giraId]
+      );
+    }
+  }
+
   return res.status(200).json(result.rows[0]);
 };

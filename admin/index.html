@@ -285,6 +285,7 @@
               <option value="com-checkin">Só com check-in</option>
               <option value="sem-checkin">Só sem check-in</option>
             </select>
+            <button class="btn btn-blue" onclick="loadSenhas()">↻ Atualizar</button>
             <button class="btn btn-gray" onclick="exportCSV()">📥 CSV</button>
           </div>
         </div>
@@ -750,7 +751,11 @@
     async function alterarStatus(id, status) {
       try {
         const r = await api(`/api/admin/senhas/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
-        if (r.ok) loadSenhas();
+        if (r.ok) {
+          loadSenhas();
+          loadGiras();
+          if (selectedGiraId) loadControle();
+        }
         else { const d = await r.json(); alert(d.mensagem || 'Erro.'); }
       } catch(e) { console.error(e); }
     }

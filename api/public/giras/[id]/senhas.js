@@ -130,7 +130,12 @@ module.exports = async function handler(req, res) {
 
     // Check duplicate
     const dupResult = await db.query(
-      `SELECT numero FROM senhas WHERE gira_id = $1 AND nome_normalizado = $2 AND telefone = $3`,
+      `SELECT numero
+       FROM senhas
+       WHERE gira_id = $1
+         AND nome_normalizado = $2
+         AND telefone = $3
+         AND status <> 'CANCELADA'`,
       [giraId, nomeNorm, telefoneNorm]
     );
     if (dupResult.rows.length > 0) {
@@ -141,15 +146,23 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Get next number
+    // Numero sequencial segue monotônico; capacidade considera apenas nao-canceladas.
     const numResult = await db.query(
       `SELECT COALESCE(MAX(numero), 0) + 1 AS proximo FROM senhas WHERE gira_id = $1`,
       [giraId]
     );
     const numero = numResult.rows[0].proximo;
 
-    // Prevent issuing beyond total
-    if (numero > ctrl.total_senhas) {
+    const emitidasAtivasResult = await db.query(
+      `SELECT COUNT(*) AS emitidas_ativas
+       FROM senhas
+       WHERE gira_id = $1 AND status <> 'CANCELADA'`,
+      [giraId]
+    );
+    const emitidasAtivas = parseInt(emitidasAtivasResult.rows[0].emitidas_ativas, 10);
+
+    // Prevent issuing beyond total considerando cancelamentos.
+    if (emitidasAtivas >= ctrl.total_senhas) {
       // Attempt to mark ESGOTADO (best-effort)
       db.query(
         `UPDATE controles_senha SET status = 'ESGOTADO', updated_at = NOW() WHERE gira_id = $1 AND status NOT IN ('ESGOTADO','ENCERRADO')`,
@@ -187,8 +200,8 @@ module.exports = async function handler(req, res) {
       console.error(`Erro ao enviar e-mail para ${emailNorm}:`, emailError.message);
     }
 
-    // Mark ESGOTADO when last ticket is issued
-    if (numero >= ctrl.total_senhas) {
+    // Mark ESGOTADO when last active ticket is issued
+    if ((emitidasAtivas + 1) >= ctrl.total_senhas) {
       db.query(
         `UPDATE controles_senha SET status = 'ESGOTADO', updated_at = NOW() WHERE gira_id = $1`,
         [giraId]
