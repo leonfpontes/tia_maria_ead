@@ -135,6 +135,15 @@
               <input id="input-tel" type="tel" class="input-field" placeholder="+55 (11) 99999-9999" required autocomplete="tel" />
               <p id="erro-tel" class="text-xs mt-1 text-red-400 hidden"></p>
             </div>
+            <div class="card p-3" style="background: rgba(250,204,21,.08); border-color: rgba(250,204,21,.35);">
+              <label for="input-preferencial" class="flex items-start gap-2 text-sm" style="color:#fef08a;cursor:pointer;">
+                <input id="input-preferencial" type="checkbox" class="mt-1" />
+                <span>
+                  ⭐ Solicito atendimento preferencial (idoso 60+, gestante, lactante ou PCD).
+                  <span class="block text-xs mt-1" style="color:#fde68a;opacity:.9;">Conforme Lei Federal 10.048/2000.</span>
+                </span>
+              </label>
+            </div>
             <p id="erro-geral" class="text-sm text-red-400 hidden"></p>
             <button type="submit" id="btn-retirar" class="btn-primary">Retirar Minha Senha</button>
           </form>
@@ -147,8 +156,9 @@
           <p id="comp-nome" class="mt-3 font-semibold text-lg"></p>
           <div class="mt-4 p-3 rounded-lg text-left text-sm space-y-1" style="background:rgba(0,0,0,.3);color:#a8d5a2">
             <p>✅ Senha retirada com sucesso!</p>
-            <p>📱 Guarde este número. Você será chamado na ordem.</p>
+            <p>📱 Guarde este número. O atendimento segue ordem de chegada com prioridade preferencial.</p>
             <p>⏰ Chegue no horário. Portões abrem às 19h30.</p>
+            <p>📍 Faça check-in na porta ao chegar para entrar na fila.</p>
             <p>🌿 Veste branco ou cor da linha.</p>
           </div>
           <button id="btn-retirar-outra" class="mt-4 text-sm underline" style="color:#6b9e68">Retirar outra senha</button>
@@ -323,6 +333,7 @@
       const nome = document.getElementById('input-nome').value.trim();
       const email = document.getElementById('input-email').value.trim();
       const tel  = document.getElementById('input-tel').value.trim();
+      const isPreferencial = document.getElementById('input-preferencial').checked;
 
       document.getElementById('erro-nome').classList.add('hidden');
       document.getElementById('erro-email').classList.add('hidden');
@@ -356,7 +367,7 @@
         const r = await fetch(`/api/public/giras/${giraData.id}/senhas`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nome, email, telefone: tel }),
+          body: JSON.stringify({ nome, email, telefone: tel, is_preferencial: isPreferencial }),
         });
         const data = await r.json();
 
@@ -378,6 +389,7 @@
             NOME_INVALIDO: 'Nome inválido.',
             TELEFONE_INVALIDO: 'Telefone inválido. Use formato: (11) 99999-9999',
             EMAIL_INVALIDO: 'E-mail inválido.',
+            PREFERENCIAL_INVALIDO: 'Seleção de atendimento preferencial inválida.',
           };
           const msg = msgs[data.error] || data.mensagem || 'Erro ao retirar senha. Tente novamente.';
           document.getElementById('erro-geral').textContent = msg;

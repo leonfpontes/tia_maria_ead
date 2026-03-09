@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
     const isAdmin = auth.role === 'ADMIN';
     const { busca, format } = req.query;
 
-    let queryText = `SELECT id, numero, nome, telefone, status, atendida_em, created_at FROM senhas WHERE gira_id = $1`;
+    let queryText = `SELECT id, numero, nome, telefone, status, atendida_em, created_at, chegada_em, is_preferencial FROM senhas WHERE gira_id = $1`;
     const params = [id];
 
     if (busca) {
@@ -38,7 +38,13 @@ module.exports = async function handler(req, res) {
       queryText += ` AND (nome ILIKE $${params.length} OR numero::text ILIKE $${params.length})`;
     }
 
-    queryText += ` ORDER BY numero ASC`;
+    queryText += `
+      ORDER BY
+        CASE WHEN chegada_em IS NULL THEN 1 ELSE 0 END,
+        is_preferencial DESC,
+        chegada_em ASC,
+        created_at ASC,
+        numero ASC`;
 
     const result = await db.query(queryText, params);
     const rows = result.rows.map(row => ({
@@ -49,9 +55,9 @@ module.exports = async function handler(req, res) {
     if (format === 'csv') {
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
       res.setHeader('Content-Disposition', `attachment; filename="senhas-gira-${id}.csv"`);
-      const header = 'numero,nome,telefone,status,created_at\n';
+      const header = 'numero,nome,telefone,status,is_preferencial,chegada_em,created_at\n';
       const body = rows.map(r =>
-        `${r.numero},"${r.nome}","${r.telefone}",${r.status},${r.created_at}`
+        `${r.numero},"${r.nome}","${r.telefone}",${r.status},${Boolean(r.is_preferencial)},${r.chegada_em || ''},${r.created_at}`
       ).join('\n');
       return res.status(200).send(header + body);
     }

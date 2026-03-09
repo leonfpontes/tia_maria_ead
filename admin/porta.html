@@ -18,6 +18,7 @@
     .btn { font-weight: 600; border-radius: .5rem; text-transform: none; }
     .btn:hover { opacity: .92; } .btn:disabled { opacity: .45; cursor: not-allowed; }
     .btn-green  { background: #2d6a2d; color: #fff; }
+    .btn-blue   { background: #1e40af; color: #fff; }
     .btn-yellow { background: #78350f; color: #fef08a; }
     .btn-red    { background: #7f1d1d; color: #fca5a5; }
     .btn-gray   { background: rgba(255,255,255,.1); color: #d1d5db; }
@@ -71,6 +72,8 @@
     .badge-atendida  { background: rgba(96,165,250,.15); color: #93c5fd; }
     .badge-no_show   { background: rgba(234,179,8,.15); color: #fbbf24; }
     .badge-cancelada { background: rgba(239,68,68,.15); color: #f87171; }
+    .badge-pref { background: rgba(250,204,21,.2); color: #fef08a; border: 1px solid rgba(250,204,21,.35); }
+    .badge-fila { background: rgba(59,130,246,.18); color: #bfdbfe; }
     .senha-card { border-radius: .6rem; padding: .75rem 1rem; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); display: flex; align-items: center; gap: 1rem; }
     .senha-card.proxima { border-color: #4ade80; background: rgba(74,222,128,.07); }
     .senha-num { font-size: 1.75rem; font-weight: 900; color: #4ade80; min-width: 3rem; text-align: center; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -337,6 +340,14 @@
         return;
       }
       const proximaIdx = rows.findIndex(s => s.status === 'ATIVA');
+      const filaPosMap = new Map();
+      let filaPos = 0;
+      rows.forEach(s => {
+        if (s.status === 'ATIVA' && s.chegada_em) {
+          filaPos += 1;
+          filaPosMap.set(Number(s.id), filaPos);
+        }
+      });
       lista.innerHTML = rows.map((s, idx) => {
         const isProxima = idx === proximaIdx;
         const st = (s.status || '').toLowerCase();
@@ -344,9 +355,22 @@
         const atendidaInfo = s.status === 'ATENDIDA' && s.atendida_em
           ? `<span class="text-xs" style="color:#6b9e68">${new Date(s.atendida_em).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo'})}</span>`
           : '';
+        const chegadaInfo = s.chegada_em
+          ? `<div class="text-xs mt-1" style="color:#93c5fd">✓ Chegou às ${new Date(s.chegada_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'})}</div>`
+          : `<div class="text-xs mt-1" style="color:#fbbf24">🕐 Aguardando check-in na porta</div>`;
+        const filaBadge = s.status === 'ATIVA' && s.chegada_em && filaPosMap.has(Number(s.id))
+          ? `<span class="badge badge-fila">#${filaPosMap.get(Number(s.id))} na fila</span>`
+          : '';
+        const prefBadge = s.is_preferencial
+          ? '<span class="badge badge-pref">⭐ Preferencial</span>'
+          : '';
+        const checkinBtn = s.status === 'ATIVA' && !s.chegada_em
+          ? `<button class="btn btn-blue btn-checkin" data-id="${Number(s.id)}" style="padding:.45rem .9rem;font-size:.8rem">📍 Check-in</button>`
+          : '';
         const actions = s.status === 'ATIVA'
           ? `
           <div class="senha-actions">
+            ${checkinBtn}
             <button class="btn btn-green btn-acao" data-id="${Number(s.id)}" data-status="ATENDIDA" style="padding:.45rem .9rem;font-size:.8rem">✓ Atendida</button>
             <button class="btn btn-yellow btn-acao" data-id="${Number(s.id)}" data-status="NO_SHOW" style="padding:.45rem .9rem;font-size:.8rem">No-Show</button>
           </div>`
@@ -360,8 +384,11 @@
           <div class="senha-num ${numClass}">#${String(s.numero).padStart(2,'0')}</div>
           <div class="flex-1 min-w-0">
             <div class="font-semibold truncate">${esc(normalizeDisplayText(s.nome))}</div>
+            ${chegadaInfo}
             <div class="flex items-center gap-2 mt-1">
               <span class="badge badge-${st === 'no_show' ? 'no_show' : st}">${s.status}</span>
+              ${prefBadge}
+              ${filaBadge}
               ${atendidaInfo}
               ${isProxima ? '<span class="text-xs font-bold" style="color:#4ade80">← PRÓXIMO</span>' : ''}
             </div>
@@ -396,8 +423,39 @@
       }
     }
 
+    async function realizarCheckin(id, triggerBtn) {
+      const originalText = triggerBtn ? triggerBtn.textContent : '';
+      if (triggerBtn) {
+        triggerBtn.disabled = true;
+        triggerBtn.textContent = '...';
+      }
+      try {
+        const r = await api(`/api/admin/senhas/${id}/checkin`, { method: 'PATCH' });
+        if (r.ok) {
+          loadSenhas(document.getElementById('busca-input').value);
+        } else {
+          const d = await r.json();
+          alert(d.mensagem || 'Erro ao registrar check-in.');
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Erro de conexão ao registrar check-in.');
+      } finally {
+        if (triggerBtn) {
+          triggerBtn.disabled = false;
+          triggerBtn.textContent = originalText;
+        }
+      }
+    }
+
     // Event delegation for action buttons (avoids inline onclick with dynamic IDs)
     document.getElementById('lista-senhas').addEventListener('click', function(e) {
+      const checkinBtn = e.target.closest('.btn-checkin');
+      if (checkinBtn) {
+        const id = parseInt(checkinBtn.dataset.id, 10);
+        if (id) realizarCheckin(id, checkinBtn);
+        return;
+      }
       const btn = e.target.closest('.btn-acao');
       if (!btn) return;
       const id = parseInt(btn.dataset.id, 10);

@@ -109,12 +109,17 @@ function renderTemplate(templateName, data) {
  * @param {Object} params.senha - Dados da senha
  * @param {number} params.senha.numero - Número da senha
  * @param {string} params.senha.nome - Nome do consulente
+ * @param {boolean} params.senha.is_preferencial - Indica atendimento prioritário
  * @param {Object} params.gira - Dados da gira
  * @param {string} params.gira.tipo - Tipo da gira
  * @param {string} params.gira.data_inicio - Data de início (ISO)
  * @returns {string} HTML do e-mail
  */
 function renderSenhaConfirmacao({ senha, gira }) {
+  const cardPreferencial = senha.is_preferencial
+    ? `<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 6px solid #f59e0b; border-radius: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);"><tr><td style="padding: 18px 22px;"><p style="margin: 0; font-size: 15px; color: #92400e; line-height: 1.6; font-weight: 600;"><strong style="color: #b45309;">⭐ Atendimento Preferencial:</strong> Você tem prioridade de atendimento conforme Lei 10.048/2000. Ao chegar, dirija-se ao operador de porta para fazer seu check-in.</p></td></tr></table>`
+    : '';
+
   const data = {
     NOME: escapeHtml(senha.nome),
     NUMERO: senha.numero,
@@ -124,6 +129,7 @@ function renderSenhaConfirmacao({ senha, gira }) {
     TIPO_GIRA: escapeHtml(gira.tipo),
     ENDERECO: 'Rua Joaquim Gomes Jardim, 49 - Ferraz de Vasconcelos/SP',
     VESTIMENTA: 'Recomendamos roupas claras e confortáveis (branco, bege ou tons pastéis).',
+    CARD_PREFERENCIAL: cardPreferencial,
     ANO_ATUAL: new Date().getFullYear(),
   };
   

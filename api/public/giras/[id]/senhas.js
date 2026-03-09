@@ -50,7 +50,7 @@ module.exports = async function handler(req, res) {
     return res.status(429).json({ error: 'RATE_LIMIT', mensagem: 'Muitas tentativas. Aguarde 1 minuto.' });
   }
 
-  const { nome, telefone, email } = req.body || {};
+  const { nome, telefone, email, is_preferencial } = req.body || {};
 
   if (!nome || typeof nome !== 'string' || nome.trim().length < 2) {
     return res.status(400).json({ error: 'NOME_INVALIDO', mensagem: 'Nome inválido.' });
@@ -60,6 +60,9 @@ module.exports = async function handler(req, res) {
   }
   if (!email || typeof email !== 'string') {
     return res.status(400).json({ error: 'EMAIL_INVALIDO', mensagem: 'E-mail é obrigatório.' });
+  }
+  if (typeof is_preferencial !== 'undefined' && typeof is_preferencial !== 'boolean') {
+    return res.status(400).json({ error: 'PREFERENCIAL_INVALIDO', mensagem: 'Campo de preferencial inválido.' });
   }
 
   let telefoneNorm, nomeNorm, emailNorm;
@@ -79,7 +82,7 @@ module.exports = async function handler(req, res) {
   try {
     // Check gira
     const giraResult = await db.query(
-      `SELECT id, status, data_inicio, tipo FROM giras WHERE id = $1`,
+      `SELECT id, status, data_inicio, COALESCE(linha, titulo, 'Gira') AS tipo FROM giras WHERE id = $1`,
       [giraId]
     );
     if (giraResult.rows.length === 0) {
@@ -155,11 +158,12 @@ module.exports = async function handler(req, res) {
       return res.status(423).json({ error: 'ESGOTADO', mensagem: 'Todas as senhas foram retiradas.' });
     }
 
+    const senhaPreferencial = is_preferencial === true;
     const insertResult = await db.query(
-      `INSERT INTO senhas (gira_id, numero, nome, telefone, email, nome_normalizado, status)
-       VALUES ($1, $2, $3, $4, $5, $6, 'ATIVA')
-       RETURNING numero, nome, email`,
-      [giraId, numero, nome.trim(), telefoneNorm, emailNorm, nomeNorm]
+      `INSERT INTO senhas (gira_id, numero, nome, telefone, email, nome_normalizado, is_preferencial, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'ATIVA')
+       RETURNING numero, nome, email, is_preferencial`,
+      [giraId, numero, nome.trim(), telefoneNorm, emailNorm, nomeNorm, senhaPreferencial]
     );
 
     const senha = insertResult.rows[0];
@@ -171,6 +175,7 @@ module.exports = async function handler(req, res) {
         senha: {
           numero: senha.numero,
           nome: senha.nome,
+          is_preferencial: senha.is_preferencial,
         },
         gira: {
           tipo: gira.tipo || 'Gira',
