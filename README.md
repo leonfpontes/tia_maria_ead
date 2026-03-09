@@ -203,7 +203,7 @@ curl -X POST https://seu-dominio.com/api/admin/admins/seed \
 
 #### Públicas
 - `GET /api/public/agenda` – Próxima gira com controle de senhas
-- `GET /api/public/giras/cards` – Cards de giras publicadas para renderização automática na home
+- `GET /api/public/giras/cards` – Cards de giras publicadas para renderização automática na home (janela `D-1`: ontem em diante, no fuso `America/Sao_Paulo`)
 - `POST /api/public/giras/:id/senhas` – Retirar senha (body: `{nome, telefone, email, is_preferencial}`)
 
 #### Admin (requer Bearer token)
@@ -221,3 +221,5 @@ curl -X POST https://seu-dominio.com/api/admin/admins/seed \
 - `/senhas` – Página pública para retirada de senhas
 - `/admin` – Painel administrativo completo
 - `/admin/porta` – Painel mobile para operador de porta
+
+Na home, os cards de gira exibem o CTA `Senha de Atendimento` apontando para `/senhas` (cards de aviso não exibem este botão).

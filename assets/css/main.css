@@ -5,7 +5,59 @@
 }
 
 .novidade-card__actions {
-  display: inline-flex
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: .5rem
+}
+
+.senha-cta__label-short {
+  display: none
+}
+
+.senha-cta {
+  background: rgba(255, 255, 255, .92);
+  color: #0f172a;
+  border-color: rgba(255, 255, 255, .72)
+}
+
+.novidade-card[data-card-type="exu_pombogira"] .senha-cta {
+  background: rgba(0, 0, 0, .72);
+  color: #fee2e2;
+  border-color: rgba(248, 113, 113, .45)
+}
+
+.novidade-card[data-card-type="pretos_velhos"] .senha-cta {
+  background: rgba(15, 23, 42, .78);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, .45)
+}
+
+.novidade-card[data-card-type="caboclos_boiadeiros"] .senha-cta {
+  background: rgba(6, 78, 59, .78);
+  color: #ecfdf5;
+  border-color: rgba(110, 231, 183, .4)
+}
+
+.novidade-card[data-card-type="gira_neutra"] .senha-cta {
+  background: rgba(131, 24, 67, .72);
+  color: #fdf2f8;
+  border-color: rgba(244, 114, 182, .46)
+}
+
+@media (max-width: 520px) {
+  .senha-cta {
+    padding-inline: .65rem;
+    font-size: .7rem
+  }
+
+  .senha-cta__label-full {
+    display: none
+  }
+
+  .senha-cta__label-short {
+    display: inline
+  }
 }
 
 :root {

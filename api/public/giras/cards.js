@@ -25,14 +25,31 @@ function mapTipoCardToTemplate(tipoCard) {
   }
 }
 
+function getSaoPauloYesterdayStartIsoUtc() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+
+  const year = Number(parts.find((p) => p.type === 'year')?.value);
+  const month = Number(parts.find((p) => p.type === 'month')?.value);
+  const day = Number(parts.find((p) => p.type === 'day')?.value);
+
+  // D-1 do projeto: ontem 00:00 em Sao Paulo (BRT), convertido para ISO UTC.
+  const startOfTodayInSaoPaulo = new Date(`${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T00:00:00-03:00`);
+  startOfTodayInSaoPaulo.setUTCDate(startOfTodayInSaoPaulo.getUTCDate() - 1);
+  return startOfTodayInSaoPaulo.toISOString();
+}
+
 module.exports = async function handler(req, res) {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'METODO_NAO_PERMITIDO' });
 
   try {
-    // Janela de exibição: inclui cards a partir de 2 dias atrás para não sumirem imediatamente.
-    const minDate = new Date(Date.now() - (2 * 24 * 60 * 60 * 1000)).toISOString();
+    const minDate = getSaoPauloYesterdayStartIsoUtc();
     const result = await db.query(
       `SELECT id, titulo, linha, tipo_card, data_inicio, observacoes, status
        FROM giras

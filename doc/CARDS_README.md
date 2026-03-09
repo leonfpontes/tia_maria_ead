@@ -28,8 +28,10 @@ Este sistema permite criar e gerenciar cards de eventos e giras de forma compone
 
 ### 5. **gira_neutra** - Giras de Outras Linhas
 - Fundo degradê azul escuro
+- Fundo degradê verde e rosa (cores do terreiro)
 - Ideal para: Baianos, Malandros, Marinheiros, Crianças, etc.
 - Badge branco com texto cinza
+- Badge branco com texto verde
 
 ### 6. **evento** - Eventos Gerais (Não Gira)
 - Fundo cinza claro com borda

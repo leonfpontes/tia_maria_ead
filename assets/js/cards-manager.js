@@ -95,12 +95,12 @@ const CARD_TEMPLATES = {
 
   // Template para outras linhas/giras (coringa neutro)
   gira_neutra: {
-    cardClasses: 'group novidade-card rounded-2xl p-5 shadow-xl transition',
+    cardClasses: 'group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition',
     cardStyle: `
-      background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
-                  linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      background: linear-gradient(135deg, #10b981 0%, #EC4899 100%);
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3), 0 0 0 2px rgba(236, 72, 153, 0.2);
     `,
-    badgeClasses: 'novidade-card__badge bg-white text-slate-700 font-bold',
+    badgeClasses: 'novidade-card__badge bg-white text-green-700 font-bold',
     badgeText: 'Agenda',
     dateStyle: 'color: #ffffff;',
     titleStyle: 'color: #ffffff;',
@@ -165,9 +165,11 @@ function gerarIconeAlerta() {
 }
 
 /**
- * Gera botões de redes sociais
+ * Gera botões de ação do card
  */
-function gerarBotoesRedesSociais() {
+function gerarBotoesAcoes(config) {
+  const exibirBotaoSenha = ['exu_pombogira', 'pretos_velhos', 'caboclos_boiadeiros', 'gira_neutra'].includes(config.tipo);
+
   return `
     <div class="novidade-card__actions gap-2">
       <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
@@ -180,6 +182,7 @@ function gerarBotoesRedesSociais() {
           <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
         </svg>
       </a>
+      ${exibirBotaoSenha ? '<a href="/senhas" class="senha-cta inline-flex items-center justify-center px-3 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 text-xs font-semibold transition z-10 border border-white/70" aria-label="Ir para a pagina de retirada de senha de atendimento"><span class="senha-cta__label-full">Senha de Atendimento</span><span class="senha-cta__label-short">Senha</span></a>' : ''}
     </div>
   `;
 }
@@ -217,7 +220,7 @@ function criarCard(config) {
   const iconeDetalhe = config.tipo === 'aviso' ? gerarIconeAlerta() : gerarIconeRelogio();
 
   return `
-    <article class="${template.cardClasses}" style="${template.cardStyle.replace(/\s+/g, ' ').trim()}">
+    <article class="${template.cardClasses}" data-card-type="${config.tipo}" style="${template.cardStyle.replace(/\s+/g, ' ').trim()}">
       <div class="novidade-card__glow" aria-hidden="true"></div>
       <div class="relative flex items-center gap-2 text-xs font-semibold">
         <span class="${template.badgeClasses}">${badgeIcone ? badgeIcone + ' ' : ''}${badgeTexto}</span>
@@ -229,7 +232,7 @@ function criarCard(config) {
         ${iconeDetalhe}
         <span>${config.horario}</span>
       </div>
-      ${gerarBotoesRedesSociais()}
+      ${gerarBotoesAcoes(config)}
     </article>
   `;
 }
