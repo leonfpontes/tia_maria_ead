@@ -134,9 +134,24 @@ const CARD_TEMPLATES = {
  * Formata uma data no formato brasileiro
  */
 function formatarData(dataISO) {
-  const [ano, mes, dia] = dataISO.split('-');
   const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-  return `${parseInt(dia)} ${meses[parseInt(mes) - 1]} ${ano}`;
+
+  if (typeof dataISO === 'string') {
+    const isoPrefix = dataISO.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoPrefix) {
+      const ano = isoPrefix[1];
+      const mes = Number(isoPrefix[2]);
+      const dia = Number(isoPrefix[3]);
+      return `${dia} ${meses[mes - 1]} ${ano}`;
+    }
+  }
+
+  const parsed = new Date(dataISO);
+  if (!Number.isNaN(parsed.getTime())) {
+    return `${parsed.getUTCDate()} ${meses[parsed.getUTCMonth()]} ${parsed.getUTCFullYear()}`;
+  }
+
+  return 'Data a confirmar';
 }
 
 /**

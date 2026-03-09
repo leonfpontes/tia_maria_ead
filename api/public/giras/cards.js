@@ -43,6 +43,31 @@ function getSaoPauloYesterdayStartIsoUtc() {
   return startOfTodayInSaoPaulo.toISOString();
 }
 
+function normalizeCardDate(value) {
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+
+  if (typeof value === 'string') {
+    const isoPrefix = value.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (isoPrefix) {
+      return isoPrefix[1];
+    }
+
+    const parsed = new Date(value);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toISOString().slice(0, 10);
+    }
+  }
+
+  const fallback = new Date(value);
+  if (!Number.isNaN(fallback.getTime())) {
+    return fallback.toISOString().slice(0, 10);
+  }
+
+  return '';
+}
+
 module.exports = async function handler(req, res) {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(204).end();
@@ -61,7 +86,7 @@ module.exports = async function handler(req, res) {
 
     const cards = result.rows.map((gira) => {
       const tipo = mapTipoCardToTemplate(gira.tipo_card);
-      const data = String(gira.data_inicio).slice(0, 10);
+      const data = normalizeCardDate(gira.data_inicio);
       const isAviso = tipo === 'aviso';
 
       return {
