@@ -87,6 +87,44 @@
       .nav-actions { gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
       #nav-username { display: none; }
     }
+    @media (max-width: 480px) {
+      #login-panel .card {
+        padding: 1.25rem;
+      }
+      .nav-actions {
+        width: 100%;
+      }
+      #lista-wrapper .card > .flex {
+        flex-direction: column;
+      }
+      #busca-senha {
+        min-width: 0 !important;
+        width: 100%;
+      }
+      #filtro-pref,
+      #filtro-checkin {
+        max-width: none !important;
+        width: 100%;
+      }
+      .actions-wrap .btn {
+        width: 100%;
+      }
+    }
+    @media (max-width: 360px) {
+      .table-responsive tbody td {
+        padding: .42rem .5rem;
+        gap: .5rem;
+      }
+      .table-responsive tbody td::before {
+        flex: 0 0 72px;
+        font-size: .7rem;
+      }
+      .admin-nav-toggle {
+        min-width: 66px;
+        padding: .34rem .48rem;
+        font-size: .72rem;
+      }
+    }
   </style>
 </head>
 <body>

@@ -264,6 +264,56 @@
         height: 260px;
       }
     }
+    @media (max-width: 480px) {
+      #login-panel .card {
+        padding: 1.25rem;
+      }
+      .nav-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .giras-filtro-item .input-field,
+      .giras-filtro-check {
+        min-height: 40px;
+      }
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      .metric-card {
+        min-height: 74px;
+        padding: .62rem .72rem;
+      }
+      .metric-card__value {
+        font-size: 1.35rem;
+      }
+      .timeline-chart-wrap {
+        min-height: 210px;
+        height: 210px;
+      }
+    }
+    @media (max-width: 360px) {
+      .admin-nav-toggle {
+        min-width: 68px;
+        padding: .34rem .5rem;
+        font-size: .72rem;
+      }
+      .admin-nav-logout {
+        padding: .34rem .52rem;
+        font-size: .72rem;
+      }
+      .table-responsive tbody td {
+        padding: .42rem .5rem;
+        gap: .5rem;
+      }
+      .table-responsive tbody td::before {
+        flex: 0 0 72px;
+        font-size: .7rem;
+      }
+      .drawer-body {
+        padding: .75rem;
+        padding-bottom: 2rem;
+      }
+    }
     @media (min-width: 641px) and (max-width: 1024px) {
       .metrics-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));

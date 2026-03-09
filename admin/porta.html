@@ -164,6 +164,49 @@
       .admin-nav-toggle { min-width: 74px; padding: .35rem .62rem; font-size: .76rem; }
       .admin-nav-logout { padding: .35rem .6rem; font-size: .74rem; }
     }
+    @media (max-width: 480px) {
+      #login-panel .card {
+        padding: 1.25rem;
+      }
+      .drawer-panel {
+        width: calc(100vw - 12px);
+        margin: 0 6px;
+      }
+      .drawer-body {
+        padding: .75rem;
+        padding-bottom: 2rem;
+      }
+      .grid.grid-cols-2.sm\:grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      #busca-input {
+        font-size: .98rem !important;
+      }
+      .senha-actions .btn {
+        font-size: .76rem !important;
+      }
+    }
+    @media (max-width: 360px) {
+      .admin-nav-toggle {
+        min-width: 66px;
+        padding: .33rem .48rem;
+        font-size: .72rem;
+      }
+      .admin-nav-logout {
+        padding: .32rem .48rem;
+        font-size: .7rem;
+      }
+      .senha-actions {
+        grid-template-columns: 1fr;
+      }
+      .senha-card .flex-1 {
+        width: 100%;
+      }
+      .input-field {
+        font-size: .9rem;
+        padding: .58rem .75rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -444,14 +487,16 @@
         return `<div class="senha-card${isProxima?' proxima':''}">
           <div class="senha-num ${numClass}">#${String(s.numero).padStart(2,'0')}</div>
           <div class="flex-1 min-w-0">
-            <div class="font-semibold truncate">${esc(normalizeDisplayText(s.nome))}</div>
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="font-semibold truncate">${esc(normalizeDisplayText(s.nome))}</div>
+              ${isProxima ? '<span class="text-xs font-bold whitespace-nowrap" style="color:#4ade80"> <--- PRÓXIMO</span>' : ''}
+            </div>
             ${chegadaInfo}
             <div class="flex items-center gap-2 mt-1">
               <span class="badge badge-${st === 'no_show' ? 'no_show' : st}">${s.status}</span>
               ${prefBadge}
               ${filaBadge}
               ${atendidaInfo}
-              ${isProxima ? '<span class="text-xs font-bold" style="color:#4ade80">← PRÓXIMO</span>' : ''}
             </div>
           </div>
           ${actions}

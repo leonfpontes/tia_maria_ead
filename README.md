@@ -8,6 +8,7 @@ Projeto estático que apresenta a home institucional do Terreiro Tia Maria e Cab
 - **Idioma**: Conteúdo principal em português (pt-BR).
 - **Foco**: Acessibilidade, responsividade, fácil manutenção e automação de tarefas.
 - **Deploy**: Hospedado no Vercel para produção.
+- **Responsividade**: Cobertura mobile revisada nas rotas públicas e administrativas (`/`, `/senhas`, `/admin`, `/admin/porta`, `/admin/listadesenhas`), incluindo estados de login e interfaces de operação.
 
 ## Pré-requisitos
 

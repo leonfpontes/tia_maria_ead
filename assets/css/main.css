@@ -795,6 +795,77 @@ textarea:focus-visible {
   }
 }
 
+@media (max-width:480px) {
+  body.has-fixed-header {
+    padding-top: 4rem
+  }
+
+  .hero-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: .55rem
+  }
+
+  .hero-actions a {
+    width: 100%;
+    min-width: 0;
+    padding: .72rem 1rem;
+    font-size: .92rem
+  }
+
+  .novidades-wrapper .novidade-card {
+    flex-basis: 92%
+  }
+
+  .map-card iframe {
+    min-height: 260px
+  }
+}
+
+@media (max-width:360px) {
+  #main-header a[aria-label="Ir para o início da página"] {
+    gap: .5rem
+  }
+
+  #main-header a[aria-label="Ir para o início da página"] img {
+    width: 30px;
+    height: 30px
+  }
+
+  #main-header a[aria-label="Ir para o início da página"] span:first-child {
+    font-size: .78rem;
+    line-height: 1.1
+  }
+
+  #main-header a[aria-label="Ir para o início da página"] span:last-child {
+    font-size: .64rem;
+    line-height: 1.1
+  }
+
+  .hero-title {
+    font-size: 2rem !important;
+    line-height: 1.15
+  }
+
+  .hero-content p {
+    font-size: .95rem
+  }
+
+  .hero-actions a {
+    padding: .65rem .85rem;
+    font-size: .88rem
+  }
+
+  .novidades-wrapper {
+    margin-inline: -.75rem;
+    padding-inline: .75rem
+  }
+
+  .novidades-wrapper .novidade-card {
+    flex-basis: 96%
+  }
+}
+
 .ornamento {
   pointer-events: none;
   opacity: .12
@@ -1110,6 +1181,56 @@ img[src="assets/img/Ray_Tim.png"] {
   }
 }
 
+@media (max-width:480px) {
+  .login-card {
+    width: 100%;
+    padding: 18px 14px 14px;
+    border-radius: 14px
+  }
+
+  .login-title {
+    font-size: 18px
+  }
+
+  .login-subtitle {
+    font-size: 13px;
+    margin-bottom: 14px
+  }
+
+  .input-control {
+    padding: 9px 42px 9px 38px;
+    border-radius: 9px
+  }
+
+  .input-icon-left,
+  .input-icon-right {
+    height: 32px;
+    width: 32px
+  }
+
+  .input-icon-left svg,
+  .input-icon-right svg {
+    width: 17px;
+    height: 17px
+  }
+}
+
+@media (max-width:360px) {
+  .login-card {
+    padding: 16px 12px 12px
+  }
+
+  .field-label,
+  .forgot {
+    font-size: 12px
+  }
+
+  .login-primary {
+    padding: 10px 12px;
+    font-size: 14px
+  }
+}
+
 #profile-button button {
   transition: all .2s ease-in-out
 }
@@ -1221,7 +1342,7 @@ img[src="assets/img/Ray_Tim.png"] {
 
 .user-fab {
   position: fixed;
-  top: 84px;
+  top: clamp(64px, 11vh, 84px);
   right: 16px;
   z-index: 9998
 }
@@ -1384,12 +1505,22 @@ img[src="assets/img/Ray_Tim.png"] {
 
 @media (max-width:640px) {
   .user-fab {
-    top: 72px;
+    top: clamp(60px, 10vh, 72px);
     right: 12px
   }
 
   .user-fab__panel {
     width: 260px
+  }
+}
+
+@media (max-width:360px) {
+  .user-fab {
+    right: 8px
+  }
+
+  .user-fab__panel {
+    width: min(92vw, 250px)
   }
 }
 
