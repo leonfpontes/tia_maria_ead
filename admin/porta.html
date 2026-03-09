@@ -98,7 +98,61 @@
       transform: scale(0.98);
     }
     .senha-actions { display: flex; gap: .35rem; margin-left: auto; }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 60; display: flex; justify-content: flex-end; }
+    .drawer-panel {
+      width: min(440px, 100vw);
+      height: 100vh;
+      background: #122012;
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -12px 0 30px rgba(0,0,0,.35);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer-header {
+      flex-shrink: 0;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 1rem;
+      padding-bottom: 3rem;
+    }
+    .drawer-body > div {
+      margin-bottom: 1rem;
+    }
+    .drawer-body > div:last-child {
+      margin-bottom: 0;
+    }
+    .walkin-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 1rem;
+    }
+    /* Override local para evitar que o Materialize esconda o checkbox nativo. */
+    .walkin-checkbox {
+      position: static !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      width: 18px !important;
+      height: 18px !important;
+      margin: 0 !important;
+      appearance: auto;
+      -webkit-appearance: checkbox;
+    }
+    .walkin-checkbox-label {
+      color: #fef08a;
+      font-size: .9rem;
+      margin: 0;
+      cursor: pointer;
+      line-height: 1.2;
+    }
     @media (max-width: 640px) {
+      .drawer-panel { width: 100vw; }
       #nav-user { display: none; }
       .senha-card { flex-wrap: wrap; align-items: flex-start; padding: .7rem .75rem; gap: .6rem; }
       .senha-num { min-width: 2.8rem; font-size: 1.6rem; }
@@ -187,6 +241,11 @@
             <div class="metric-val" style="color:#fbbf24" id="m-noshow">0</div>
             <div class="text-xs mt-1" style="color:#6b9e68">No-Show</div>
           </div>
+        </div>
+
+        <!-- Botão Incluir Walk-in -->
+        <div class="card p-3">
+          <button onclick="abrirDrawerWalkin()" class="btn btn-green w-full">➕ Incluir Walk-in</button>
         </div>
 
         <!-- Lista Senhas -->
@@ -487,7 +546,135 @@
       }
     }
 
+    // ---- WALK-IN ----
+    function abrirDrawerWalkin() {
+      document.getElementById('walkin-nome').value = '';
+      document.getElementById('walkin-telefone').value = '';
+      document.getElementById('walkin-email').value = '';
+      document.getElementById('walkin-preferencial').checked = false;
+      document.getElementById('walkin-error').classList.add('hidden');
+      document.getElementById('walkin-drawer-overlay').classList.remove('hidden');
+      setTimeout(() => document.getElementById('walkin-nome').focus(), 100);
+    }
+
+    function fecharDrawerWalkin(event) {
+      if (event && event.target && event.target.id !== 'walkin-drawer-overlay') return;
+      document.getElementById('walkin-drawer-overlay').classList.add('hidden');
+    }
+
+    function formatarTelefone(input) {
+      let valor = input.value.replace(/\D/g, '');
+      if (valor.length <= 2) {
+        input.value = valor;
+      } else if (valor.length <= 6) {
+        input.value = `(${valor.slice(0,2)}) ${valor.slice(2)}`;
+      } else if (valor.length <= 10) {
+        input.value = `(${valor.slice(0,2)}) ${valor.slice(2,6)}-${valor.slice(6)}`;
+      } else {
+        input.value = `(${valor.slice(0,2)}) ${valor.slice(2,7)}-${valor.slice(7,11)}`;
+      }
+    }
+
+    async function salvarWalkin() {
+      if (!selectedGiraId) {
+        document.getElementById('walkin-error').textContent = 'Nenhuma gira selecionada.';
+        document.getElementById('walkin-error').classList.remove('hidden');
+        return;
+      }
+
+      const nome = document.getElementById('walkin-nome').value.trim();
+      if (!nome || nome.length < 2) {
+        document.getElementById('walkin-error').textContent = 'Nome é obrigatório (mínimo 2 caracteres).';
+        document.getElementById('walkin-error').classList.remove('hidden');
+        return;
+      }
+
+      const telefone = document.getElementById('walkin-telefone').value.trim();
+      const email = document.getElementById('walkin-email').value.trim();
+      const is_preferencial = document.getElementById('walkin-preferencial').checked;
+
+      const btn = document.getElementById('walkin-salvar-btn');
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+      document.getElementById('walkin-error').classList.add('hidden');
+
+      try {
+        const body = { nome, is_preferencial };
+        if (telefone) body.telefone = telefone;
+        if (email) body.email = email;
+
+        const r = await api(`/api/admin/giras/${selectedGiraId}/senhas/walk-in`, {
+          method: 'POST',
+          body: JSON.stringify(body)
+        });
+        const data = await r.json();
+
+        if (r.ok) {
+          fecharDrawerWalkin();
+          loadSenhas();
+          M.toast({ html: `✅ Walk-in #${data.numero} registrado - ${data.nome}`, classes: 'green', displayLength: 3000 });
+        } else {
+          document.getElementById('walkin-error').textContent = data.mensagem || 'Erro ao criar walk-in.';
+          document.getElementById('walkin-error').classList.remove('hidden');
+        }
+      } catch (e) {
+        console.error(e);
+        document.getElementById('walkin-error').textContent = 'Erro de conexão ao criar walk-in.';
+        document.getElementById('walkin-error').classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Salvar Walk-in';
+      }
+    }
+
+    // ESC key para fechar drawer
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const walkinOverlay = document.getElementById('walkin-drawer-overlay');
+        if (walkinOverlay && !walkinOverlay.classList.contains('hidden')) {
+          fecharDrawerWalkin();
+        }
+      }
+    });
+
     init();
   </script>
+
+  <!-- Drawer Walk-in -->
+  <div id="walkin-drawer-overlay" class="drawer-overlay hidden" onclick="fecharDrawerWalkin(event)">
+    <aside class="drawer-panel" onclick="event.stopPropagation()">
+      <div class="drawer-header flex justify-between items-center">
+        <h3 class="font-bold text-lg" style="color:#a8d5a2">➕ Incluir Walk-in</h3>
+        <button class="btn btn-gray btn-sm" onclick="fecharDrawerWalkin()" style="padding:.4rem .75rem;font-size:.8rem">Fechar</button>
+      </div>
+      <div class="drawer-body">
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Nome completo *</label>
+          <input id="walkin-nome" type="text" class="input-field" placeholder="Ex: Maria da Silva" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Telefone (opcional)</label>
+          <input id="walkin-telefone" type="tel" class="input-field" placeholder="(11) 98765-4321" oninput="formatarTelefone(this)" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">E-mail (opcional)</label>
+          <input id="walkin-email" type="email" class="input-field" placeholder="nome@exemplo.com" />
+        </div>
+        <div class="walkin-checkbox-row">
+          <input id="walkin-preferencial" type="checkbox" class="walkin-checkbox" />
+          <label for="walkin-preferencial" class="walkin-checkbox-label">
+            ⭐ Atendimento preferencial
+          </label>
+        </div>
+        <p class="text-xs" style="color:#6b9e68;margin-top:.25rem;margin-left:1.75rem">Lei Federal 10.048/2000</p>
+        <p id="walkin-error" class="text-sm text-red-400 hidden" style="margin-top:1rem"></p>
+        <div class="flex justify-end gap-2" style="margin-top:1.5rem">
+          <button class="btn btn-gray" onclick="fecharDrawerWalkin()">Cancelar</button>
+          <button id="walkin-salvar-btn" class="btn btn-green" onclick="salvarWalkin()">💾 Salvar Walk-in</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
 </body>
 </html>

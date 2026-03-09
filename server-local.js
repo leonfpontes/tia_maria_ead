@@ -29,6 +29,7 @@ const apiHandlers = {
   'POST /api/admin/giras/[id]/senhas': require('./api/admin/giras/[id]/senhas.js'),
   'PATCH /api/admin/senhas/[id]/status': require('./api/admin/senhas/[id]/status.js'),
   'PATCH /api/admin/senhas/[id]/checkin': require('./api/admin/senhas/[id]/checkin.js'),
+  'POST /api/admin/giras/[giraId]/senhas/walk-in': require('./api/admin/giras/[giraId]/senhas/walk-in.js'),
   'GET /api/public/agenda': require('./api/public/agenda.js'),
   'POST /api/public/giras/[id]/senhas': require('./api/public/giras/[id]/senhas.js'),
 };
@@ -172,6 +173,9 @@ const server = http.createServer((req, res) => {
   } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+\/checkin$/)) {
     handler = apiHandlers['PATCH /api/admin/senhas/[id]/checkin'];
     params.id = apiPath.split('/')[4];
+  } else if (method === 'POST' && apiPath.match(/^\/api\/admin\/giras\/[^/]+\/senhas\/walk-in$/)) {
+    handler = apiHandlers['POST /api/admin/giras/[giraId]/senhas/walk-in'];
+    params.giraId = apiPath.split('/')[4];
   } else if (method === 'GET' && apiPath === '/api/public/agenda') {
     handler = apiHandlers['GET /api/public/agenda'];
   } else if (method === 'POST' && apiPath.match(/^\/api\/public\/giras\/[^/]+\/senhas$/)) {
