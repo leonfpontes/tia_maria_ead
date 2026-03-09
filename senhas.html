@@ -126,6 +126,11 @@
               <p id="erro-nome" class="text-xs mt-1 text-red-400 hidden"></p>
             </div>
             <div>
+              <label for="input-email" class="block text-sm font-medium mb-1" style="color:#a8d5a2">E-mail *</label>
+              <input id="input-email" type="email" class="input-field" placeholder="seu@email.com" required autocomplete="email" />
+              <p id="erro-email" class="text-xs mt-1 text-red-400 hidden"></p>
+            </div>
+            <div>
               <label for="input-tel" class="block text-sm font-medium mb-1" style="color:#a8d5a2">Telefone (WhatsApp) *</label>
               <input id="input-tel" type="tel" class="input-field" placeholder="+55 (11) 99999-9999" required autocomplete="tel" />
               <p id="erro-tel" class="text-xs mt-1 text-red-400 hidden"></p>
@@ -316,9 +321,11 @@
     document.getElementById('form-senha').addEventListener('submit', async function(e) {
       e.preventDefault();
       const nome = document.getElementById('input-nome').value.trim();
+      const email = document.getElementById('input-email').value.trim();
       const tel  = document.getElementById('input-tel').value.trim();
 
       document.getElementById('erro-nome').classList.add('hidden');
+      document.getElementById('erro-email').classList.add('hidden');
       document.getElementById('erro-tel').classList.add('hidden');
       document.getElementById('erro-geral').classList.add('hidden');
 
@@ -326,6 +333,12 @@
       if (nome.length < 2) {
         document.getElementById('erro-nome').textContent = 'Digite seu nome completo.';
         document.getElementById('erro-nome').classList.remove('hidden');
+        ok = false;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        document.getElementById('erro-email').textContent = 'Digite um e-mail válido.';
+        document.getElementById('erro-email').classList.remove('hidden');
         ok = false;
       }
       if (!tel) {
@@ -343,7 +356,7 @@
         const r = await fetch(`/api/public/giras/${giraData.id}/senhas`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nome, telefone: tel }),
+          body: JSON.stringify({ nome, email, telefone: tel }),
         });
         const data = await r.json();
 
@@ -364,6 +377,7 @@
             DADOS_INVALIDOS: data.mensagem || 'Dados inválidos.',
             NOME_INVALIDO: 'Nome inválido.',
             TELEFONE_INVALIDO: 'Telefone inválido. Use formato: (11) 99999-9999',
+            EMAIL_INVALIDO: 'E-mail inválido.',
           };
           const msg = msgs[data.error] || data.mensagem || 'Erro ao retirar senha. Tente novamente.';
           document.getElementById('erro-geral').textContent = msg;

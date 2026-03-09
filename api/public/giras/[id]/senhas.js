@@ -3,6 +3,7 @@ const db = require('../../../../server/db');
 const { normalizePhone } = require('../../../../server/phone');
 const { normalizeName } = require('../../../../server/normalizeName');
 const { checkRateLimit } = require('../../../../server/rateLimit');
+const emailService = require('../../../../server/emailer');
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,6 +24,18 @@ function maskPhone(phone) {
   return `****-${digits.slice(-4)}`;
 }
 
+function normalizeEmail(email) {
+  if (!email || typeof email !== 'string') {
+    throw new Error('E-mail inválido');
+  }
+  const normalized = email.trim().toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(normalized)) {
+    throw new Error('E-mail inválido');
+  }
+  return normalized;
+}
+
 module.exports = async function handler(req, res) {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(204).end();
@@ -37,7 +50,7 @@ module.exports = async function handler(req, res) {
     return res.status(429).json({ error: 'RATE_LIMIT', mensagem: 'Muitas tentativas. Aguarde 1 minuto.' });
   }
 
-  const { nome, telefone } = req.body || {};
+  const { nome, telefone, email } = req.body || {};
 
   if (!nome || typeof nome !== 'string' || nome.trim().length < 2) {
     return res.status(400).json({ error: 'NOME_INVALIDO', mensagem: 'Nome inválido.' });
@@ -45,11 +58,15 @@ module.exports = async function handler(req, res) {
   if (!telefone || typeof telefone !== 'string') {
     return res.status(400).json({ error: 'TELEFONE_INVALIDO', mensagem: 'Telefone inválido.' });
   }
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ error: 'EMAIL_INVALIDO', mensagem: 'E-mail é obrigatório.' });
+  }
 
-  let telefoneNorm, nomeNorm;
+  let telefoneNorm, nomeNorm, emailNorm;
   try {
     telefoneNorm = normalizePhone(telefone);
     nomeNorm = normalizeName(nome);
+    emailNorm = normalizeEmail(email);
   } catch (e) {
     return res.status(400).json({ error: 'DADOS_INVALIDOS', mensagem: e.message });
   }
@@ -62,7 +79,7 @@ module.exports = async function handler(req, res) {
   try {
     // Check gira
     const giraResult = await db.query(
-      `SELECT id, status, data_inicio FROM giras WHERE id = $1`,
+      `SELECT id, status, data_inicio, tipo FROM giras WHERE id = $1`,
       [giraId]
     );
     if (giraResult.rows.length === 0) {
@@ -139,11 +156,31 @@ module.exports = async function handler(req, res) {
     }
 
     const insertResult = await db.query(
-      `INSERT INTO senhas (gira_id, numero, nome, telefone, nome_normalizado, status)
-       VALUES ($1, $2, $3, $4, $5, 'ATIVA')
-       RETURNING numero, nome`,
-      [giraId, numero, nome.trim(), telefoneNorm, nomeNorm]
+      `INSERT INTO senhas (gira_id, numero, nome, telefone, email, nome_normalizado, status)
+       VALUES ($1, $2, $3, $4, $5, $6, 'ATIVA')
+       RETURNING numero, nome, email`,
+      [giraId, numero, nome.trim(), telefoneNorm, emailNorm, nomeNorm]
     );
+
+    const senha = insertResult.rows[0];
+
+    // Enviar e-mail de confirmação (não bloquear se falhar)
+    try {
+      await emailService.sendSenhaConfirmacao({
+        email: emailNorm,
+        senha: {
+          numero: senha.numero,
+          nome: senha.nome,
+        },
+        gira: {
+          tipo: gira.tipo || 'Gira',
+          data_inicio: gira.data_inicio,
+        },
+      });
+    } catch (emailError) {
+      // Log error but don't block senha creation
+      console.error(`Erro ao enviar e-mail para ${emailNorm}:`, emailError.message);
+    }
 
     // Mark ESGOTADO when last ticket is issued
     if (numero >= ctrl.total_senhas) {
@@ -154,8 +191,8 @@ module.exports = async function handler(req, res) {
     }
 
     return res.status(201).json({
-      numero: insertResult.rows[0].numero,
-      nome: insertResult.rows[0].nome,
+      numero: senha.numero,
+      nome: senha.nome,
       telefone_mascarado: maskPhone(telefoneNorm),
     });
   } catch (err) {

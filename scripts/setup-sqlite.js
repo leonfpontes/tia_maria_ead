@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '..');
 const dbPath = process.env.SQLITE_PATH
   ? path.resolve(process.env.SQLITE_PATH)
   : path.join(root, 'local.sqlite');
-const migrationPath = path.join(root, 'db', 'migrations', '001_create_tables.sqlite.sql');
+const migrationsDir = path.join(root, 'db', 'migrations');
 
 const adminUser = process.env.ADMIN_USER || 'admin';
 const adminPass = process.env.ADMIN_PASSWORD || 'admin123';
@@ -30,8 +30,24 @@ async function main() {
 
   db.run('PRAGMA foreign_keys = ON;');
 
-  const migrationSql = fs.readFileSync(migrationPath, 'utf8');
-  db.run(migrationSql);
+  // Apply all SQLite migrations in order
+  const migrationFiles = fs.readdirSync(migrationsDir)
+    .filter(file => file.endsWith('.sqlite.sql'))
+    .sort(); // 001, 002, etc.
+
+  for (const file of migrationFiles) {
+    const migrationPath = path.join(migrationsDir, file);
+    const migrationSql = fs.readFileSync(migrationPath, 'utf8');
+    try {
+      db.run(migrationSql);
+      console.log(`✅ Aplicada migration: ${file}`);
+    } catch (err) {
+      // Ignore errors for already applied migrations (column already exists, etc)
+      if (!err.message.includes('duplicate column name')) {
+        console.warn(`⚠️  ${file}: ${err.message}`);
+      }
+    }
+  }
 
   const checkStmt = db.prepare('SELECT id FROM admins WHERE username = ?');
   checkStmt.bind([adminUser]);

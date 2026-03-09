@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
 
-// Set environment for local dev
+// Set environment for local dev with fallbacks
 process.env.DB_DRIVER = process.env.DB_DRIVER || 'sqlite';
 process.env.SQLITE_PATH = process.env.SQLITE_PATH || './local.sqlite';
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-local';
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const PORT = process.env.PORT || 3000;
 
