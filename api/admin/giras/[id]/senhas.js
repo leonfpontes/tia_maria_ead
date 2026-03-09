@@ -45,8 +45,7 @@ module.exports = async function handler(req, res) {
         EXISTS (
           SELECT 1
           FROM auditoria a
-          WHERE a.entidade = 'senha'
-            AND a.entidade_id = s.id
+          WHERE a.referencia_id = s.id
             AND a.tipo = 'WALK_IN_CRIADA'
         ) AS is_walk_in
       FROM senhas s
@@ -55,16 +54,16 @@ module.exports = async function handler(req, res) {
 
     if (busca) {
       params.push(`%${busca}%`);
-      queryText += ` AND (nome ILIKE $${params.length} OR numero::text ILIKE $${params.length})`;
+      queryText += ` AND (s.nome ILIKE $${params.length} OR s.numero::text ILIKE $${params.length})`;
     }
 
     queryText += `
       ORDER BY
-        CASE WHEN chegada_em IS NULL THEN 1 ELSE 0 END,
-        is_preferencial DESC,
-        chegada_em ASC,
-        created_at ASC,
-        numero ASC`;
+        CASE WHEN s.chegada_em IS NULL THEN 1 ELSE 0 END,
+        s.is_preferencial DESC,
+        s.chegada_em ASC,
+        s.created_at ASC,
+        s.numero ASC`;
 
     const result = await db.query(queryText, params);
     const rows = result.rows.map(row => ({

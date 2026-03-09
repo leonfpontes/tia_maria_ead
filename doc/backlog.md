@@ -53,6 +53,7 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Corrigir erro 500 em produção na rota `/api/admin/giras/[id]/senhas` ajustando consulta de walk-in para o schema real da tabela `auditoria` (`referencia_id`) - Status: Concluída em 09/03/2026
 - [x] Trazer os big numbers da rota `/admin` para `/admin/listadesenhas` com 5 indicadores (emitidas, atendidas, no-show, walk-in, preferenciais), recalculados em tempo real conforme filtros de busca/preferencial/check-in - Status: Concluída em 09/03/2026
 - [x] Aplicar máscara padrão de telefone `+55 (XX) XXXXX-XXXX` em todas as telas admin onde telefone é exibido, com função `formatPhoneDisplay` reutilizável - Status: Concluída em 09/03/2026
 - [x] Exibir telefone completo do consulente na rota `/admin/listadesenhas` (listagem e exportação CSV), removendo anonimização nesta tela via parâmetro explícito `telefone_completo=1` - Status: Concluída em 09/03/2026
