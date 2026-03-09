@@ -32,6 +32,8 @@
     th { text-align: left; padding: .6rem .8rem; font-weight: 600; color: #6b9e68; border-bottom: 1px solid rgba(255,255,255,.08); }
     td { padding: .6rem .8rem; border-bottom: 1px solid rgba(255,255,255,.05); }
     .actions-wrap { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .metric { text-align: center; }
+    .metric-val { font-size: 1.75rem; font-weight: 800; }
     .admin-nav { background: rgba(255,255,255,.92); border-bottom: 1px solid rgba(148,163,184,.35); backdrop-filter: blur(8px); }
     .admin-brand { color: #166534; }
     .admin-nav-user { color: #334155; }
@@ -192,6 +194,29 @@
           </div>
         </div>
 
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2 mb-4">
+          <div class="card p-3 metric">
+            <div id="bn-emitidas" class="metric-val" style="color:#4ade80">0</div>
+            <div class="text-xs mt-1" style="color:#6b9e68">Senhas emitidas</div>
+          </div>
+          <div class="card p-3 metric">
+            <div id="bn-atendidas" class="metric-val" style="color:#93c5fd">0</div>
+            <div class="text-xs mt-1" style="color:#6b9e68">Senhas atendidas</div>
+          </div>
+          <div class="card p-3 metric">
+            <div id="bn-no-show" class="metric-val" style="color:#fbbf24">0</div>
+            <div class="text-xs mt-1" style="color:#6b9e68">Senhas no-show</div>
+          </div>
+          <div class="card p-3 metric">
+            <div id="bn-walk-in" class="metric-val" style="color:#fca5a5">0</div>
+            <div class="text-xs mt-1" style="color:#6b9e68">Senhas walk-in</div>
+          </div>
+          <div class="card p-3 metric">
+            <div id="bn-preferenciais" class="metric-val" style="color:#fde68a">0</div>
+            <div class="text-xs mt-1" style="color:#6b9e68">Senhas preferenciais</div>
+          </div>
+        </div>
+
         <div class="card overflow-x-auto table-responsive">
           <table>
             <thead>
@@ -238,13 +263,54 @@
       try { return decodeURIComponent(escape(text)); } catch { return text; }
     }
 
+    function formatPhoneDisplay(phone) {
+      if (!phone) return '–';
+      const digits = String(phone).replace(/\D/g, '');
+      if (digits.length === 13 && digits.startsWith('55')) {
+        // +5511999990000 -> +55 (11) 99999-0000 or +55 (11) 9999-9999
+        return `+55 (${digits.slice(2,4)}) ${digits.length === 13 ? digits.slice(4,8) + '-' + digits.slice(8) : digits.slice(4,8) + '-' + digits.slice(8)}`;
+      }
+      if (digits.length === 12 && digits.startsWith('55')) {
+        // +5511988887777 -> +55 (11) 98888-7777
+        return `+55 (${digits.slice(2,4)}) ${digits.slice(4,9)}-${digits.slice(9)}`;
+      }
+      if (digits.length === 11) {
+        // 11999990000 -> +55 (11) 99999-0000
+        return `+55 (${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+      }
+      if (digits.length === 10) {
+        // 1133334444 -> +55 (11) 3333-4444
+        return `+55 (${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+      }
+      return phone;
+    }
+
+    function renderBigNumbers(rows) {
+      const totals = (Array.isArray(rows) ? rows : []).reduce((acc, s) => {
+        const status = String(s.status || '').toUpperCase();
+        if (status !== 'CANCELADA') acc.emitidas += 1;
+        if (status === 'ATENDIDA') acc.atendidas += 1;
+        if (status === 'NO_SHOW') acc.noShow += 1;
+        if (Boolean(s.is_walk_in)) acc.walkIn += 1;
+        if (Boolean(s.is_preferencial)) acc.preferenciais += 1;
+        return acc;
+      }, { emitidas: 0, atendidas: 0, noShow: 0, walkIn: 0, preferenciais: 0 });
+
+      document.getElementById('bn-emitidas').textContent = totals.emitidas;
+      document.getElementById('bn-atendidas').textContent = totals.atendidas;
+      document.getElementById('bn-no-show').textContent = totals.noShow;
+      document.getElementById('bn-walk-in').textContent = totals.walkIn;
+      document.getElementById('bn-preferenciais').textContent = totals.preferenciais;
+    }
+
     async function loadSenhas() {
       if (!selectedGiraId) return;
       const busca = document.getElementById('busca-senha').value;
       const filtroPref = document.getElementById('filtro-pref').value;
       const filtroCheckin = document.getElementById('filtro-checkin').value;
-      let url = `/api/admin/giras/${selectedGiraId}/senhas`;
-      if (busca) url += `?busca=${encodeURIComponent(busca)}`;
+      const params = new URLSearchParams({ telefone_completo: '1' });
+      if (busca) params.set('busca', busca);
+      const url = `/api/admin/giras/${selectedGiraId}/senhas?${params.toString()}`;
 
       const r = await api(url);
       const rows = await r.json();
@@ -253,6 +319,7 @@
       if (filtroPref === 'preferencial') rowsFiltrados = rowsFiltrados.filter(s => Boolean(s.is_preferencial));
       if (filtroCheckin === 'com-checkin') rowsFiltrados = rowsFiltrados.filter(s => Boolean(s.chegada_em));
       if (filtroCheckin === 'sem-checkin') rowsFiltrados = rowsFiltrados.filter(s => !s.chegada_em);
+      renderBigNumbers(rowsFiltrados);
 
       const tbody = document.getElementById('senhas-tbody');
       if (!rowsFiltrados.length) {
@@ -285,7 +352,7 @@
           <td data-label="Nome">${esc(normalizeDisplayText(s.nome))}</td>
           <td data-label="Pref.">${s.is_preferencial ? '<span class="badge badge-pref">⭐ Sim</span>' : '—'}</td>
           <td data-label="Chegada" style="color:#93c5fd">${chegada} ${filaBadge}</td>
-          <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(s.telefone)}</td>
+          <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(formatPhoneDisplay(s.telefone))}</td>
           <td data-label="Status"><span class="badge badge-${stBadge}">${s.status}</span></td>
           <td data-label="Criado" class="text-xs" style="color:#6b9e68">${criado}</td>
           <td data-label="Ações">
@@ -326,7 +393,7 @@
 
     async function exportCSV() {
       if (!selectedGiraId) return;
-      const r = await api(`/api/admin/giras/${selectedGiraId}/senhas?format=csv`);
+      const r = await api(`/api/admin/giras/${selectedGiraId}/senhas?format=csv&telefone_completo=1`);
       const text = await r.text();
       const blob = new Blob([text], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);

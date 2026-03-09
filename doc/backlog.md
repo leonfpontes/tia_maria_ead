@@ -53,6 +53,9 @@ Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o statu
 - [ ] Melhorar acessibilidade do modal de login - Status: Em andamento
 
 ## Tarefas Concluídas
+- [x] Trazer os big numbers da rota `/admin` para `/admin/listadesenhas` com 5 indicadores (emitidas, atendidas, no-show, walk-in, preferenciais), recalculados em tempo real conforme filtros de busca/preferencial/check-in - Status: Concluída em 09/03/2026
+- [x] Aplicar máscara padrão de telefone `+55 (XX) XXXXX-XXXX` em todas as telas admin onde telefone é exibido, com função `formatPhoneDisplay` reutilizável - Status: Concluída em 09/03/2026
+- [x] Exibir telefone completo do consulente na rota `/admin/listadesenhas` (listagem e exportação CSV), removendo anonimização nesta tela via parâmetro explícito `telefone_completo=1` - Status: Concluída em 09/03/2026
 - [x] Revisar e ajustar responsividade mobile de todas as rotas frontend (`/`, `/senhas`, `/admin`, `/admin/porta`, `/admin/listadesenhas`) incluindo telas de login, filtros, tabelas/cards, drawers e estados sem overflow horizontal em breakpoints pequenos - Status: Concluída em 09/03/2026
 - [x] Adicionar gráfico de barras em timeline na rota `/admin` para distribuição de senhas por gira (`emitidas`, `atendidas`, `preferenciais`, `no-show`, `walk-in`) conectado aos filtros existentes (nome/período/ocultar antigas) - Status: Concluída em 09/03/2026
 - [x] Implementar cards de big numbers na rota `/admin` (emitidas, atendidas, no-show, walk-in e preferenciais) conectados aos filtros existentes de nome/período/ocultar antigas, com atualização em tempo real da listagem filtrada - Status: Concluída em 09/03/2026

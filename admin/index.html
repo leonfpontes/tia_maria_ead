@@ -1055,7 +1055,7 @@
             <td data-label="Nome">${esc(normalizeDisplayText(s.nome))}</td>
             <td data-label="Pref.">${s.is_preferencial ? '<span class="badge badge-pref">⭐ Sim</span>' : '—'}</td>
             <td data-label="Chegada" style="color:#93c5fd">${chegada} ${filaBadge}</td>
-            <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(s.telefone)}</td>
+            <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(formatPhoneDisplay(s.telefone))}</td>
             <td data-label="Status"><span class="badge badge-${stBadge}">${s.status}</span></td>
             <td data-label="Criado" class="text-xs" style="color:#6b9e68">${criado}</td>
             <td data-label="Ações">
@@ -1127,6 +1127,24 @@
       } catch {
         return text;
       }
+    }
+
+    function formatPhoneDisplay(phone) {
+      if (!phone) return '–';
+      const digits = String(phone).replace(/\D/g, '');
+      if (digits.length === 13 && digits.startsWith('55')) {
+        return `+55 (${digits.slice(2,4)}) ${digits.slice(4,9)}-${digits.slice(9)}`;
+      }
+      if (digits.length === 12 && digits.startsWith('55')) {
+        return `+55 (${digits.slice(2,4)}) ${digits.slice(4,9)}-${digits.slice(9)}`;
+      }
+      if (digits.length === 11) {
+        return `+55 (${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+      }
+      if (digits.length === 10) {
+        return `+55 (${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+      }
+      return phone;
     }
 
     function toDatetimeLocalValue(isoLike) {

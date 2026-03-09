@@ -28,9 +28,29 @@ module.exports = async function handler(req, res) {
     if (!auth) return;
 
     const isAdmin = auth.role === 'ADMIN';
+    const showFullPhone = req.query.telefone_completo === '1';
     const { busca, format } = req.query;
 
-    let queryText = `SELECT id, numero, nome, telefone, status, atendida_em, created_at, chegada_em, is_preferencial FROM senhas WHERE gira_id = $1`;
+    let queryText = `
+      SELECT
+        s.id,
+        s.numero,
+        s.nome,
+        s.telefone,
+        s.status,
+        s.atendida_em,
+        s.created_at,
+        s.chegada_em,
+        s.is_preferencial,
+        EXISTS (
+          SELECT 1
+          FROM auditoria a
+          WHERE a.entidade = 'senha'
+            AND a.entidade_id = s.id
+            AND a.tipo = 'WALK_IN_CRIADA'
+        ) AS is_walk_in
+      FROM senhas s
+      WHERE s.gira_id = $1`;
     const params = [id];
 
     if (busca) {
@@ -49,7 +69,7 @@ module.exports = async function handler(req, res) {
     const result = await db.query(queryText, params);
     const rows = result.rows.map(row => ({
       ...row,
-      telefone: isAdmin ? row.telefone : maskPhone(row.telefone),
+      telefone: (isAdmin || showFullPhone) ? row.telefone : maskPhone(row.telefone),
     }));
 
     if (format === 'csv') {
