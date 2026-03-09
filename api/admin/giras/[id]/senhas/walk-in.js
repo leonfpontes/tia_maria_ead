@@ -24,35 +24,30 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'METODO_NAO_PERMITIDO' });
 
-  // Autenticação: apenas ADMIN ou OPERADOR_PORTA
+  // Autenticacao: apenas ADMIN ou OPERADOR_PORTA.
   const auth = requireAuth(req, res, ['ADMIN', 'OPERADOR_PORTA']);
   if (!auth) return;
 
-  const { giraId } = req.query;
+  const giraId = req.query.id || req.query.giraId;
   const { nome, telefone, email, is_preferencial } = req.body || {};
 
-  // Validação: apenas nome é obrigatório
+  // Validacao: apenas nome e obrigatorio.
   if (!nome || typeof nome !== 'string' || nome.trim().length < 2) {
     return res.status(400).json({ error: 'NOME_INVALIDO', mensagem: 'Nome é obrigatório (mínimo 2 caracteres).' });
   }
 
-  // Defaults para campos opcionais
-  const telefoneInput = telefone && typeof telefone === 'string' && telefone.trim().length > 0 
-    ? telefone 
+  const telefoneInput = telefone && typeof telefone === 'string' && telefone.trim().length > 0
+    ? telefone
     : '0000-0000';
-  const emailInput = email && typeof email === 'string' && email.trim().length > 0 
-    ? email 
+  const emailInput = email && typeof email === 'string' && email.trim().length > 0
+    ? email
     : '';
   const senhaPreferencial = is_preferencial === true;
 
-  let telefoneNorm, nomeNorm;
+  let telefoneNorm;
+  let nomeNorm;
   try {
-    // Normalizar telefone apenas se não for o default
-    if (telefoneInput === '0000-0000') {
-      telefoneNorm = '0000-0000';
-    } else {
-      telefoneNorm = normalizePhone(telefoneInput);
-    }
+    telefoneNorm = telefoneInput === '0000-0000' ? '0000-0000' : normalizePhone(telefoneInput);
     nomeNorm = normalizeName(nome);
   } catch (e) {
     return res.status(400).json({ error: 'DADOS_INVALIDOS', mensagem: e.message });
@@ -63,20 +58,17 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // Verificar se gira existe (sem validar status)
-    const giraResult = await db.query(`SELECT id FROM giras WHERE id = $1`, [giraId]);
+    const giraResult = await db.query('SELECT id FROM giras WHERE id = $1', [giraId]);
     if (giraResult.rows.length === 0) {
       return res.status(404).json({ error: 'GIRA_NAO_ENCONTRADA', mensagem: 'Gira não encontrada.' });
     }
 
-    // Gerar próximo número sequencial
     const numResult = await db.query(
-      `SELECT COALESCE(MAX(numero), 0) + 1 AS proximo FROM senhas WHERE gira_id = $1`,
+      'SELECT COALESCE(MAX(numero), 0) + 1 AS proximo FROM senhas WHERE gira_id = $1',
       [giraId]
     );
     const numero = numResult.rows[0].proximo;
 
-    // Inserir senha com check-in automático (chegada_em = NOW())
     const insertResult = await db.query(
       `INSERT INTO senhas (gira_id, numero, nome, telefone, email, nome_normalizado, is_preferencial, status, chegada_em)
        VALUES ($1, $2, $3, $4, $5, $6, $7, 'ATIVA', NOW())
@@ -86,7 +78,6 @@ module.exports = async function handler(req, res) {
 
     const senha = insertResult.rows[0];
 
-    // Auditoria: registrar criação de walk-in
     await db.query(
       `INSERT INTO auditoria (tipo, referencia_id, admin_id, dados, ip)
        VALUES ('WALK_IN_CRIADA', $1, $2, $3, $4)`,
@@ -98,7 +89,6 @@ module.exports = async function handler(req, res) {
       ]
     );
 
-    // Resposta com dados da senha criada
     return res.status(201).json({
       numero: senha.numero,
       nome: senha.nome,
@@ -107,7 +97,6 @@ module.exports = async function handler(req, res) {
       chegada_em: senha.chegada_em,
       is_preferencial: senha.is_preferencial
     });
-
   } catch (err) {
     console.error('walk-in POST error', err);
     return res.status(500).json({ error: 'ERRO_INTERNO', mensagem: err.message });
