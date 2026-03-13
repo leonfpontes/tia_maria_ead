@@ -715,11 +715,11 @@
 
       const timelineRows = [...list].sort((a, b) => new Date(a.data_inicio) - new Date(b.data_inicio));
       const labels = timelineRows.map(g => formatTimelineLabel(g.data_inicio, g.titulo));
-      const emitidas = timelineRows.map(g => toNumberSafe(g.emitidas));
+      const aguardando = timelineRows.map(g => toNumberSafe(g.aguardando_padrao));
+      const prefAguardando = timelineRows.map(g => toNumberSafe(g.aguardando_preferencial));
+      const walkinAguardando = timelineRows.map(g => toNumberSafe(g.aguardando_walkin));
       const atendidas = timelineRows.map(g => toNumberSafe(g.atendidas));
       const noShow = timelineRows.map(g => toNumberSafe(g.no_show));
-      const walkIn = timelineRows.map(g => toNumberSafe(g.walk_in));
-      const preferenciais = timelineRows.map(g => toNumberSafe(g.preferenciais));
 
       if (senhasTimelineChart) {
         senhasTimelineChart.destroy();
@@ -731,11 +731,11 @@
         data: {
           labels,
           datasets: [
-            { label: 'Emitidas', data: emitidas, backgroundColor: 'rgba(59, 130, 246, 0.75)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 1, stack: 'senhas' },
+            { label: 'Aguardando', data: aguardando, backgroundColor: 'rgba(59, 130, 246, 0.75)', borderColor: 'rgba(59, 130, 246, 1)', borderWidth: 1, stack: 'senhas' },
+            { label: 'Preferencial', data: prefAguardando, backgroundColor: 'rgba(245, 158, 11, 0.8)', borderColor: 'rgba(245, 158, 11, 1)', borderWidth: 1, stack: 'senhas' },
+            { label: 'Walk-in', data: walkinAguardando, backgroundColor: 'rgba(236, 72, 153, 0.8)', borderColor: 'rgba(236, 72, 153, 1)', borderWidth: 1, stack: 'senhas' },
             { label: 'Atendidas', data: atendidas, backgroundColor: 'rgba(34, 197, 94, 0.8)', borderColor: 'rgba(34, 197, 94, 1)', borderWidth: 1, stack: 'senhas' },
-            { label: 'Preferenciais', data: preferenciais, backgroundColor: 'rgba(245, 158, 11, 0.8)', borderColor: 'rgba(245, 158, 11, 1)', borderWidth: 1, stack: 'senhas' },
-            { label: 'No-show', data: noShow, backgroundColor: 'rgba(249, 115, 22, 0.8)', borderColor: 'rgba(249, 115, 22, 1)', borderWidth: 1, stack: 'senhas' },
-            { label: 'Walk-in', data: walkIn, backgroundColor: 'rgba(236, 72, 153, 0.8)', borderColor: 'rgba(236, 72, 153, 1)', borderWidth: 1, stack: 'senhas' }
+            { label: 'No-show', data: noShow, backgroundColor: 'rgba(249, 115, 22, 0.8)', borderColor: 'rgba(249, 115, 22, 1)', borderWidth: 1, stack: 'senhas' }
           ]
         },
         options: {
@@ -753,7 +753,7 @@
             tooltip: {
               callbacks: {
                 footer: function() {
-                  return 'Obs.: series representam distribuicao por status/tipo no periodo filtrado.';
+                  return 'Obs.: fatias sao mutuamente exclusivas e somam o total de emitidas.';
                 }
               }
             }

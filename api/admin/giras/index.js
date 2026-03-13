@@ -64,7 +64,18 @@ module.exports = async function handler(req, res) {
                     WHERE s.id = a.referencia_id
                       AND s.gira_id = g.id
                   )
-              ) AS walk_in
+              ) AS walk_in,
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status = 'ATIVA'
+                AND s.is_preferencial = false
+                AND NOT EXISTS (SELECT 1 FROM auditoria a WHERE a.tipo = 'WALK_IN_CRIADA' AND a.referencia_id = s.id)
+              ) AS aguardando_padrao,
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status = 'ATIVA'
+                AND s.is_preferencial = true
+                AND NOT EXISTS (SELECT 1 FROM auditoria a WHERE a.tipo = 'WALK_IN_CRIADA' AND a.referencia_id = s.id)
+              ) AS aguardando_preferencial,
+              (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id AND s.status = 'ATIVA'
+                AND EXISTS (SELECT 1 FROM auditoria a WHERE a.tipo = 'WALK_IN_CRIADA' AND a.referencia_id = s.id)
+              ) AS aguardando_walkin
        FROM giras g
        LEFT JOIN controles_senha cs ON cs.gira_id = g.id
        ORDER BY g.data_inicio DESC`
