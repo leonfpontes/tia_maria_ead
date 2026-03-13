@@ -127,6 +127,10 @@
       font-size: .8rem !important;
       white-space: nowrap;
     }
+    .senha-card { position: relative; }
+    .btn-info-atendimento { background:none; border:none; cursor:pointer; font-size:.95rem; opacity:.45; transition:opacity .15s; padding:2px 6px; line-height:1; position:absolute; top:.4rem; right:.4rem; z-index:2; }
+    .btn-info-atendimento:hover { opacity:1; }
+    .btn-info-atendimento.has-info { opacity:.85; filter: drop-shadow(0 0 2px rgba(74,222,128,.5)); }
     .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 60; display: flex; justify-content: flex-end; }
     .drawer-panel {
       width: min(440px, 100vw);
@@ -512,6 +516,7 @@
           : `<div class="senha-chegada senha-chegada--aguardando">🕐 Aguardando check-in na porta</div>`;
 
         return `<div class="senha-card${isProxima?' proxima':''}">
+          ${s.status === 'ATENDIDA' ? `<button class="btn-info-atendimento${(s.medium_nome||s.cambone_nome||s.observacao)?' has-info':''}" data-info-id="${Number(s.id)}" title="Info atendimento">ℹ️</button>` : ''}
           <div class="senha-num ${numClass}">#${String(s.numero).padStart(2,'0')}</div>
           <div class="senha-main">
             <div class="senha-name-row">
@@ -540,7 +545,8 @@
       try {
         const r = await api(`/api/admin/senhas/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
         if (r.ok) {
-          loadSenhas(document.getElementById('busca-input').value);
+          await loadSenhas(document.getElementById('busca-input').value);
+          if (status === 'ATENDIDA') openAtendimentoDrawer(id);
         } else {
           const d = await r.json();
           alert(d.mensagem || 'Erro ao atualizar status da senha.');
@@ -583,6 +589,12 @@
 
     // Event delegation for action buttons (avoids inline onclick with dynamic IDs)
     document.getElementById('lista-senhas').addEventListener('click', function(e) {
+      const infoBtn = e.target.closest('.btn-info-atendimento');
+      if (infoBtn) {
+        const id = parseInt(infoBtn.dataset.infoId, 10);
+        if (id) openAtendimentoDrawer(id);
+        return;
+      }
       const checkinBtn = e.target.closest('.btn-checkin');
       if (checkinBtn) {
         const id = parseInt(checkinBtn.dataset.id, 10);
@@ -722,6 +734,11 @@
     // ESC key para fechar drawer
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
+        const atdOverlay = document.getElementById('atendimento-drawer-overlay');
+        if (atdOverlay && !atdOverlay.classList.contains('hidden')) {
+          closeAtendimentoDrawer();
+          return;
+        }
         const walkinOverlay = document.getElementById('walkin-drawer-overlay');
         if (walkinOverlay && !walkinOverlay.classList.contains('hidden')) {
           fecharDrawerWalkin();
@@ -729,8 +746,88 @@
       }
     });
 
+    // --- Drawer Atendimento ---
+    function openAtendimentoDrawer(senhaId) {
+      const s = allSenhas.find(x => x.id === senhaId || x.id === String(senhaId));
+      document.getElementById('atd-senha-id').value = senhaId;
+      document.getElementById('atd-medium').value = (s && s.medium_nome) || '';
+      document.getElementById('atd-cambone').value = (s && s.cambone_nome) || '';
+      document.getElementById('atd-obs').value = (s && s.observacao) || '';
+      document.getElementById('atd-error').classList.add('hidden');
+      const titulo = s ? `Atendimento — #${String(s.numero).padStart(2,'0')} ${normalizeDisplayText(s.nome)}` : 'Atendimento';
+      document.getElementById('atd-drawer-title').textContent = titulo;
+      document.getElementById('atendimento-drawer-overlay').classList.remove('hidden');
+    }
+
+    function closeAtendimentoDrawer(event) {
+      if (event && event.target && event.target.id !== 'atendimento-drawer-overlay') return;
+      document.getElementById('atendimento-drawer-overlay').classList.add('hidden');
+    }
+
+    async function salvarAtendimento() {
+      const id = document.getElementById('atd-senha-id').value;
+      const btn = document.getElementById('atd-salvar-btn');
+      btn.disabled = true; btn.textContent = '...';
+      document.getElementById('atd-error').classList.add('hidden');
+      try {
+        const r = await api(`/api/admin/senhas/${id}/atendimento`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            medium_nome: document.getElementById('atd-medium').value.trim(),
+            cambone_nome: document.getElementById('atd-cambone').value.trim(),
+            observacao: document.getElementById('atd-obs').value.trim()
+          })
+        });
+        if (r.ok) {
+          document.getElementById('atendimento-drawer-overlay').classList.add('hidden');
+          loadSenhas(document.getElementById('busca-input').value);
+          M.toast({ html: '✅ Informações de atendimento salvas', classes: 'green', displayLength: 2000 });
+        } else {
+          const d = await r.json();
+          document.getElementById('atd-error').textContent = d.mensagem || 'Erro ao salvar informações.';
+          document.getElementById('atd-error').classList.remove('hidden');
+        }
+      } catch(e) {
+        console.error(e);
+        document.getElementById('atd-error').textContent = 'Erro de conexão.';
+        document.getElementById('atd-error').classList.remove('hidden');
+      } finally {
+        btn.disabled = false; btn.textContent = '💾 Salvar';
+      }
+    }
+
     init();
   </script>
+
+  <!-- Drawer Atendimento -->
+  <div id="atendimento-drawer-overlay" class="drawer-overlay hidden" onclick="closeAtendimentoDrawer(event)">
+    <aside class="drawer-panel" onclick="event.stopPropagation()">
+      <div class="drawer-header flex justify-between items-center">
+        <h3 class="font-bold text-lg" style="color:#a8d5a2" id="atd-drawer-title">Atendimento</h3>
+        <button class="btn btn-gray" style="padding:.35rem .75rem;font-size:.8rem" onclick="closeAtendimentoDrawer()">Fechar</button>
+      </div>
+      <div class="drawer-body">
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Nome do Médium</label>
+          <input id="atd-medium" type="text" class="input-field" placeholder="Ex: João da Mata" maxlength="255" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Nome do Cambone</label>
+          <input id="atd-cambone" type="text" class="input-field" placeholder="Ex: Maria das Ervas" maxlength="255" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color:#a8d5a2">Observação</label>
+          <textarea id="atd-obs" class="input-field" rows="3" placeholder="Informações adicionais..." maxlength="1000"></textarea>
+        </div>
+        <p id="atd-error" class="text-sm text-red-400 hidden"></p>
+        <input type="hidden" id="atd-senha-id" value="" />
+        <div class="flex justify-end gap-2" style="margin-top:1.5rem">
+          <button class="btn btn-gray" onclick="closeAtendimentoDrawer()" style="padding:.45rem .9rem;font-size:.85rem">Cancelar</button>
+          <button class="btn btn-green" id="atd-salvar-btn" onclick="salvarAtendimento()" style="padding:.45rem .9rem;font-size:.85rem">💾 Salvar</button>
+        </div>
+      </div>
+    </aside>
+  </div>
 
   <!-- Drawer Walk-in -->
   <div id="walkin-drawer-overlay" class="drawer-overlay hidden" onclick="fecharDrawerWalkin(event)">

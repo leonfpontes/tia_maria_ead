@@ -42,6 +42,9 @@ module.exports = async function handler(req, res) {
         s.created_at,
         s.chegada_em,
         s.is_preferencial,
+        s.medium_nome,
+        s.cambone_nome,
+        s.observacao,
         EXISTS (
           SELECT 1
           FROM auditoria a

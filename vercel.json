@@ -40,5 +40,8 @@
       ]
     }
   ],
-  "redirects": []
+  "redirects": [],
+  "rewrites": [
+    { "source": "/api/admin/senhas/:id/atendimento", "destination": "/api/admin/senhas/[id]/atendimento" }
+  ]
 }
