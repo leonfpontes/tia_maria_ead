@@ -70,9 +70,9 @@ module.exports = async function handler(req, res) {
     const numero = numResult.rows[0].proximo;
 
     const insertResult = await db.query(
-      `INSERT INTO senhas (gira_id, numero, nome, telefone, email, nome_normalizado, is_preferencial, status, chegada_em)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, 'ATIVA', NOW())
-       RETURNING id, numero, nome, telefone, email, status, is_preferencial, chegada_em`,
+      `INSERT INTO senhas (gira_id, numero, nome, telefone, email, nome_normalizado, is_preferencial, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'ATIVA')
+       RETURNING id, numero, nome, telefone, email, status, is_preferencial`,
       [giraId, numero, nome.trim(), telefoneNorm, emailInput, nomeNorm, senhaPreferencial]
     );
 
@@ -94,7 +94,6 @@ module.exports = async function handler(req, res) {
       nome: senha.nome,
       telefone_mascarado: maskPhone(senha.telefone),
       status: senha.status,
-      chegada_em: senha.chegada_em,
       is_preferencial: senha.is_preferencial
     });
   } catch (err) {

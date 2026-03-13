@@ -103,8 +103,7 @@
         min-width: 0 !important;
         width: 100%;
       }
-      #filtro-pref,
-      #filtro-checkin {
+      #filtro-pref {
         max-width: none !important;
         width: 100%;
       }
@@ -184,11 +183,6 @@
               <option value="todos">Todos</option>
               <option value="preferencial">Só preferenciais</option>
             </select>
-            <select id="filtro-checkin" class="input-field" onchange="loadSenhas()" style="max-width:170px;">
-              <option value="todos">Todos</option>
-              <option value="com-checkin">Só com check-in</option>
-              <option value="sem-checkin">Só sem check-in</option>
-            </select>
             <button class="btn btn-blue" onclick="loadSenhas()">↻ Atualizar</button>
             <button class="btn btn-gray" onclick="exportCSV()">📥 CSV</button>
           </div>
@@ -220,7 +214,7 @@
         <div class="card overflow-x-auto table-responsive">
           <table>
             <thead>
-              <tr><th>#</th><th>Nome</th><th>Pref.</th><th>Chegada</th><th>Telefone</th><th>Status</th><th>Criado</th><th>Ações</th></tr>
+              <tr><th>#</th><th>Nome</th><th>Pref.</th><th>Fila</th><th>Telefone</th><th>Status</th><th>Criado</th><th>Ações</th></tr>
             </thead>
             <tbody id="senhas-tbody">
               <tr><td colspan="8" class="text-center py-8" style="color:#6b9e68">Carregando...</td></tr>
@@ -307,7 +301,6 @@
       if (!selectedGiraId) return;
       const busca = document.getElementById('busca-senha').value;
       const filtroPref = document.getElementById('filtro-pref').value;
-      const filtroCheckin = document.getElementById('filtro-checkin').value;
       const params = new URLSearchParams({ telefone_completo: '1' });
       if (busca) params.set('busca', busca);
       const url = `/api/admin/giras/${selectedGiraId}/senhas?${params.toString()}`;
@@ -317,8 +310,6 @@
       let rowsFiltrados = Array.isArray(rows) ? [...rows] : [];
 
       if (filtroPref === 'preferencial') rowsFiltrados = rowsFiltrados.filter(s => Boolean(s.is_preferencial));
-      if (filtroCheckin === 'com-checkin') rowsFiltrados = rowsFiltrados.filter(s => Boolean(s.chegada_em));
-      if (filtroCheckin === 'sem-checkin') rowsFiltrados = rowsFiltrados.filter(s => !s.chegada_em);
       renderBigNumbers(rowsFiltrados);
 
       const tbody = document.getElementById('senhas-tbody');
@@ -330,7 +321,7 @@
       const filaPosMap = new Map();
       let filaPos = 0;
       rowsFiltrados.forEach(s => {
-        if (s.status === 'ATIVA' && s.chegada_em) {
+        if (s.status === 'ATIVA') {
           filaPos += 1;
           filaPosMap.set(Number(s.id), filaPos);
         }
@@ -339,25 +330,18 @@
       tbody.innerHTML = rowsFiltrados.map(s => {
         const criado = s.created_at ? new Date(s.created_at).toLocaleString('pt-BR', { timeZone:'America/Sao_Paulo' }) : '–';
         const stBadge = { 'ativa':'ativa','atendida':'atendida','no_show':'no_show','cancelada':'cancelada-s' }[s.status?.toLowerCase()] || 'ativa';
-        const chegada = s.chegada_em
-          ? new Date(s.chegada_em).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', timeZone:'America/Sao_Paulo' })
-          : '—';
         const filaBadge = filaPosMap.has(Number(s.id)) ? `<span class="badge badge-fila">#${filaPosMap.get(Number(s.id))}</span>` : '';
-        const checkinBtn = s.status === 'ATIVA' && !s.chegada_em
-          ? `<button class="btn btn-blue btn-sm" onclick="realizarCheckin(${s.id})">Check-in</button>`
-          : '';
 
         return `<tr class="${s.is_preferencial ? 'row-preferencial' : ''}">
           <td data-label="#" class="font-bold" style="color:#4ade80">#${String(s.numero).padStart(2,'0')}</td>
           <td data-label="Nome">${esc(normalizeDisplayText(s.nome))}</td>
           <td data-label="Pref.">${s.is_preferencial ? '<span class="badge badge-pref">⭐ Sim</span>' : '—'}</td>
-          <td data-label="Chegada" style="color:#93c5fd">${chegada} ${filaBadge}</td>
+          <td data-label="Fila" style="color:#93c5fd">${filaBadge}</td>
           <td data-label="Telefone" style="color:#a8d5a2;font-variant-numeric:tabular-nums">${esc(formatPhoneDisplay(s.telefone))}</td>
           <td data-label="Status"><span class="badge badge-${stBadge}">${s.status}</span></td>
           <td data-label="Criado" class="text-xs" style="color:#6b9e68">${criado}</td>
           <td data-label="Ações">
             <div class="actions-wrap">
-              ${checkinBtn}
               ${s.status !== 'ATENDIDA' ? `<button class="btn btn-green btn-sm" onclick="alterarStatus(${s.id},'ATENDIDA')">✓</button>` : ''}
               ${s.status === 'ATIVA' ? `<button class="btn btn-yellow btn-sm" onclick="alterarStatus(${s.id},'NO_SHOW')">No-Show</button>` : ''}
               ${s.status !== 'CANCELADA' && s.status !== 'ATENDIDA' ? `<button class="btn btn-red btn-sm" onclick="alterarStatus(${s.id},'CANCELADA')">Cancelar</button>` : ''}
@@ -366,15 +350,6 @@
           </td>
         </tr>`;
       }).join('');
-    }
-
-    async function realizarCheckin(id) {
-      const r = await api(`/api/admin/senhas/${id}/checkin`, { method: 'PATCH' });
-      if (r.ok) loadSenhas();
-      else {
-        const d = await r.json();
-        alert(d.mensagem || 'Erro ao registrar check-in.');
-      }
     }
 
     async function alterarStatus(id, status) {

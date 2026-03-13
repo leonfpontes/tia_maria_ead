@@ -40,7 +40,6 @@ module.exports = async function handler(req, res) {
         s.status,
         s.atendida_em,
         s.created_at,
-        s.chegada_em,
         s.is_preferencial,
         s.medium_nome,
         s.cambone_nome,
@@ -62,10 +61,7 @@ module.exports = async function handler(req, res) {
 
     queryText += `
       ORDER BY
-        CASE WHEN s.chegada_em IS NULL THEN 1 ELSE 0 END,
         s.is_preferencial DESC,
-        s.chegada_em ASC,
-        s.created_at ASC,
         s.numero ASC`;
 
     const result = await db.query(queryText, params);
@@ -77,9 +73,9 @@ module.exports = async function handler(req, res) {
     if (format === 'csv') {
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
       res.setHeader('Content-Disposition', `attachment; filename="senhas-gira-${id}.csv"`);
-      const header = 'numero,nome,telefone,status,is_preferencial,chegada_em,created_at\n';
+      const header = 'numero,nome,telefone,status,is_preferencial,created_at\n';
       const body = rows.map(r =>
-        `${r.numero},"${r.nome}","${r.telefone}",${r.status},${Boolean(r.is_preferencial)},${r.chegada_em || ''},${r.created_at}`
+        `${r.numero},"${r.nome}","${r.telefone}",${r.status},${Boolean(r.is_preferencial)},${r.created_at}`
       ).join('\n');
       return res.status(200).send(header + body);
     }

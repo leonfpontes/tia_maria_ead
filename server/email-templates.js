@@ -117,7 +117,7 @@ function renderTemplate(templateName, data) {
  */
 function renderSenhaConfirmacao({ senha, gira }) {
   const cardPreferencial = senha.is_preferencial
-    ? `<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 6px solid #f59e0b; border-radius: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);"><tr><td style="padding: 18px 22px;"><p style="margin: 0; font-size: 15px; color: #92400e; line-height: 1.6; font-weight: 600;"><strong style="color: #b45309;">⭐ Atendimento Preferencial:</strong> Você tem prioridade de atendimento conforme Lei 10.048/2000. Ao chegar, dirija-se ao operador de porta para fazer seu check-in.</p></td></tr></table>`
+    ? `<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 6px solid #f59e0b; border-radius: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);"><tr><td style="padding: 18px 22px;"><p style="margin: 0; font-size: 15px; color: #92400e; line-height: 1.6; font-weight: 600;"><strong style="color: #b45309;">⭐ Atendimento Preferencial:</strong> Você tem prioridade de atendimento conforme Lei 10.048/2000. Ao chegar, dirija-se ao operador de porta e informe o número da sua senha.</p></td></tr></table>`
     : '';
 
   const data = {
