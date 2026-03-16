@@ -67,13 +67,15 @@
       padding: .38rem .75rem;
     }
     .admin-nav-logout:hover { background: #f0fdf4; }
-    .badge { display: inline-flex; align-items: center; padding: .2rem .6rem; border-radius: 9999px; font-size: .75rem; font-weight: 600; }
+    .badge { display: inline-flex; align-items: center; padding: .15rem .45rem; border-radius: 9999px; font-size: .68rem; font-weight: 600; line-height: 1.2; }
     .badge-ativa     { background: rgba(34,197,94,.15); color: #4ade80; }
     .badge-atendida  { background: rgba(96,165,250,.15); color: #93c5fd; }
     .badge-no_show   { background: rgba(234,179,8,.15); color: #fbbf24; }
     .badge-cancelada { background: rgba(239,68,68,.15); color: #f87171; }
     .badge-pref { background: rgba(250,204,21,.2); color: #fef08a; border: 1px solid rgba(250,204,21,.35); }
     .badge-fila { background: rgba(59,130,246,.18); color: #bfdbfe; }
+    .badge-walkin { background: rgba(168,117,255,.18); color: #c4b5fd; border: 1px solid rgba(168,117,255,.3); }
+    .badge-presente { background: rgba(34,197,94,.18); color: #86efac; border: 1px solid rgba(34,197,94,.3); }
     .senha-card {
       border-radius: .6rem;
       padding: .75rem 1rem;
@@ -94,7 +96,7 @@
     .senha-name-row { display: flex; align-items: center; gap: .45rem; min-width: 0; flex-wrap: wrap; }
     .senha-name { font-weight: 700; min-width: 0; word-break: break-word; }
     .senha-proxima { color: #4ade80; font-size: .75rem; font-weight: 800; white-space: nowrap; }
-    .senha-meta { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; min-width: 0; }
+    .senha-meta { display: flex; align-items: center; gap: .25rem; flex-wrap: wrap; min-width: 0; }
     .metric { text-align: center; }
     .metric-val { font-size: 1.75rem; font-weight: 800; }
     .hidden { display: none !important; }
@@ -115,7 +117,7 @@
     .senha-actions {
       grid-column: 1 / -1;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: .35rem;
       margin-top: .2rem;
     }
@@ -188,7 +190,7 @@
       .senha-card { padding: .7rem .75rem; gap: .45rem; }
       .senha-num { min-width: 2.8rem; font-size: 1.6rem; }
       .senha-actions { grid-template-columns: 1fr 1fr; }
-      .senha-actions .btn { padding: .45rem .4rem !important; font-size: .82rem !important; }
+      .senha-actions .btn { padding: .45rem .35rem !important; font-size: .78rem !important; }
       .metric-val { font-size: 1.5rem; }
       .nav-actions { gap: .4rem; }
       .admin-nav-toggle { min-width: 74px; padding: .35rem .62rem; font-size: .76rem; }
@@ -227,7 +229,11 @@
         font-size: .7rem;
       }
       .senha-actions {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+      }
+      .senha-actions .btn {
+        font-size: .72rem !important;
+        padding: .4rem .25rem !important;
       }
       .senha-proxima { font-size: .7rem; }
       .input-field {
@@ -295,7 +301,7 @@
         </div>
 
         <!-- Métricas -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr))">
           <div class="card p-3 metric">
             <div class="metric-val" style="color:#93c5fd" id="m-atendidas">0</div>
             <div class="text-xs mt-1" style="color:#6b9e68">Atendidas</div>
@@ -307,6 +313,10 @@
           <div class="card p-3 metric">
             <div class="metric-val" style="color:#e8f5e9" id="m-ativas">0</div>
             <div class="text-xs mt-1" style="color:#6b9e68">Restantes</div>
+          </div>
+          <div class="card p-3 metric">
+            <div class="metric-val" style="color:#86efac" id="m-presentes">0</div>
+            <div class="text-xs mt-1" style="color:#6b9e68">Presentes</div>
           </div>
           <div class="card p-3 metric">
             <div class="metric-val" style="color:#fbbf24" id="m-noshow">0</div>
@@ -336,6 +346,7 @@
     let allSenhas = [];
     let refreshInterval = null;
     let searchDebounce = null;
+    let editingWalkinId = null;
 
     function api(path, opts = {}) {
       const headers = { 'Content-Type': 'application/json', ...(opts.headers||{}) };
@@ -462,6 +473,7 @@
       document.getElementById('m-atendidas').textContent = rows.filter(s=>s.status==='ATENDIDA').length;
       document.getElementById('m-emitidas').textContent = rows.filter(s=>s.status!=='CANCELADA').length;
       document.getElementById('m-ativas').textContent = rows.filter(s=>s.status==='ATIVA').length;
+      document.getElementById('m-presentes').textContent = rows.filter(s=>s.chegada_em && s.status!=='CANCELADA').length;
       document.getElementById('m-noshow').textContent = rows.filter(s=>s.status==='NO_SHOW').length;
     }
 
@@ -493,16 +505,33 @@
         const prefBadge = s.is_preferencial
           ? '<span class="badge badge-pref">⭐ Preferencial</span>'
           : '';
+        const walkinBadge = s.is_walk_in
+          ? '<span class="badge badge-walkin">Walk-in</span>'
+          : '';
+        const presenteBadge = s.chegada_em
+          ? `<span class="badge badge-presente">✅ ${new Date(s.chegada_em).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'})}</span>`
+          : '';
+        const checkinBtn = s.status === 'ATIVA'
+          ? (s.chegada_em
+            ? `<button class="btn btn-gray btn-checkin" data-id="${Number(s.id)}" data-checkin="false" style="padding:.45rem .55rem;font-size:.8rem">↩ Check-in</button>`
+            : `<button class="btn btn-blue btn-checkin" data-id="${Number(s.id)}" data-checkin="true" style="padding:.45rem .55rem;font-size:.8rem">📍 Check-in</button>`)
+          : '';
+        const editWalkinBtn = s.is_walk_in && (s.status === 'ATIVA' || s.status === 'ATENDIDA')
+          ? `<button class="btn btn-gray btn-edit-walkin" data-id="${Number(s.id)}" style="padding:.45rem .55rem;font-size:.8rem">✏️ Editar</button>`
+          : '';
         const actions = s.status === 'ATIVA'
           ? `
           <div class="senha-actions">
             <button class="btn btn-green btn-acao" data-id="${Number(s.id)}" data-status="ATENDIDA" style="padding:.45rem .9rem;font-size:.8rem">✓ Atendida</button>
             <button class="btn btn-yellow btn-acao" data-id="${Number(s.id)}" data-status="NO_SHOW" style="padding:.45rem .9rem;font-size:.8rem">No-Show</button>
+            ${checkinBtn}
+            ${editWalkinBtn}
           </div>`
           : (s.status === 'ATENDIDA' || s.status === 'NO_SHOW')
             ? `
           <div class="senha-actions">
             <button class="btn btn-gray btn-acao" data-id="${Number(s.id)}" data-status="ATIVA" style="padding:.45rem .9rem;font-size:.8rem">↩ Desfazer</button>
+            ${editWalkinBtn}
           </div>`
             : '';
 
@@ -512,11 +541,13 @@
           <div class="senha-main">
             <div class="senha-name-row">
               <div class="senha-name">${esc(normalizeDisplayText(s.nome))}</div>
-              ${isProxima ? '<span class="senha-proxima">PRÓXIMO →</span>' : ''}
+              ${isProxima ? '<span class="senha-proxima">← PRÓXIMO</span>' : ''}
             </div>
             <div class="senha-meta">
               <span class="badge badge-${st === 'no_show' ? 'no_show' : st}">${s.status}</span>
               ${prefBadge}
+              ${walkinBadge}
+              ${presenteBadge}
               ${filaBadge}
               ${atendidaInfo}
             </div>
@@ -552,12 +583,45 @@
       }
     }
 
+    async function patchCheckin(id, checkin, triggerBtn) {
+      const originalText = triggerBtn ? triggerBtn.textContent : '';
+      if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.textContent = '...'; }
+      try {
+        const r = await api(`/api/admin/senhas/${id}/checkin`, { method: 'PATCH', body: JSON.stringify({ checkin }) });
+        if (r.ok) {
+          await loadSenhas(document.getElementById('busca-input').value);
+          M.toast({ html: checkin ? '✅ Check-in registrado' : '↩ Check-in desfeito', classes: checkin ? 'green' : 'grey', displayLength: 2000 });
+        } else {
+          const d = await r.json();
+          alert(d.mensagem || 'Erro ao registrar check-in.');
+        }
+      } catch(e) {
+        console.error(e);
+        alert('Erro de conexão ao registrar check-in.');
+      } finally {
+        if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = originalText; }
+      }
+    }
+
     // Event delegation for action buttons (avoids inline onclick with dynamic IDs)
     document.getElementById('lista-senhas').addEventListener('click', function(e) {
       const infoBtn = e.target.closest('.btn-info-atendimento');
       if (infoBtn) {
         const id = parseInt(infoBtn.dataset.infoId, 10);
         if (id) openAtendimentoDrawer(id);
+        return;
+      }
+      const checkinBtn = e.target.closest('.btn-checkin');
+      if (checkinBtn) {
+        const id = parseInt(checkinBtn.dataset.id, 10);
+        const checkin = checkinBtn.dataset.checkin === 'true';
+        if (id) patchCheckin(id, checkin, checkinBtn);
+        return;
+      }
+      const editBtn = e.target.closest('.btn-edit-walkin');
+      if (editBtn) {
+        const id = parseInt(editBtn.dataset.id, 10);
+        if (id) abrirDrawerEditarWalkin(id);
         return;
       }
       const btn = e.target.closest('.btn-acao');
@@ -611,6 +675,9 @@
 
     // ---- WALK-IN ----
     function abrirDrawerWalkin() {
+      editingWalkinId = null;
+      document.getElementById('walkin-drawer-title').textContent = '➕ Incluir Walk-in';
+      document.getElementById('walkin-salvar-btn').textContent = '💾 Salvar Walk-in';
       document.getElementById('walkin-nome').value = '';
       document.getElementById('walkin-telefone').value = '';
       document.getElementById('walkin-email').value = '';
@@ -620,9 +687,27 @@
       setTimeout(() => document.getElementById('walkin-nome').focus(), 100);
     }
 
+    function abrirDrawerEditarWalkin(senhaId) {
+      const s = allSenhas.find(x => Number(x.id) === senhaId);
+      if (!s) return;
+      editingWalkinId = senhaId;
+      document.getElementById('walkin-drawer-title').textContent = `✏️ Editar Walk-in #${String(s.numero).padStart(2,'0')}`;
+      document.getElementById('walkin-salvar-btn').textContent = '💾 Salvar Alterações';
+      document.getElementById('walkin-nome').value = s.nome || '';
+      // Formatar telefone para display se não for placeholder
+      const tel = s.telefone && s.telefone !== '0000-0000' ? s.telefone : '';
+      document.getElementById('walkin-telefone').value = tel ? formatPhoneDisplay(tel).replace('+55 ', '') : '';
+      document.getElementById('walkin-email').value = s.email || '';
+      document.getElementById('walkin-preferencial').checked = Boolean(s.is_preferencial);
+      document.getElementById('walkin-error').classList.add('hidden');
+      document.getElementById('walkin-drawer-overlay').classList.remove('hidden');
+      setTimeout(() => document.getElementById('walkin-nome').focus(), 100);
+    }
+
     function fecharDrawerWalkin(event) {
       if (event && event.target && event.target.id !== 'walkin-drawer-overlay') return;
       document.getElementById('walkin-drawer-overlay').classList.add('hidden');
+      editingWalkinId = null;
     }
 
     function formatarTelefone(input) {
@@ -666,18 +751,32 @@
         if (telefone) body.telefone = telefone;
         if (email) body.email = email;
 
-        const r = await api(`/api/admin/giras/${selectedGiraId}/senhas/walk-in`, {
-          method: 'POST',
-          body: JSON.stringify(body)
-        });
-        const data = await r.json();
+        let r, data;
+        if (editingWalkinId) {
+          r = await api(`/api/admin/senhas/${editingWalkinId}/editar`, {
+            method: 'PATCH',
+            body: JSON.stringify(body)
+          });
+          data = await r.json();
+        } else {
+          r = await api(`/api/admin/giras/${selectedGiraId}/senhas/walk-in`, {
+            method: 'POST',
+            body: JSON.stringify(body)
+          });
+          data = await r.json();
+        }
 
         if (r.ok) {
           fecharDrawerWalkin();
           loadSenhas();
-          M.toast({ html: `✅ Walk-in #${data.numero} registrado - ${data.nome}`, classes: 'green', displayLength: 3000 });
+          if (editingWalkinId) {
+            M.toast({ html: `✅ Walk-in atualizado`, classes: 'green', displayLength: 2000 });
+          } else {
+            M.toast({ html: `✅ Walk-in #${data.numero} registrado - ${data.nome}`, classes: 'green', displayLength: 3000 });
+          }
+          editingWalkinId = null;
         } else {
-          document.getElementById('walkin-error').textContent = data.mensagem || 'Erro ao criar walk-in.';
+          document.getElementById('walkin-error').textContent = data.mensagem || 'Erro ao salvar walk-in.';
           document.getElementById('walkin-error').classList.remove('hidden');
         }
       } catch (e) {
@@ -686,7 +785,7 @@
         document.getElementById('walkin-error').classList.remove('hidden');
       } finally {
         btn.disabled = false;
-        btn.textContent = '💾 Salvar Walk-in';
+        btn.textContent = editingWalkinId ? '💾 Salvar Alterações' : '💾 Salvar Walk-in';
       }
     }
 
@@ -792,7 +891,7 @@
   <div id="walkin-drawer-overlay" class="drawer-overlay hidden" onclick="fecharDrawerWalkin(event)">
     <aside class="drawer-panel" onclick="event.stopPropagation()">
       <div class="drawer-header flex justify-between items-center">
-        <h3 class="font-bold text-lg" style="color:#a8d5a2">➕ Incluir Walk-in</h3>
+        <h3 class="font-bold text-lg" style="color:#a8d5a2" id="walkin-drawer-title">➕ Incluir Walk-in</h3>
         <button class="btn btn-gray btn-sm" onclick="fecharDrawerWalkin()" style="padding:.4rem .75rem;font-size:.8rem">Fechar</button>
       </div>
       <div class="drawer-body">
