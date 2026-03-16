@@ -1059,7 +1059,7 @@
 
     async function alterarStatus(id, status) {
       try {
-        const r = await api(`/api/admin/senhas/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+        const r = await api(`/api/admin/senhas/${id}?action=status`, { method: 'PATCH', body: JSON.stringify({ status }) });
         if (r.ok) {
           loadSenhas();
           loadGiras();

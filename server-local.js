@@ -27,11 +27,7 @@ const apiHandlers = {
   'PUT /api/admin/giras/[id]': require('./api/admin/giras/[id].js'),
   'GET /api/admin/giras/[id]/senhas': require('./api/admin/giras/[id]/senhas.js'),
   'POST /api/admin/giras/[id]/senhas': require('./api/admin/giras/[id]/senhas.js'),
-  'PATCH /api/admin/senhas/[id]/status': require('./api/admin/senhas/[id]/status.js'),
-  'PATCH /api/admin/senhas/[id]/atendimento': require('./api/admin/senhas/[id]/atendimento.js'),
-  'PATCH /api/admin/senhas/[id]/checkin': require('./api/admin/senhas/[id]/checkin.js'),
-  'PATCH /api/admin/senhas/[id]/editar': require('./api/admin/senhas/[id]/editar.js'),
-  'POST /api/admin/giras/[id]/senhas/walk-in': require('./api/admin/giras/[id]/senhas/walk-in.js'),
+  'PATCH /api/admin/senhas/[id]': require('./api/admin/senhas/[id].js'),
   'GET /api/public/agenda': require('./api/public/agenda.js'),
   'GET /api/public/giras/cards': require('./api/public/giras/cards.js'),
   'POST /api/public/giras/[id]/senhas': require('./api/public/giras/[id]/senhas.js'),
@@ -170,20 +166,8 @@ const server = http.createServer((req, res) => {
   } else if (method === 'POST' && apiPath.match(/^\/api\/admin\/giras\/[^/]+\/senhas$/)) {
     handler = apiHandlers['POST /api/admin/giras/[id]/senhas'];
     params.id = apiPath.split('/')[4];
-  } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+\/status$/)) {
-    handler = apiHandlers['PATCH /api/admin/senhas/[id]/status'];
-    params.id = apiPath.split('/')[4];
-  } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+\/atendimento$/)) {
-    handler = apiHandlers['PATCH /api/admin/senhas/[id]/atendimento'];
-    params.id = apiPath.split('/')[4];
-  } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+\/checkin$/)) {
-    handler = apiHandlers['PATCH /api/admin/senhas/[id]/checkin'];
-    params.id = apiPath.split('/')[4];
-  } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+\/editar$/)) {
-    handler = apiHandlers['PATCH /api/admin/senhas/[id]/editar'];
-    params.id = apiPath.split('/')[4];
-  } else if (method === 'POST' && apiPath.match(/^\/api\/admin\/giras\/[^/]+\/senhas\/walk-in$/)) {
-    handler = apiHandlers['POST /api/admin/giras/[id]/senhas/walk-in'];
+  } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+$/)) {
+    handler = apiHandlers['PATCH /api/admin/senhas/[id]'];
     params.id = apiPath.split('/')[4];
   } else if (method === 'GET' && apiPath === '/api/public/agenda') {
     handler = apiHandlers['GET /api/public/agenda'];

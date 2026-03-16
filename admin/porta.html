@@ -564,7 +564,7 @@
         triggerBtn.textContent = '...';
       }
       try {
-        const r = await api(`/api/admin/senhas/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+        const r = await api(`/api/admin/senhas/${id}?action=status`, { method: 'PATCH', body: JSON.stringify({ status }) });
         if (r.ok) {
           await loadSenhas(document.getElementById('busca-input').value);
           if (status === 'ATENDIDA') openAtendimentoDrawer(id);
@@ -587,7 +587,7 @@
       const originalText = triggerBtn ? triggerBtn.textContent : '';
       if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.textContent = '...'; }
       try {
-        const r = await api(`/api/admin/senhas/${id}/checkin`, { method: 'PATCH', body: JSON.stringify({ checkin }) });
+        const r = await api(`/api/admin/senhas/${id}?action=checkin`, { method: 'PATCH', body: JSON.stringify({ checkin }) });
         if (r.ok) {
           await loadSenhas(document.getElementById('busca-input').value);
           M.toast({ html: checkin ? '✅ Check-in registrado' : '↩ Check-in desfeito', classes: checkin ? 'green' : 'grey', displayLength: 2000 });
@@ -753,13 +753,13 @@
 
         let r, data;
         if (editingWalkinId) {
-          r = await api(`/api/admin/senhas/${editingWalkinId}/editar`, {
+          r = await api(`/api/admin/senhas/${editingWalkinId}?action=editar`, {
             method: 'PATCH',
             body: JSON.stringify(body)
           });
           data = await r.json();
         } else {
-          r = await api(`/api/admin/giras/${selectedGiraId}/senhas/walk-in`, {
+          r = await api(`/api/admin/giras/${selectedGiraId}/senhas`, {
             method: 'POST',
             body: JSON.stringify(body)
           });
@@ -828,7 +828,7 @@
       btn.disabled = true; btn.textContent = '...';
       document.getElementById('atd-error').classList.add('hidden');
       try {
-        const r = await api(`/api/admin/senhas/${id}/atendimento`, {
+        const r = await api(`/api/admin/senhas/${id}?action=atendimento`, {
           method: 'PATCH',
           body: JSON.stringify({
             medium_nome: document.getElementById('atd-medium').value.trim(),
