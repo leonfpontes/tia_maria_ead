@@ -32,9 +32,12 @@ import KeyIcon from '@mui/icons-material/Key';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { format } from 'date-fns';
 import AppLayout from '../components/AppLayout';
 import { useApi } from '../hooks/useApi';
-import { toDateOnlyInSaoPaulo, toDatetimeLocalValue, fromDatetimeLocalToSaoPaulo, formatDatetimeBR } from '../utils/dates';
+import { toDateOnlyInSaoPaulo, formatDatetimeBR, formatDateTimeForApi } from '../utils/dates';
 import { formatTipoCardLabel, normalizeDisplayText } from '../utils/formatters';
 
 const TIPO_CARD_OPTIONS = [
@@ -69,15 +72,15 @@ const CTRL_STATUS_COLORS = {
 const INITIAL_GIRA_FORM = {
   titulo: '',
   tipo_card: 'GIRA_MISTA',
-  data_inicio: '',
+  data_inicio: null,
   observacoes: '',
   status: 'RASCUNHO',
 };
 
 const INITIAL_CTRL_FORM = {
   total_senhas: 50,
-  liberacao_inicio: '',
-  liberacao_fim: '',
+  liberacao_inicio: null,
+  liberacao_fim: null,
 };
 
 function GiraDrawer({ open, onClose, editId, onSaved, api }) {
@@ -96,7 +99,7 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
           setForm({
             titulo: g.titulo || '',
             tipo_card: g.tipo_card || 'GIRA_MISTA',
-            data_inicio: g.data_inicio ? g.data_inicio.slice(0, 16) : '',
+            data_inicio: g.data_inicio ? new Date(g.data_inicio) : null,
             observacoes: g.observacoes || '',
             status: g.status || 'RASCUNHO',
           })
@@ -117,7 +120,7 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
     const body = {
       titulo: form.titulo.trim(),
       tipo_card: form.tipo_card,
-      data_inicio: fromDatetimeLocalToSaoPaulo(form.data_inicio),
+      data_inicio: formatDateTimeForApi(form.data_inicio),
       observacoes: form.observacoes.trim() || null,
       status: form.status,
     };
@@ -189,14 +192,13 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
             </Select>
           </FormControl>
 
-          <TextField
+          <DateTimePicker
             label="Data e Hora *"
-            type="datetime-local"
             value={form.data_inicio}
-            onChange={(e) => set('data_inicio', e.target.value)}
-            fullWidth
-            size="small"
-            InputLabelProps={{ shrink: true }}
+            onChange={(val) => set('data_inicio', val)}
+            format="dd/MM/yyyy HH:mm"
+            ampm={false}
+            slotProps={{ textField: { fullWidth: true, size: 'small' } }}
           />
 
           <TextField
@@ -268,8 +270,8 @@ function ConfigDrawer({ open, onClose, giraId, giraNome, api }) {
         setCtrlStatus(ctrl.status);
         setForm({
           total_senhas: ctrl.total_senhas || 50,
-          liberacao_inicio: toDatetimeLocalValue(ctrl.liberacao_inicio),
-          liberacao_fim: toDatetimeLocalValue(ctrl.liberacao_fim),
+          liberacao_inicio: ctrl.liberacao_inicio ? new Date(ctrl.liberacao_inicio) : null,
+          liberacao_fim: ctrl.liberacao_fim ? new Date(ctrl.liberacao_fim) : null,
         });
       })
       .catch(console.error);
@@ -289,8 +291,8 @@ function ConfigDrawer({ open, onClose, giraId, giraNome, api }) {
     try {
       const body = {
         total_senhas: parseInt(form.total_senhas, 10),
-        liberacao_inicio: fromDatetimeLocalToSaoPaulo(form.liberacao_inicio),
-        liberacao_fim: form.liberacao_fim ? fromDatetimeLocalToSaoPaulo(form.liberacao_fim) : null,
+        liberacao_inicio: formatDateTimeForApi(form.liberacao_inicio),
+        liberacao_fim: form.liberacao_fim ? formatDateTimeForApi(form.liberacao_fim) : null,
       };
       const r = await api(`/api/admin/controles/${giraId}`, {
         method: 'PUT',
@@ -376,23 +378,21 @@ function ConfigDrawer({ open, onClose, giraId, giraNome, api }) {
                 size="small"
                 inputProps={{ min: 1 }}
               />
-              <TextField
+              <DateTimePicker
                 label="Início da Liberação *"
-                type="datetime-local"
                 value={form.liberacao_inicio}
-                onChange={(e) => set('liberacao_inicio', e.target.value)}
-                fullWidth
-                size="small"
-                InputLabelProps={{ shrink: true }}
+                onChange={(val) => set('liberacao_inicio', val)}
+                format="dd/MM/yyyy HH:mm"
+                ampm={false}
+                slotProps={{ textField: { fullWidth: true, size: 'small' } }}
               />
-              <TextField
+              <DateTimePicker
                 label="Fim da Liberação (opcional)"
-                type="datetime-local"
                 value={form.liberacao_fim}
-                onChange={(e) => set('liberacao_fim', e.target.value)}
-                fullWidth
-                size="small"
-                InputLabelProps={{ shrink: true }}
+                onChange={(val) => set('liberacao_fim', val)}
+                format="dd/MM/yyyy HH:mm"
+                ampm={false}
+                slotProps={{ textField: { fullWidth: true, size: 'small' } }}
               />
               <Typography variant="caption" color="text.disabled">
                 Defina início obrigatório e fim opcional da retirada.
@@ -428,8 +428,8 @@ export default function Giras() {
 
   // Filters
   const [filtroNome, setFiltroNome] = useState('');
-  const [filtroDe, setFiltroDe] = useState('');
-  const [filtroAte, setFiltroAte] = useState('');
+  const [filtroDe, setFiltroDe] = useState(null);
+  const [filtroAte, setFiltroAte] = useState(null);
   const [apenasAtivas, setApenasAtivas] = useState(true);
 
   // Gira drawer
@@ -461,8 +461,10 @@ export default function Giras() {
         const titulo = String(g.titulo || '').toLowerCase();
         if (filtroNome && !titulo.includes(filtroNome.toLowerCase())) return false;
         const dataSp = toDateOnlyInSaoPaulo(g.data_inicio);
-        if (filtroDe && dataSp < filtroDe) return false;
-        if (filtroAte && dataSp > filtroAte) return false;
+        const de = filtroDe ? format(filtroDe, 'yyyy-MM-dd') : null;
+        const ate = filtroAte ? format(filtroAte, 'yyyy-MM-dd') : null;
+        if (de && dataSp < de) return false;
+        if (ate && dataSp > ate) return false;
         if (apenasAtivas && dataSp && dataSp < hojeSp) return false;
         return true;
       })
@@ -526,25 +528,21 @@ export default function Giras() {
                 />
               </Grid>
               <Grid item xs={6} sm={2}>
-                <TextField
+                <DatePicker
                   label="De"
-                  type="date"
                   value={filtroDe}
-                  onChange={(e) => setFiltroDe(e.target.value)}
-                  fullWidth
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
+                  onChange={(val) => setFiltroDe(val)}
+                  format="dd/MM/yyyy"
+                  slotProps={{ textField: { fullWidth: true, size: 'small' } }}
                 />
               </Grid>
               <Grid item xs={6} sm={2}>
-                <TextField
+                <DatePicker
                   label="Até"
-                  type="date"
                   value={filtroAte}
-                  onChange={(e) => setFiltroAte(e.target.value)}
-                  fullWidth
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
+                  onChange={(val) => setFiltroAte(val)}
+                  format="dd/MM/yyyy"
+                  slotProps={{ textField: { fullWidth: true, size: 'small' } }}
                 />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ display: 'flex', alignItems: 'center' }}>

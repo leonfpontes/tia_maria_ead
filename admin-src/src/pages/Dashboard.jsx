@@ -6,7 +6,6 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
-  TextField,
   Typography,
 } from '@mui/material';
 import {
@@ -19,6 +18,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { format } from 'date-fns';
 import AppLayout from '../components/AppLayout';
 import { useApi } from '../hooks/useApi';
 import { toDateOnlyInSaoPaulo } from '../utils/dates';
@@ -150,8 +151,8 @@ export default function Dashboard() {
 
   // Filters
   const [filtroNome, setFiltroNome] = useState('');
-  const [filtroDe, setFiltroDe] = useState('');
-  const [filtroAte, setFiltroAte] = useState('');
+  const [filtroDe, setFiltroDe] = useState(null);
+  const [filtroAte, setFiltroAte] = useState(null);
   const [apenasAtivas, setApenasAtivas] = useState(true);
 
   useEffect(() => {
@@ -170,8 +171,10 @@ export default function Dashboard() {
         const titulo = String(g.titulo || '').toLowerCase();
         if (filtroNome && !titulo.includes(filtroNome.toLowerCase())) return false;
         const dataSp = toDateOnlyInSaoPaulo(g.data_inicio);
-        if (filtroDe && dataSp < filtroDe) return false;
-        if (filtroAte && dataSp > filtroAte) return false;
+        const de = filtroDe ? format(filtroDe, 'yyyy-MM-dd') : null;
+        const ate = filtroAte ? format(filtroAte, 'yyyy-MM-dd') : null;
+        if (de && dataSp < de) return false;
+        if (ate && dataSp > ate) return false;
         if (apenasAtivas && dataSp && dataSp < hojeSp) return false;
         return true;
       })
@@ -203,25 +206,21 @@ export default function Dashboard() {
                 />
               </Grid>
               <Grid item xs={6} sm={2}>
-                <TextField
+                <DatePicker
                   label="De"
-                  type="date"
                   value={filtroDe}
-                  onChange={(e) => setFiltroDe(e.target.value)}
-                  fullWidth
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
+                  onChange={(val) => setFiltroDe(val)}
+                  format="dd/MM/yyyy"
+                  slotProps={{ textField: { fullWidth: true, size: 'small' } }}
                 />
               </Grid>
               <Grid item xs={6} sm={2}>
-                <TextField
+                <DatePicker
                   label="Até"
-                  type="date"
                   value={filtroAte}
-                  onChange={(e) => setFiltroAte(e.target.value)}
-                  fullWidth
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
+                  onChange={(val) => setFiltroAte(val)}
+                  format="dd/MM/yyyy"
+                  slotProps={{ textField: { fullWidth: true, size: 'small' } }}
                 />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ display: 'flex', alignItems: 'center' }}>

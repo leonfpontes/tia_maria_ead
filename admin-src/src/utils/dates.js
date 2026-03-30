@@ -71,3 +71,13 @@ export function formatTimeBR(isoValue) {
     return '–';
   }
 }
+
+/**
+ * Converts a Date object (picker value) to ISO string with -03:00 offset
+ * for sending to the API. Uses local time as SP time.
+ */
+export function formatDateTimeForApi(date) {
+  if (!date || !(date instanceof Date) || isNaN(date.getTime())) return null;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00-03:00`;
+}
