@@ -10,7 +10,8 @@
     "build:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -m",
     "minify:css": "npx --yes clean-css-cli -o assets/css/main.css assets/css/main.css",
     "watch:css": "npx --yes @tailwindcss/cli -i assets/css/tailwind.input.css -o assets/css/tailwind.css -w",
-    "build": "npm run build:css && npm run minify:css",
+    "build:admin": "vite build --config admin-src/vite.config.js",
+    "build": "npm run build:css && npm run minify:css && npm run build:admin",
     "start": "npx --yes http-server -c-1 .",
     "setup:sqlite": "node scripts/setup-sqlite.js",
     "dev:local": "node server-local.js",
@@ -31,17 +32,30 @@
     "node": "20.x"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
+    "@mui/x-date-pickers": "^8.27.2",
     "@tailwindcss/cli": "^4.1.14",
     "autoprefixer": "^10.4.21",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.5.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "jsonwebtoken": "^9.0.2",
     "materialize-css": "^1.0.0",
     "pg": "^8.13.3",
     "postcss": "^8.5.6",
+    "react": "^19.2.4",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.2",
     "resend": "^6.9.3",
     "sql.js": "^1.12.0",
-    "tailwindcss": "^4.1.14"
+    "tailwindcss": "^4.1.14",
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.3"
   },
   "devDependencies": {
     "vercel": "^50.25.6"
