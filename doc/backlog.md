@@ -2,6 +2,23 @@
 
 Este arquivo é utilizado pelos agentes de IA para controlar e atualizar o status das atividades do projeto. Sempre que uma tarefa for iniciada, atualizada ou concluída, marque-a aqui com o status apropriado.
 
+## Admin SPA – React + MUI com Side Menu (Concluído em 09/03/2026)
+
+### ✅ Concluído
+- [x] Branch `feature/admin-sidemenu` criada e utilizada para toda a implementação.
+- [x] Instalação de dependências: `react`, `react-dom`, `@mui/material`, `@mui/icons-material`, `@emotion/react`, `@emotion/styled`, `react-router-dom`, `react-chartjs-2`, `chart.js`, `vite`, `@vitejs/plugin-react`.
+- [x] Estrutura `admin-src/` com Vite + React + MUI (dark theme com cores do projeto: verde Oxóssi `#10b981`, rosa `#EC4899`).
+- [x] Sidebar MUI permanente (desktop) / temporário (mobile) com grupos Cadastros → Giras e Operações → Porta.
+- [x] Rota `/admin` → Dashboard (big numbers + gráfico de barras empilhadas, sem CRUD).
+- [x] Rota `/admin/gira` → CRUD de Giras com drawers laterais (Nova Gira, Editar, Config Senhas).
+- [x] Rota `/admin/gira/:id/senhas` → Lista de Senhas com big numbers, tabela, filtros, export CSV.
+- [x] Rota `/admin/porta` → Tela de operação com cards de senha, check-in, walk-in drawer, atendimento drawer.
+- [x] Login JWT com AuthContext + hook `useAuth` e `useApi` com auto-logout em 401.
+- [x] `package.json`: adicionado script `build:admin` + `build` atualizado com Vite.
+- [x] `vercel.json`: rewrite `/admin/:path*` → `/admin/index.html` para SPA routing.
+- [x] Build verificado com `vite build` (929 módulos, output em `admin/index.html` + `admin/assets/`).
+
+
 ## Fases do Projeto EAD (Pendente)
 
 ### Fase 0 – Estratégia e Governança
