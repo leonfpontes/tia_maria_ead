@@ -119,22 +119,39 @@ const server = http.createServer((req, res) => {
     }
   }
 
-  if (pathname === '/admin') {
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    const adminMimeTypes = {
+      '.html': 'text/html',
+      '.css': 'text/css',
+      '.js': 'application/javascript',
+      '.json': 'application/json',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.gif': 'image/gif',
+      '.svg': 'image/svg+xml',
+      '.ico': 'image/x-icon',
+      '.woff': 'font/woff',
+      '.woff2': 'font/woff2',
+      '.ttf': 'font/ttf',
+    };
+
+    // Try to serve as a static file first
+    const staticFile = path.join(__dirname, pathname);
+    if (fs.existsSync(staticFile) && fs.statSync(staticFile).isFile()) {
+      const ext = path.extname(staticFile).toLowerCase();
+      res.setHeader('Content-Type', adminMimeTypes[ext] || 'application/octet-stream');
+      res.writeHead(200);
+      res.end(fs.readFileSync(staticFile));
+      return;
+    }
+
+    // SPA fallback: serve admin/index.html for all /admin/* routes
     const adminIndex = path.join(__dirname, 'admin', 'index.html');
     if (fs.existsSync(adminIndex)) {
       res.setHeader('Content-Type', 'text/html');
       res.writeHead(200);
       res.end(fs.readFileSync(adminIndex));
-      return;
-    }
-  }
-
-  if (pathname.startsWith('/admin/')) {
-    const adminFile = path.join(__dirname, pathname + (pathname.endsWith('.html') ? '' : '.html'));
-    if (fs.existsSync(adminFile)) {
-      res.setHeader('Content-Type', 'text/html');
-      res.writeHead(200);
-      res.end(fs.readFileSync(adminFile));
       return;
     }
   }
