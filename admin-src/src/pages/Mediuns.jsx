@@ -153,7 +153,7 @@ function MediumDrawer({ open, onClose, editId, viewOnly, onSaved, api }) {
                 color="primary"
               />
             }
-            label="Também é cambone (auxiliar de gira)"
+            label="É cambone (auxiliar de gira)"
           />
         </Box>
 
@@ -358,21 +358,13 @@ export default function Mediuns() {
                 <TableRow key={m.id} hover>
                   <TableCell sx={{ fontWeight: 500 }}>{m.nome}</TableCell>
                   <TableCell>{formatPhoneDisplay(m.telefone)}</TableCell>
-                  <TableCell sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                  <TableCell>
                     <Chip
-                      label="Médium"
+                      label={m.is_cambone ? 'cambone' : 'Médium'}
                       size="small"
-                      color="primary"
+                      color={m.is_cambone ? 'secondary' : 'primary'}
                       variant="outlined"
                     />
-                    {m.is_cambone && (
-                      <Chip
-                        label="Cambone"
-                        size="small"
-                        color="secondary"
-                        variant="outlined"
-                      />
-                    )}
                   </TableCell>
                   <TableCell>
                     <Chip

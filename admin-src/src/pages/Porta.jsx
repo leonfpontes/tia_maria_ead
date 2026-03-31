@@ -210,7 +210,7 @@ function AtendimentoDrawer({ open, onClose, senha, api, onSaved }) {
         if (!Array.isArray(data)) return;
         const ativos = data.filter((m) => m.ativo);
         setMediunOptions(ativos.filter((m) => !m.is_cambone).map((m) => m.nome));
-        setCamboneOptions(ativos.filter((m) => m.is_cambone).map((m) => m.nome));
+        setCamboneOptions(ativos.map((m) => m.nome));
       })
       .catch(console.error);
   }, [open, api]);
