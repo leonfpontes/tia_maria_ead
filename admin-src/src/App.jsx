@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Giras from './pages/Giras';
+import Mediuns from './pages/Mediuns';
 import Porta from './pages/Porta';
 import ListaSenhas from './pages/ListaSenhas';
 
@@ -36,6 +37,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <ListaSenhas />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mediums"
+          element={
+            <ProtectedRoute>
+              <Mediuns />
             </ProtectedRoute>
           }
         />

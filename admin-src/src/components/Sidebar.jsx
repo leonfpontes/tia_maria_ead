@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import GroupIcon from '@mui/icons-material/Group';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
@@ -100,6 +101,19 @@ export default function Sidebar({ onItemClick }) {
               </ListItemIcon>
               <ListItemText
                 primary="Giras"
+                primaryTypographyProps={{ fontSize: '0.875rem' }}
+              />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 4 }}
+              selected={isActive('/mediums')}
+              onClick={() => go('/mediums')}
+            >
+              <ListItemIcon>
+                <GroupIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Médiuns"
                 primaryTypographyProps={{ fontSize: '0.875rem' }}
               />
             </ListItemButton>
