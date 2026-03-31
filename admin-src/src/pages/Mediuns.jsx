@@ -153,7 +153,7 @@ function MediumDrawer({ open, onClose, editId, viewOnly, onSaved, api }) {
                 color="primary"
               />
             }
-            label="É Cambonê (auxiliar de gira)"
+            label="É cambone (auxiliar de gira)"
           />
         </Box>
 
@@ -360,7 +360,7 @@ export default function Mediuns() {
                   <TableCell>{formatPhoneDisplay(m.telefone)}</TableCell>
                   <TableCell>
                     <Chip
-                      label={m.is_cambone ? 'Cambonê' : 'Médium'}
+                      label={m.is_cambone ? 'cambone' : 'Médium'}
                       size="small"
                       color={m.is_cambone ? 'secondary' : 'primary'}
                       variant="outlined"

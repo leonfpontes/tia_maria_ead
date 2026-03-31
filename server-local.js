@@ -174,6 +174,19 @@ const server = http.createServer((req, res) => {
   } else if (method === 'PATCH' && apiPath.match(/^\/api\/admin\/senhas\/[^/]+$/)) {
     handler = apiHandlers['PATCH /api/admin/senhas/[id]'];
     params.id = apiPath.split('/')[4];
+  } else if (method === 'GET' && apiPath === '/api/admin/mediuns') {
+    handler = apiHandlers['GET /api/admin/mediuns'];
+  } else if (method === 'POST' && apiPath === '/api/admin/mediuns') {
+    handler = apiHandlers['POST /api/admin/mediuns'];
+  } else if (method === 'GET' && apiPath.match(/^\/api\/admin\/mediuns\/[^/]+$/)) {
+    handler = apiHandlers['GET /api/admin/mediuns/[id]'];
+    params.id = apiPath.split('/')[4];
+  } else if (method === 'PUT' && apiPath.match(/^\/api\/admin\/mediuns\/[^/]+$/)) {
+    handler = apiHandlers['PUT /api/admin/mediuns/[id]'];
+    params.id = apiPath.split('/')[4];
+  } else if (method === 'DELETE' && apiPath.match(/^\/api\/admin\/mediuns\/[^/]+$/)) {
+    handler = apiHandlers['DELETE /api/admin/mediuns/[id]'];
+    params.id = apiPath.split('/')[4];
   } else if (method === 'GET' && apiPath === '/api/public/agenda') {
     handler = apiHandlers['GET /api/public/agenda'];
   } else if (method === 'GET' && apiPath === '/api/public/giras/cards') {

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -198,6 +199,21 @@ function AtendimentoDrawer({ open, onClose, senha, api, onSaved }) {
   const [obs, setObs] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [mediunOptions, setMediunOptions] = useState([]);
+  const [camboneOptions, setCamboneOptions] = useState([]);
+
+  useEffect(() => {
+    if (!open) return;
+    api('/api/admin/mediuns')
+      .then((r) => r.json())
+      .then((data) => {
+        if (!Array.isArray(data)) return;
+        const ativos = data.filter((m) => m.ativo);
+        setMediunOptions(ativos.filter((m) => !m.is_cambone).map((m) => m.nome));
+        setCamboneOptions(ativos.filter((m) => m.is_cambone).map((m) => m.nome));
+      })
+      .catch(console.error);
+  }, [open, api]);
 
   useEffect(() => {
     if (!open || !senha) return;
@@ -262,23 +278,37 @@ function AtendimentoDrawer({ open, onClose, senha, api, onSaved }) {
         </Box>
 
         <Box sx={{ flex: 1, overflow: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField
-            label="Nome do Médium"
-            value={medium}
-            onChange={(e) => setMedium(e.target.value)}
-            fullWidth
-            size="small"
-            placeholder="Ex: João da Mata"
-            inputProps={{ maxLength: 255 }}
+          <Autocomplete
+            freeSolo
+            options={mediunOptions}
+            inputValue={medium}
+            onInputChange={(_, val) => setMedium(val)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Médium"
+                size="small"
+                fullWidth
+                placeholder="Selecione ou digite o nome"
+                inputProps={{ ...params.inputProps, maxLength: 255 }}
+              />
+            )}
           />
-          <TextField
-            label="Nome do Cambone"
-            value={cambone}
-            onChange={(e) => setCambone(e.target.value)}
-            fullWidth
-            size="small"
-            placeholder="Ex: Maria das Ervas"
-            inputProps={{ maxLength: 255 }}
+          <Autocomplete
+            freeSolo
+            options={camboneOptions}
+            inputValue={cambone}
+            onInputChange={(_, val) => setCambone(val)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Cambonê"
+                size="small"
+                fullWidth
+                placeholder="Selecione ou digite o nome"
+                inputProps={{ ...params.inputProps, maxLength: 255 }}
+              />
+            )}
           />
           <TextField
             label="Observação"
