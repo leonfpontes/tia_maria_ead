@@ -183,21 +183,22 @@ function gerarIconeAlerta() {
  * Gera botões de ação do card
  */
 function gerarBotoesAcoes(config) {
-  const exibirBotaoSenha = ['exu_pombogira', 'pretos_velhos', 'caboclos_boiadeiros', 'gira_neutra'].includes(config.tipo);
+  const tiposComSenha = ['exu_pombogira', 'pretos_velhos', 'caboclos_boiadeiros', 'gira_neutra'];
+  const exibirBotaoSenha = !!config.link_senhas && tiposComSenha.includes(config.tipo);
 
   return `
     <div class="novidade-card__actions gap-2">
-      <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
+      <a href="https://api.whatsapp.com/message/5CVUD77PM674E1?autoload=1&app_absent=0" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 transition z-10">
         <img src="assets/img/whatsapp.png" alt="WhatsApp" class="w-5 h-5" />
       </a>
-      <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
+      <a href="https://www.instagram.com/terreirotiamariaecaboclajupira/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 transition z-10">
         <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
           <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
           <circle cx="17" cy="7" r="1.2" fill="currentColor"/>
         </svg>
       </a>
-      ${exibirBotaoSenha ? '<a href="/senhas" class="senha-cta inline-flex items-center justify-center px-3 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 text-xs font-semibold transition z-10 border border-white/70" aria-label="Ir para a pagina de retirada de senha de atendimento"><span class="senha-cta__label-full">Senha de Atendimento</span><span class="senha-cta__label-short">Senha</span></a>' : ''}
+      ${exibirBotaoSenha ? `<a href="${config.link_senhas}" target="_blank" rel="noopener noreferrer" class="senha-cta inline-flex items-center justify-center px-3 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 text-xs font-semibold transition z-10 border border-white/70" aria-label="Acessar retirada de senha de atendimento em nova aba"><span class="senha-cta__label-full">Senha de Atendimento</span><span class="senha-cta__label-short">Senha</span></a>` : ''}
     </div>
   `;
 }

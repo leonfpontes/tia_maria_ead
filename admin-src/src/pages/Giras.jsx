@@ -29,6 +29,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import KeyIcon from '@mui/icons-material/Key';
+import LinkIcon from '@mui/icons-material/Link';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
@@ -75,6 +76,7 @@ const INITIAL_GIRA_FORM = {
   data_inicio: null,
   observacoes: '',
   status: 'RASCUNHO',
+  link_senhas: '',
 };
 
 const INITIAL_CTRL_FORM = {
@@ -102,6 +104,7 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
             data_inicio: g.data_inicio ? new Date(g.data_inicio) : null,
             observacoes: g.observacoes || '',
             status: g.status || 'RASCUNHO',
+            link_senhas: g.link_senhas || '',
           })
         )
         .catch(console.error);
@@ -117,12 +120,20 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
   async function handleSave() {
     setSaving(true);
     setError('');
+    const linkSenhas = form.link_senhas.trim();
+    if (linkSenhas && !/^https?:\/\/.+/.test(linkSenhas)) {
+      setError('Link de senhas deve ser uma URL válida iniciando com http:// ou https://');
+      setSaving(false);
+      return;
+    }
+
     const body = {
       titulo: form.titulo.trim(),
       tipo_card: form.tipo_card,
       data_inicio: formatDateTimeForApi(form.data_inicio),
       observacoes: form.observacoes.trim() || null,
       status: form.status,
+      link_senhas: linkSenhas || null,
     };
     try {
       const url = editId ? `/api/admin/giras/${editId}` : '/api/admin/giras';
@@ -227,6 +238,23 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
             </Select>
           </FormControl>
 
+          {form.tipo_card !== 'NAO_HAVERA_GIRA' && (
+            <TextField
+              label="Link de Senhas (URL externa)"
+              value={form.link_senhas}
+              onChange={(e) => set('link_senhas', e.target.value)}
+              fullWidth
+              size="small"
+              placeholder="https://minhaplacaforma.com/senhas/gira-42"
+              helperText={
+                form.link_senhas && !/^https?:\/\/.+/.test(form.link_senhas)
+                  ? 'URL inválida. Use http:// ou https://'
+                  : 'Opcional. Se preenchido, o botão de senha na home abrirá este link em nova aba.'
+              }
+              error={Boolean(form.link_senhas && !/^https?:\/\/.+/.test(form.link_senhas))}
+            />
+          )}
+
           {error && <Alert severity="error">{error}</Alert>}
         </Box>
 
@@ -251,7 +279,7 @@ function GiraDrawer({ open, onClose, editId, onSaved, api }) {
   );
 }
 
-function ConfigDrawer({ open, onClose, giraId, giraNome, api }) {
+function ConfigDrawer({ open, onClose, giraId, giraNome, giraLinkSenhas, api }) {
   const [form, setForm] = useState(INITIAL_CTRL_FORM);
   const [ctrlStatus, setCtrlStatus] = useState(null);
   const [error, setError] = useState('');
@@ -367,6 +395,12 @@ function ConfigDrawer({ open, onClose, giraId, giraNome, api }) {
             </Typography>
           </Box>
 
+          {giraLinkSenhas && (
+            <Alert severity="info" icon={<LinkIcon fontSize="small" />}>
+              Esta gira usa link externo para senhas. As configurações abaixo não têm efeito no fluxo público.
+            </Alert>
+          )}
+
           <Card>
             <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
@@ -440,6 +474,7 @@ export default function Giras() {
   const [cfgDrawerOpen, setCfgDrawerOpen] = useState(false);
   const [cfgGiraId, setCfgGiraId] = useState(null);
   const [cfgGiraNome, setCfgGiraNome] = useState('');
+  const [cfgGiraLinkSenhas, setCfgGiraLinkSenhas] = useState(null);
 
   const loadGiras = useCallback(() => {
     setLoading(true);
@@ -481,9 +516,10 @@ export default function Giras() {
     setGiraDrawerOpen(true);
   }
 
-  function openConfigSenhas(id, nome) {
+  function openConfigSenhas(id, nome, linkSenhas) {
     setCfgGiraId(id);
     setCfgGiraNome(nome);
+    setCfgGiraLinkSenhas(linkSenhas || null);
     setCfgDrawerOpen(true);
   }
 
@@ -619,11 +655,16 @@ export default function Giras() {
                         </TableCell>
                         <TableCell sx={{ color: 'text.primary' }}>{senhas}</TableCell>
                         <TableCell align="right">
-                          <Box display="flex" gap={0.5} justifyContent="flex-end">
+                          <Box display="flex" gap={0.5} justifyContent="flex-end" alignItems="center">
+                            {g.link_senhas && (
+                              <Tooltip title={g.link_senhas}>
+                                <LinkIcon fontSize="small" sx={{ color: 'primary.main', opacity: 0.8 }} />
+                              </Tooltip>
+                            )}
                             <Tooltip title="Configurar senhas">
                               <IconButton
                                 size="small"
-                                onClick={() => openConfigSenhas(g.id, g.titulo)}
+                                onClick={() => openConfigSenhas(g.id, g.titulo, g.link_senhas)}
                                 aria-label="Configurar senhas"
                               >
                                 <KeyIcon fontSize="small" />
@@ -686,6 +727,7 @@ export default function Giras() {
         onClose={() => setCfgDrawerOpen(false)}
         giraId={cfgGiraId}
         giraNome={cfgGiraNome}
+        giraLinkSenhas={cfgGiraLinkSenhas}
         api={api}
       />
     </AppLayout>
