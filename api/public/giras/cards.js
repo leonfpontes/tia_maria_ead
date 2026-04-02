@@ -76,7 +76,7 @@ module.exports = async function handler(req, res) {
   try {
     const minDate = getSaoPauloYesterdayStartIsoUtc();
     const result = await db.query(
-      `SELECT id, titulo, linha, tipo_card, data_inicio, observacoes, status
+      `SELECT id, titulo, linha, tipo_card, data_inicio, observacoes, status, link_senhas
        FROM giras
        WHERE status = 'PUBLICADA'
          AND data_inicio >= $1
@@ -100,6 +100,7 @@ module.exports = async function handler(req, res) {
         horario: isAviso ? 'Casa fechada' : 'Portões abrem às 19h30',
         badge: isAviso ? 'Aviso' : 'Agenda',
         icone: isAviso ? '⚠' : undefined,
+        link_senhas: gira.link_senhas || null,
       };
     });
 

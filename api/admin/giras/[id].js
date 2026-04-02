@@ -50,7 +50,9 @@ module.exports = async function handler(req, res) {
     if (!auth) return;
 
     const result = await db.query(
-      `SELECT g.*, cs.total_senhas, cs.liberacao_inicio, cs.liberacao_fim, cs.status AS controle_status,
+      `SELECT g.id, g.titulo, g.linha, g.tipo_card, g.data_inicio, g.observacoes, g.status,
+              g.motivo_cancelamento, g.link_senhas, g.created_at, g.updated_at,
+              cs.total_senhas, cs.liberacao_inicio, cs.liberacao_fim, cs.status AS controle_status,
               (SELECT COUNT(*) FROM senhas s WHERE s.gira_id = g.id) AS total_senhas_emitidas
        FROM giras g
        LEFT JOIN controles_senha cs ON cs.gira_id = g.id
@@ -69,10 +71,16 @@ module.exports = async function handler(req, res) {
     if (currentResult.rows.length === 0) return res.status(404).json({ error: 'NAO_ENCONTRADA' });
 
     const current = currentResult.rows[0];
-    const { titulo, tipo_card, data_inicio, observacoes, status, motivo_cancelamento } = req.body || {};
+    const { titulo, tipo_card, data_inicio, observacoes, status, motivo_cancelamento, link_senhas } = req.body || {};
 
     if (typeof tipo_card !== 'undefined' && !VALID_TIPO_CARD.includes(tipo_card)) {
       return res.status(400).json({ error: 'TIPO_INVALIDO', mensagem: 'tipo_card inválido.' });
+    }
+
+    if (link_senhas != null && link_senhas !== '') {
+      if (!/^https?:\/\/.+/.test(link_senhas) || link_senhas.length > 500) {
+        return res.status(400).json({ error: 'LINK_INVALIDO', mensagem: 'link_senhas deve ser uma URL válida iniciando com http:// ou https://' });
+      }
     }
 
     const finalStatus = typeof status !== 'undefined' ? status : current.status;
@@ -82,6 +90,9 @@ module.exports = async function handler(req, res) {
 
     const finalTipoCard = typeof tipo_card !== 'undefined' ? tipo_card : (current.tipo_card || 'GIRA_MISTA');
     const finalLinha = linhaFromTipoCard(finalTipoCard);
+    // link_senhas: null limpa o campo; undefined mantém o valor atual
+    const linkSenhasUpdate = typeof link_senhas === 'undefined' ? current.link_senhas
+      : (link_senhas && link_senhas.trim() ? link_senhas.trim() : null);
 
     const result = await db.query(
       `UPDATE giras
@@ -92,10 +103,11 @@ module.exports = async function handler(req, res) {
            observacoes = COALESCE($5, observacoes),
            status = COALESCE($6, status),
            motivo_cancelamento = COALESCE($7, motivo_cancelamento),
+           link_senhas = $9,
            updated_at = NOW()
        WHERE id = $8
        RETURNING *`,
-      [titulo, finalLinha, finalTipoCard, data_inicio, observacoes, status, motivo_cancelamento, id]
+      [titulo, finalLinha, finalTipoCard, data_inicio, observacoes, status, motivo_cancelamento, id, linkSenhasUpdate]
     );
 
     await db.query(
