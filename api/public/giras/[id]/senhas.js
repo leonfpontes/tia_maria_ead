@@ -181,8 +181,21 @@ module.exports = async function handler(req, res) {
 
     const senha = insertResult.rows[0];
 
-    // Enviar e-mail de confirmação (não bloquear se falhar)
+    // Verificar flag de e-mail antes de enviar
+    let emailAtivo = true;
     try {
+      const configResult = await db.query(
+        `SELECT valor FROM configuracoes WHERE chave = 'email_confirmacao_ativo'`
+      );
+      if (configResult.rows.length > 0) {
+        emailAtivo = configResult.rows[0].valor === 'true';
+      }
+    } catch {
+      // Se a tabela ainda não existir, mantém o padrão ativo
+    }
+
+    // Enviar e-mail de confirmação (não bloquear se falhar)
+    if (emailAtivo) try {
       await emailService.sendSenhaConfirmacao({
         email: emailNorm,
         senha: {

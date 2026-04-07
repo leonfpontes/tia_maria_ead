@@ -33,6 +33,8 @@ const apiHandlers = {
   'GET /api/admin/mediuns/[id]': require('./api/admin/mediuns/[id].js'),
   'PUT /api/admin/mediuns/[id]': require('./api/admin/mediuns/[id].js'),
   'DELETE /api/admin/mediuns/[id]': require('./api/admin/mediuns/[id].js'),
+  'GET /api/admin/config': require('./api/admin/config/index.js'),
+  'PUT /api/admin/config': require('./api/admin/config/index.js'),
   'GET /api/public/agenda': require('./api/public/agenda.js'),
   'GET /api/public/giras/cards': require('./api/public/giras/cards.js'),
   'POST /api/public/giras/[id]/senhas': require('./api/public/giras/[id]/senhas.js'),
@@ -204,6 +206,10 @@ const server = http.createServer((req, res) => {
   } else if (method === 'DELETE' && apiPath.match(/^\/api\/admin\/mediuns\/[^/]+$/)) {
     handler = apiHandlers['DELETE /api/admin/mediuns/[id]'];
     params.id = apiPath.split('/')[4];
+  } else if (method === 'GET' && apiPath === '/api/admin/config') {
+    handler = apiHandlers['GET /api/admin/config'];
+  } else if (method === 'PUT' && apiPath === '/api/admin/config') {
+    handler = apiHandlers['PUT /api/admin/config'];
   } else if (method === 'GET' && apiPath === '/api/public/agenda') {
     handler = apiHandlers['GET /api/public/agenda'];
   } else if (method === 'GET' && apiPath === '/api/public/giras/cards') {

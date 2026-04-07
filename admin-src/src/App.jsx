@@ -9,6 +9,7 @@ import Giras from './pages/Giras';
 import Mediuns from './pages/Mediuns';
 import Porta from './pages/Porta';
 import ListaSenhas from './pages/ListaSenhas';
+import FinanceiroConfig from './pages/FinanceiroConfig';
 
 export default function App() {
   return (
@@ -53,6 +54,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Porta />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/financeiro/config"
+          element={
+            <ProtectedRoute>
+              <FinanceiroConfig />
             </ProtectedRoute>
           }
         />
