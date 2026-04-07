@@ -18,8 +18,6 @@ import GroupIcon from '@mui/icons-material/Group';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import TuneIcon from '@mui/icons-material/Tune';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -32,7 +30,6 @@ export default function Sidebar({ onItemClick }) {
 
   const [cadastrosOpen, setCadastrosOpen] = useState(true);
   const [operacoesOpen, setOperacoesOpen] = useState(true);
-  const [financeiroOpen, setFinanceiroOpen] = useState(true);
 
   function go(path) {
     navigate(path);
@@ -144,33 +141,6 @@ export default function Sidebar({ onItemClick }) {
               </ListItemIcon>
               <ListItemText
                 primary="Porta"
-                primaryTypographyProps={{ fontSize: '0.875rem' }}
-              />
-            </ListItemButton>
-          </List>
-        </Collapse>
-
-        {/* Financeiro group */}
-        <ListItemButton onClick={() => setFinanceiroOpen((v) => !v)} sx={{ mt: 0.5 }}>
-          <ListItemIcon>
-            <AttachMoneyIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Financeiro" primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 700 }} />
-          {financeiroOpen ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
-        </ListItemButton>
-
-        <Collapse in={financeiroOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton
-              sx={{ pl: 4 }}
-              selected={isActive('/financeiro/config')}
-              onClick={() => go('/financeiro/config')}
-            >
-              <ListItemIcon>
-                <TuneIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Configurações"
                 primaryTypographyProps={{ fontSize: '0.875rem' }}
               />
             </ListItemButton>
