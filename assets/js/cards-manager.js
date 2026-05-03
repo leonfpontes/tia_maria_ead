@@ -44,7 +44,7 @@ const CARD_TEMPLATES = {
     cardClasses: 'group novidade-card novidade-card--destaque-preto-vermelho rounded-2xl p-5 shadow-2xl transition',
     cardStyle: `
       background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-                  url('assets/img/Cards/bg_card_esquerda.jpg') !important;
+                  url('assets/img/Cards/bg_card_esquerda.jpeg') !important;
       background-size: cover !important;
       background-position: center !important;
     `,
@@ -62,7 +62,7 @@ const CARD_TEMPLATES = {
     cardClasses: 'group novidade-card novidade-card--pretos-velhos rounded-2xl p-5 shadow-xl transition',
     cardStyle: `
       background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-                  url('assets/img/Cards/bg_card_pretos_velhos.jpg') !important;
+                  url('assets/img/Cards/bg_card_pretos_velhos.jpeg') !important;
       background-size: cover !important;
       background-position: center !important;
     `,
@@ -80,7 +80,7 @@ const CARD_TEMPLATES = {
     cardClasses: 'group novidade-card novidade-card--destaque-verde-rosa rounded-2xl p-5 shadow-xl transition',
     cardStyle: `
       background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
-                  url('assets/img/Cards/bg_card_caboclos_boiadeiros.png') !important;
+                  url('assets/img/Cards/bg_card_caboclos_boiadeiros.jpeg') !important;
       background-size: cover !important;
       background-position: center !important;
     `,
