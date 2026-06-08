@@ -127,7 +127,7 @@ function renderSenhaConfirmacao({ senha, gira }) {
     DATA_CURTA: formatarDataCurta(gira.data_inicio),
     HORA: formatarHora(gira.data_inicio),
     TIPO_GIRA: escapeHtml(gira.tipo),
-    ENDERECO: 'Rua Joaquim Gomes Jardim, 49 - Ferraz de Vasconcelos/SP',
+    ENDERECO: 'R. Adalberto Pajuaba, 908 - Sumarezinho, Ribeirão Preto - SP, 14055-220',
     VESTIMENTA: 'Recomendamos roupas claras e confortáveis (branco, bege ou tons pastéis).',
     CARD_PREFERENCIAL: cardPreferencial,
     ANO_ATUAL: new Date().getFullYear(),
